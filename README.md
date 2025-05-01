@@ -18,7 +18,9 @@ In my experience when working in a team of developers or hackers, they often nee
 
 Far too often these tasks fall under the domain of DevOps and so something like `Rundeck`, `Jenkins`, `GitHub Actions`, `GitLab CI/CD`, `Ansible AWX/Tower`, `Puppet Bolt`, `SaltStack`, `Chef Automate`, `Argo Workflows`, or `Apache Airflow` is implemented to help manage all-the-things.
 
-Unfortunately, these pieces of software can take a lot of support and tend to require a DevOps team with specialized knowledge, as they are primarily built for the enterprise market. This results in DevOps not acting as an extension of the team but rather its very own department. This ultimately causes a lot of friction, creating organizational drag, thus limiting the speed at which the team can ship.  
+Unfortunately, these pieces of software can take a lot of support and tend to require a DevOps team with specialized knowledge, as they are primarily built for the enterprise market. This results in DevOps not acting as an extension of the team but rather its very own department. Ultimately this causes a lot of friction, creating organizational drag, thus limiting the speed at which the team can ship.  
+
+`LEMC` believes that in the age of vibe coding, developers must also become operations.
 
 ## How does `LEMC` help?
 
