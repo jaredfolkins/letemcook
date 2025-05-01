@@ -28,7 +28,7 @@ Unfortunately, these pieces of software can take a lot of support and tend to re
 
 `LEMC` works to free siloed code or business logic. It's the type of code that gets core business work done but tends to sit on someone's computer running under their desk or may need that "special engineer" around to run it manually. And when said engineer is out-of-office, suddenly the organization is screwed.
 
-`LEMC` allows anyone on your team to take their siloed code or lone-wolf scripts, wrap them in a container, and quickly empower their team to get visual results streamed to the browwer right from the container at the click of a button. It does this with a few special verbs and the most used programming functions of all time, `print` or `echo`. 
+`LEMC` allows anyone on your team to take their siloed code or lone-wolf scripts, wrap them in a container, and quickly empower their team to get visual results streamed to the browser right from inside the container at the click of a button. It does this with a few special verbs and the most used programming functions of all time, `print` or `echo`. 
 
 `LEMC` is built in anticipation of Ai-assisted code generation which helps fast moving teams build and innovate quickly. Forsaking many modern and gui heavy solutions, `LEMC` is a **language first solution**. This is perfect for LLM vibe-coding sessions. 
 
