@@ -1,7 +1,8 @@
-FROM ubuntu:20.04
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y curl \
-    sudo
+FROM alpine:latest
+
+# Update and install necessary packages using apk
+RUN apk update && \
+    apk add --no-cache curl shadow
 
 RUN mkdir /lemc
 
@@ -11,4 +12,4 @@ COPY lemc/run.sh /lemc/run.sh
 
 RUN chmod +x /lemc/run.sh
 
-CMD ["/bin/bash", "-c", "/lemc/run.sh"]
+CMD ["/bin/sh", "-c", "/lemc/run.sh"]
