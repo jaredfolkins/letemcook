@@ -18,16 +18,18 @@ Then `LEMC` is made for you!
 
 In my experience when working in a team of developers or hackers, they often need to perform deterministic tasks, on non-deterministic schedules, and then communicate the results in a streamlined fashion.
 
-Far too often these tasks fall under the domain of "DevOps" and so something like `Rundeck`, `Jenkins`, `GitHub Actions`, `GitLab CI/CD`, `Ansible AWX/Tower`, `Puppet Bolt`, `SaltStack`, `Chef Automate`, `Argo Workflows`, or `Apache Airflow` is implemented to help manage all-the-things.
+Far too often these tasks fall under the domain of DevOps and so something like `Rundeck`, `Jenkins`, `GitHub Actions`, `GitLab CI/CD`, `Ansible AWX/Tower`, `Puppet Bolt`, `SaltStack`, `Chef Automate`, `Argo Workflows`, or `Apache Airflow` is implemented to help manage all-the-things.
 
-Unfortunately, these pieces of software can take a lot of support and tend to require a DevOps team with specialized knowledge, as they are primarily built for the enterprise market. This results in DevOps not acting as an extension of the team but rather its very own department.
+Unfortunately, these pieces of software can take a lot of support and tend to require a DevOps team with specialized knowledge, as they are primarily built for the enterprise market. This results in DevOps not acting as an extension of the team but rather its very own department. This ultimately causes a lot of friction, creating organizational drag, thus limiting the speed at which the team can ship.  
 
-And when the "Developers" throw their code over the wall to "DevOps" things never seem to go well. Finger pointing ensues with brief "works for me" messages being hurled in Slack. 
-This ultimately causes a lot of friction, creating organizational drag, thus limiting the speed at which the team can ship.  
+## How does `LEMC` help?
 
-## What is `LEMC`?
+`LEMC` works to free `Siloed` code. It's the type of code that gets core business work done but tends to sit on someone's computer running under their desk. And when that engineer is out-of-office, suddenly the organization is screwed.
 
-`LEMC` is my experimental answer to help fast moving teams build and ship their solutions in the age of AI-assisted vibe coding.
+`LEMC` allows anyone on your team to take their `lone-wolf` scripts, wrap them in a container, and have their team run the script with a click of a button. 
+
+Plus in the age of Ai-assistance, `LEMC` helps fast moving teams build and innovate quickly. As unlike many modern and gui heavy solutions, `LEMC` is a **language first solution**. This is perfect for LLM vibe coding sessions. 
+
 
 #### At a high level how does `LEMC` accomplish this?
 
