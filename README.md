@@ -14,8 +14,6 @@ Have you ever found yourself thinking
 
 Then `LEMC` is made for you!
 
-## A broader look behind the problem
-
 In my experience when working in a team of developers or hackers, they often need to perform deterministic tasks, on non-deterministic schedules, and then communicate the results in a streamlined fashion.
 
 Far too often these tasks fall under the domain of DevOps and so something like `Rundeck`, `Jenkins`, `GitHub Actions`, `GitLab CI/CD`, `Ansible AWX/Tower`, `Puppet Bolt`, `SaltStack`, `Chef Automate`, `Argo Workflows`, or `Apache Airflow` is implemented to help manage all-the-things.
@@ -24,12 +22,13 @@ Unfortunately, these pieces of software can take a lot of support and tend to re
 
 ## How does `LEMC` help?
 
-`LEMC` works to free `Siloed` code. It's the type of code that gets core business work done but tends to sit on someone's computer running under their desk. And when that engineer is out-of-office, suddenly the organization is screwed.
+`LEMC` works to free siloed code. It's the type of code that gets core business work done but tends to sit on someone's computer running under their desk or may need said engineer around to run it. And when that engineer is out-of-office, suddenly the organization is screwed.
 
-`LEMC` allows anyone on your team to take their `lone-wolf` scripts, wrap them in a container, and have their team run the script with a click of a button. 
+`LEMC` allows anyone on your team to take their siloed code or lone-wolf scripts, wrap them in a container, and have their team run execute the business logic with a click of a button. 
 
-Plus in the age of Ai-assistance, `LEMC` helps fast moving teams build and innovate quickly. As unlike many modern and gui heavy solutions, `LEMC` is a **language first solution**. This is perfect for LLM vibe coding sessions. 
+`LEMC` is built in anticipation of Ai-assisted code generation which helps fast moving teams build and innovate quickly. 
 
+And unlike many modern and gui heavy solutions, `LEMC` is a **language first solution**. This is perfect for LLM vibe- coding sessions. 
 
 #### At a high level how does `LEMC` accomplish this?
 
