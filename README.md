@@ -20,7 +20,7 @@ In my experience when working on a team of developers or hackers, they often nee
 
 Far too often these tasks fall under the domain of DevOps and so something like `Rundeck`, `Jenkins`, `GitHub Actions`, `GitLab CI/CD`, `Ansible AWX/Tower`, `Puppet Bolt`, `SaltStack`, `Chef Automate`, `Argo Workflows`, or `Apache Airflow` is implemented to help manage all-the-things. Unfortunately, these pieces of software can take a lot of support and tend to require a DevOps team with specialized knowledge as they are built for the enterprise market. This results in DevOps not acting as an extension of the team but rather its very own department. This causes a lot of friction, creating organizational drag, thus limiting the speed at which the team can ship.  
 
-`LEMC` is built with the beleif that in the age of vibe-coding, developers will out-pace their competition when they own their operations. Ultimately `LEMC` aims to help your organization "ops their devs."
+`LEMC` is built with the belief that in the age of vibe-coding, developers will out-pace their competition when they own their operations. Ultimately `LEMC` aims to help your organization "ops their devs."
 
 ## How does `LEMC` help?
 
@@ -28,7 +28,7 @@ Far too often these tasks fall under the domain of DevOps and so something like 
 
 `LEMC` allows anyone on your team to take their siloed code or lone-wolf scripts, wrap them in a container, and quickly empower their team to get visual results streamed to the browser right from inside the container at the click of a button. It does this with a few special verbs and the most used programming functions of all time, `print` or `echo`. 
 
-`LEMC` is built in anticipation of Ai-assisted code generation which helps fast moving teams build and innovate quickly. Forsaking many modern and gui heavy solutions, `LEMC` is a **language first solution**. This is perfect for LLM vibe-coding sessions. 
+`LEMC` is built in anticipation of AI-assisted code generation which helps fast moving teams build and innovate quickly. Forsaking many modern and GUI-heavy solutions, `LEMC` is a **language first solution**. This is perfect for LLM vibe-coding sessions. 
 
 #### At a high level how does `LEMC` accomplish this?
 
@@ -38,7 +38,7 @@ Far too often these tasks fall under the domain of DevOps and so something like 
     - Recipe scripts are packaged and distributed as container images using a Docker registry.
     - When a recipe is triggered, `LEMC` ensures the correct container image version is available locally (pulling it if necessary).
     - It then executes the container, automatically passing environment variables to manage state across steps or executions.
-- **Real-time Feedback:** Recipe execution results are streamed live to the user's web browser via websockets and displayed within the `LEMC` UI.
+- **Real-time Feedback:** Recipe execution results are streamed live to the user's web browser via WebSockets and displayed within the `LEMC` UI.
 - **Simplified Development & AI:** This container-centric approach simplifies recipe development and troubleshooting (using test harnesses) and provides a well-defined, small context when leveraging AI assistance more effectively.
 
 Below I'll offer a tutorial that will use a real-world use case.
