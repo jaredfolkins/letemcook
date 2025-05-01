@@ -14,23 +14,23 @@ Have you ever found yourself thinking
 
 Then `LEMC` is made for you!
 
+## The `LEMC` thesis
+
 In my experience when working in a team of developers or hackers, they often need to perform deterministic tasks, on non-deterministic schedules, and then communicate the results in a streamlined fashion.
 
 Far too often these tasks fall under the domain of DevOps and so something like `Rundeck`, `Jenkins`, `GitHub Actions`, `GitLab CI/CD`, `Ansible AWX/Tower`, `Puppet Bolt`, `SaltStack`, `Chef Automate`, `Argo Workflows`, or `Apache Airflow` is implemented to help manage all-the-things.
 
 Unfortunately, these pieces of software can take a lot of support and tend to require a DevOps team with specialized knowledge, as they are primarily built for the enterprise market. This results in DevOps not acting as an extension of the team but rather its very own department. Ultimately this causes a lot of friction, creating organizational drag, thus limiting the speed at which the team can ship.  
 
-`LEMC` believes that in the age of vibe coding, developers must also become operations.
+`LEMC` is built with the beleif that in the age of vibe-coding, developers will out-pace their competition when they own their operations. And `LEMC` is going to help you "ops your devs."
 
 ## How does `LEMC` help?
 
-`LEMC` works to free siloed code. It's the type of code that gets core business work done but tends to sit on someone's computer running under their desk or may need said engineer around to run it. And when that engineer is out-of-office, suddenly the organization is screwed.
+`LEMC` works to free siloed code or business logic. It's the type of code that gets core business work done but tends to sit on someone's computer running under their desk or may need that "special engineer" around to run it manually. And when said engineer is out-of-office, suddenly the organization is screwed.
 
-`LEMC` allows anyone on your team to take their siloed code or lone-wolf scripts, wrap them in a container, and have their team run execute the business logic with a click of a button. 
+`LEMC` allows anyone on your team to take their siloed code or lone-wolf scripts, wrap them in a container, and quickly empower their team to get visual results streamed to the browwer right from the container at the click of a button. It does this with a few special verbs and the most used programming functions of all time, `print` or `echo`. 
 
-`LEMC` is built in anticipation of Ai-assisted code generation which helps fast moving teams build and innovate quickly. 
-
-And unlike many modern and gui heavy solutions, `LEMC` is a **language first solution**. This is perfect for LLM vibe- coding sessions. 
+`LEMC` is built in anticipation of Ai-assisted code generation which helps fast moving teams build and innovate quickly. Forsaking many modern and gui heavy solutions, `LEMC` is a **language first solution**. This is perfect for LLM vibe-coding sessions. 
 
 #### At a high level how does `LEMC` accomplish this?
 
