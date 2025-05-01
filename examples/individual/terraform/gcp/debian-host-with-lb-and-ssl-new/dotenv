@@ -1,0 +1,38 @@
+# dotenv file for local Terraform testing
+
+# image names
+IMAGE_NAME_APPLY="docker.io/jfolkins/lemc-tf-lb-and-ssl-apply:latest"
+IMAGE_NAME_DESTROY="docker.io/jfolkins/lemc-tf-lb-and-ssl-destroy:latest"
+
+# --- Mock System LEMC Context Variables ---
+# Note: Generate a unique UUID for each test run or leave commented to use script's date-based default
+LEMC_UUID=00000000-0000-0000-0000-000000000000
+LEMC_SCOPE=individual
+LEMC_RECIPE_NAME=recipe 
+LEMC_USERNAME=username
+LEMC_USER_ID=123 
+LEMC_PAGE_ID=1              
+LEMC_STEP_ID=1              
+
+# Dynamically constructed mocks based on other LEMC vars (will be expanded by sourcing shell)
+LEMC_HTML_ID="uuid-${LEMC_UUID}-pageid-${LEMC_PAGE_ID}-html"
+LEMC_CSS_ID="uuid-${LEMC_UUID}-pageid-${LEMC_PAGE_ID}-style"
+LEMC_JS_ID="uuid-${LEMC_UUID}-pageid-${LEMC_PAGE_ID}-script"
+LEMC_HTTP_DOWNLOAD_BASE_URL="/lemc/locker/uuid/${LEMC_UUID}/page/${LEMC_PAGE_ID}/scope/${LEMC_SCOPE}/filename/"
+
+# --- Terraform Configuration ---
+# Default instance type
+FORM_MACHINE_TYPE="e2-small"
+# Default OS image
+FORM_IMAGE="debian-cloud/debian-11"
+
+# --- User-Defined Root Domain/Zone --- (ALL CAPS,  prefix)
+# Replace with actual values for real tests
+ROOT_DOMAIN=w-a-s-d.com
+ROOT_ZONE=w-a-s-d-com 
+GCP_PROJECT_ID=your-gcp-project-id-here
+COOKBOOK_IDENTIFIER=local-tf-demo
+GCP_REGION=us-central1
+GCP_ZONE=us-central1-a
+PRIVATE_DIR="./private"
+PUBLIC_DIR="./public"

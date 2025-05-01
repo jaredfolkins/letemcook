@@ -1,0 +1,58 @@
+package partials
+
+import (
+    "time"
+    "strconv"
+)
+
+templ Copyright() {
+    {{ year := time.Now().Year() }}
+    {{ yearStr := strconv.Itoa(year) }}
+    <p>
+        <span class="text-xs">
+            if year != 2024 {
+                Copyright © 2024-{ yearStr }
+            } else {
+                Copyright © 2024
+            }
+        </span>
+    </p>
+}
+
+templ Footer() {
+    <footer class="footer-center items-center p-4">
+    </footer>
+
+        <footer class="footer p-4 text-base-content">
+            <div class="flex justify-around w-full">
+
+                <div class="flex-1 text-center">
+                </div>
+
+                <div class="flex-1 text-center">
+                  <aside class="items-center grid-flow-col outlined-text">
+                    <p>
+                        <span class="text-lg">
+                            <a href="https://github.com/jaredfolkins/letemcook" target="_blank">
+                                Let'em Cook!
+                            </a>
+                        </span>
+                   </p>
+                   <p>
+                        <span class="text-sm">
+                            Made with 🔥 by
+                            <a href="https://jaredfolkins.com" target="_blank">
+                                Jared Folkins
+                            </a>
+                        </span>
+                   </p>
+                   @Copyright()
+                  </aside>
+                </div>
+
+                <div class="flex-1 text-center">
+                </div>
+
+            </div>
+        </footer>
+}

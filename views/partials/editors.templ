@@ -1,0 +1,346 @@
+package partials
+
+import (
+)
+
+templ readOnlyEditors() {
+<script type="module">
+    window.LemcGlobalEditors = {}; // You can also use new Map() if you use ES6.
+	import {
+		ClassicEditor,
+		Autoformat,
+		Autosave,
+		Bold,
+		Italic,
+		Underline,
+		BlockQuote,
+		SimpleUploadAdapter,
+		CKFinder,
+		CKFinderUploadAdapter,
+		CloudServices,
+		Essentials,
+		Heading,
+		Image,
+		ImageCaption,
+		ImageResize,
+		ImageStyle,
+		ImageToolbar,
+		ImageUpload,
+		PictureEditing,
+		Indent,
+		IndentBlock,
+		Link,
+		List,
+		MediaEmbed,
+		Mention,
+		Paragraph,
+		PasteFromOffice,
+		Table,
+		TableColumnResize,
+		TableToolbar,
+		TextTransformation,
+	} from 'ckeditor5';
+
+    var className = 'lemc-editors-group';
+    var elements = document.getElementsByClassName(className);
+    var elementsArray = Array.from(elements);
+    elementsArray.forEach(element => {
+    var pageid = element.getAttribute('data-pageid');
+    var uuid = element.getAttribute('data-uuid');
+    var yaml_type = element.getAttribute('data-type');
+	ClassicEditor
+			.create( document.querySelector( '#'+element.id ), {
+			    readOnly: true,
+				plugins: [
+				Autoformat,
+					Autosave,
+					BlockQuote,
+					Bold,
+					CKFinder,
+					CKFinderUploadAdapter,
+					CloudServices,
+					Essentials,
+					Heading,
+					Image,
+					ImageCaption,
+					ImageResize,
+					ImageStyle,
+					SimpleUploadAdapter,
+					Indent,
+					IndentBlock,
+					Italic,
+					Link,
+					List,
+					MediaEmbed,
+					Mention,
+					Paragraph,
+					PasteFromOffice,
+					PictureEditing,
+					Table,
+					TableColumnResize,
+					TableToolbar,
+					TextTransformation,
+					Underline,
+				],
+				toolbar: [],
+				image: {
+					resizeOptions: [
+						{
+							name: 'resizeImage:original',
+							label: 'Default image width',
+							value: null,
+						},
+						{
+							name: 'resizeImage:50',
+							label: '50% page width',
+							value: '50',
+						},
+						{
+							name: 'resizeImage:75',
+							label: '75% page width',
+							value: '75',
+						},
+					],
+					toolbar: [
+						'imageTextAlternative',
+						'toggleImageCaption',
+						'|',
+						'imageStyle:inline',
+						'imageStyle:wrapText',
+						'imageStyle:breakText',
+						'|',
+						'resizeImage',
+					],
+				},
+				link: {
+					addTargetToExternalLinks: true,
+					defaultProtocol: 'https://',
+				},
+             }).then( editor => {
+                editor.enableReadOnlyMode( 'lemc-read-only' );
+                const elements = document.getElementsByClassName("ck-balloon-panel");
+                if (elements.length > 0) {
+                    elements[0].remove();
+                }
+                window.LemcGlobalEditors[element.id.toString()] = editor;
+             })
+            .catch( error => {
+                console.error( error );
+            });
+    });
+
+</script>
+}
+
+templ readwriteEditors() {
+<script type="module">
+    window.LemcGlobalEditors = {}; // You can also use new Map() if you use ES6.
+	import {
+		ClassicEditor,
+		Autoformat,
+		Autosave,
+		Bold,
+		Italic,
+		Underline,
+		BlockQuote,
+		SimpleUploadAdapter,
+		CKFinder,
+		CKFinderUploadAdapter,
+		CloudServices,
+		Essentials,
+		Heading,
+		Image,
+		ImageCaption,
+		ImageResize,
+		ImageStyle,
+		ImageToolbar,
+		ImageUpload,
+		PictureEditing,
+		Indent,
+		IndentBlock,
+		Link,
+		List,
+		MediaEmbed,
+		Mention,
+		Paragraph,
+		PasteFromOffice,
+		Table,
+		TableColumnResize,
+		TableToolbar,
+		TextTransformation,
+	} from 'ckeditor5';
+
+    var className = 'lemc-editors-group';
+    var elements = document.getElementsByClassName(className);
+    var elementsArray = Array.from(elements);
+    elementsArray.forEach(element => {
+    var pageid = element.getAttribute('data-pageid');
+    var uuid = element.getAttribute('data-uuid');
+    var yaml_type = element.getAttribute('data-type');
+	ClassicEditor
+			.create( document.querySelector( '#'+element.id ), {
+				plugins: [
+					Autoformat,
+					Autosave,
+					BlockQuote,
+					Bold,
+					CKFinder,
+					CKFinderUploadAdapter,
+					CloudServices,
+					Essentials,
+					Heading,
+					Image,
+					ImageCaption,
+					ImageResize,
+					ImageStyle,
+					ImageToolbar,
+					ImageUpload,
+					SimpleUploadAdapter,
+					Indent,
+					IndentBlock,
+					Italic,
+					Link,
+					List,
+					MediaEmbed,
+					Mention,
+					Paragraph,
+					PasteFromOffice,
+					PictureEditing,
+					Table,
+					TableColumnResize,
+					TableToolbar,
+					TextTransformation,
+					Underline,
+				],
+				toolbar: [
+					'undo',
+					'redo',
+					'|',
+					'heading',
+					'|',
+					'bold',
+					'italic',
+					'underline',
+					'|',
+					'link',
+					'uploadImage',
+					'insertTable',
+					'blockQuote',
+					'mediaEmbed',
+					'|',
+					'bulletedList',
+					'numberedList',
+					'|',
+					'outdent',
+					'indent',
+				],
+                autosave: {
+                    waitingTime: 700,
+                    save( editor ) {
+                        return saveData( editor.getData(), uuid, pageid, yaml_type);
+                    }
+                },
+				simpleUpload: {
+                   uploadUrl: `/lemc/cookbook/wiki/image/${yaml_type}/${uuid}`,
+                },
+				image: {
+					resizeOptions: [
+						{
+							name: 'resizeImage:original',
+							label: 'Default image width',
+							value: null,
+						},
+						{
+							name: 'resizeImage:50',
+							label: '50% page width',
+							value: '50',
+						},
+						{
+							name: 'resizeImage:75',
+							label: '75% page width',
+							value: '75',
+						},
+					],
+					toolbar: [
+						'imageTextAlternative',
+						'toggleImageCaption',
+						'|',
+						'imageStyle:inline',
+						'imageStyle:wrapText',
+						'imageStyle:breakText',
+						'|',
+						'resizeImage',
+					],
+				},
+				link: {
+					addTargetToExternalLinks: true,
+					defaultProtocol: 'https://',
+				},
+             }).then( editor => {
+                editor.focus();
+                const elements = document.getElementsByClassName("ck-balloon-panel");
+                if (elements.length > 0) {
+                    elements[0].remove();
+                }
+                window.LemcGlobalEditors[element.id.toString()] = editor;
+             })
+            .catch( error => {
+                console.error( error );
+            });
+    });
+
+    function saveData( data, uuid, pageid, yaml_type) {
+        return new Promise( resolve => {
+                var obj = {
+                    uuid: uuid,
+                    pageid: pageid,
+                    content: data,
+                    yaml_type: yaml_type
+                }
+                sendPostRequestFetch(`/lemc/cookbook/wiki/create/${uuid}`, obj);
+                 resolve();
+        } );
+    }
+
+    function displayStatus( editor, pid) {
+        var pendingActions = editor.plugins.get( 'PendingActions' );
+        var statusIndicator = document.querySelector( '#editor-status-' + pid);
+        pendingActions.on( 'change:hasAny', ( evt, propertyName, newValue ) => {
+            if ( newValue ) {
+                statusIndicator.style.color = '#ff0000';
+                statusIndicator.innerHTML = '<span class="loading loading-spinner loading-xs"></span>';
+            } else {
+                var icon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>';
+                statusIndicator.style.color = '#45bf32';
+                statusIndicator.innerHTML = icon;
+            }
+        } );
+    }
+
+    async function sendPostRequestFetch(url, data) {
+        try {
+            showSpinner();
+            var response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            var result = await response.json();
+        } catch (error) {
+            console.error('Error:', error);
+        } finally {
+            var errObj = JSON.parse(response.headers.get('X-Lemc-Flash-Error'));
+            var successObj = JSON.parse(response.headers.get('X-Lemc-Flash-Success'));
+            if (errObj) {
+                hideSpinner(errObj, 'error', 'post');
+            } else if (successObj) {
+                hideSpinner(successObj, 'success', 'post');
+            } else {
+                hideSpinner({}, 'success', 'post');
+            }
+        }
+    }
+</script>
+}

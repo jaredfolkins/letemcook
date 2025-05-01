@@ -1,0 +1,123 @@
+package partials
+
+import (
+    "fmt"
+    "github.com/jaredfolkins/letemcook/models"
+)
+
+
+templ Navbar(v models.BaseView) {
+	<div class="fixed top-0 z-10 w-full">
+    if v.IsDev {
+        <div class="ribbon ribbon-top-right bg-red-500 text-white font-bold text-xs px-2 py-1 flex items-center justify-center">
+            <span>development</span>
+        </div>
+    }
+	<nav class="navbar drop-shadow-xl bg-primary text-primary-content bg-lemc-navbar">
+		<div class="navbar-start">
+		        <div class="flex items-center">
+			        <button hx-on:click="playSound()">
+                        <div id="logo" class="logo"></div>
+			        </button>
+		        </div>
+		</div>
+
+		<div
+        id="navtop"
+        hx-get={ string(fmt.Sprintf("/navtop?squid=%s&account=%s", v.AccountSquid, v.AccountName)) }
+        hx-swap="innerHTML"
+        hx-trigger="refreshNavtop from:body"
+		class="navbar-end outlined-text">
+            @Navtop(v)
+        </div>
+        <script>
+
+        </script>
+
+	</nav>
+	<progress id="upload-progress" class="w-full" style="display: none;" max="100" value="0"></progress>
+    </div>
+
+    <script>
+        var isPlaying = false;
+
+        async function heckle() {
+                // Get current URL params
+                const urlParams = new URLSearchParams(window.location.search);
+                const squid = urlParams.get('squid');
+
+                // Construct fetch URL
+                let fetchUrl = '/heckle';
+                if (squid) {
+                    fetchUrl += '?squid=' + encodeURIComponent(squid);
+                }
+
+                console.log('Heckle fetch URL:', fetchUrl); // Log the URL being fetched
+
+                var response = await fetch(fetchUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                switch(response.status) {
+                    case 200:
+                        var result = await response.json();
+                        console.log('Server response:', result); // Log the server response                        var audioPlayer = document.getElementById('audioPlayer');
+                        if (!audioPlayer) {
+                            console.error('Audio player element not found');
+                        }
+
+                        if (isPlaying === false) {
+                            isPlaying = true;
+                            var logoElm = document.getElementById('logo');
+                            logoElm.classList.add('shake');
+                            var audioUrl = result.file;
+                            audioPlayer.src = audioUrl;
+                                audioPlayer.play();
+                        }
+                        break;
+                    case 204:
+                        console.log('204 Not Found');
+                        break;
+                    default:
+                        console.error('Unknown error');
+                        break;
+                }
+                return;
+        }
+
+
+        function playSound() {
+            heckle();
+        }
+
+        function stopSound() {
+            if (isPlaying === true) {
+                isPlaying = false;
+                var logoElm = document.getElementById('logo');
+                logoElm.classList.remove('shake');
+                var audioPlayer = document.getElementById('audioPlayer');
+                audioPlayer.pause();
+                audioPlayer.currentTime = 0;
+            }
+        }
+
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById('audioPlayer').addEventListener('ended', function() {
+                stopSound();
+            });
+            document.addEventListener("click", function(event) {
+                if (Math.random() <= 0.3) {
+                    playSound();
+                };
+               console.log("A click event occurred!");
+            });
+        })
+
+
+
+    </script>
+}

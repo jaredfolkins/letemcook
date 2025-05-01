@@ -1,0 +1,265 @@
+package pages
+
+import (
+	"fmt"
+	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/views/layout"
+)
+
+const (
+	AppCreate   = "/lemc/app/create"
+	CookbookSearch = "/lemc/cookbook/search"
+)
+
+templ Apps(v models.AppsView) {
+	<div id="cookbooknav" class="cookbooknav-attrs flex flex-col justify-end md:flex-row mx-12 mb-2">
+		<div class="flex-1 flex items-center justify-start">
+			<h1 class="text-2xl font-bold">Apps</h1>
+		</div>
+		<div class="flex flex-row gap-12 justify-end">
+			<div>
+				if v.BaseView.UserContext.ActingAs.CanCreateapp() {
+					<button class="btn btn-primary rounded-none" onclick="new_app.showModal()">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
+						</svg>
+					</button>
+				}
+
+				<dialog id="new_app" class="modal overscroll-none">
+					<div class="p-12 overscroll-none" style="width:80%;">
+						<form
+							id="new-app-form"
+							hx-target="#apps-list"
+							hx-swap="innerHTML"
+							hx-headers="js:{'X-TimeZone': Intl.DateTimeFormat().resolvedOptions().timeZone}"
+							class="drop-shadow-xl flex flex-col gap-4 p-12 bg-base-100 rounded-none"
+							action={ AppCreate }
+							method="post"
+						>
+							<label class="flex flex-col justify-start gap-2 rounded-none">
+								Name:
+								<input
+									class="input input-bordered bg-white input-primary rounded-none"
+									type="text"
+									name="name"
+								/>
+							</label>
+							<label class="flex flex-col justify-start gap-2 relative rounded-none">
+								Description:
+								<textarea
+									style="min-height: 200px;"
+									class="input input-bordered bg-white input-primary rounded-none"
+									name="description"
+								></textarea>
+							</label>
+							<div class="divider"></div>
+							<label class="flex flex-col justify-start gap-2 rounded-none">
+								Select Cookbook:
+							</label>
+							<div class="acl-search-container w-auto flex flex-row">
+								<input
+									id="acl-search-input"
+									placeholder="search..."
+									class="flex input input input-bordered bg-white input-primary rounded-none w-full h-full flex-grow md:flex-row"
+									name="cookbook-search"
+									hx-params="cookbook-search"
+									hx-get={ CookbookSearch }
+									hx-trigger="keyup changed"
+									hx-target="#acl-search-results"
+								/>
+								<div id="acl-search-results"></div>
+							</div>
+							<input
+								id="cookbook-uuid"
+								class="input input-bordered rounded-none"
+								type="hidden"
+								name="cookbook-uuid"
+							/>
+							<input
+								disabled
+								id="cookbook-name"
+								class="input input-bordered rounded-none"
+								type="text"
+								name="cookbook-name"
+							/>
+							<input
+								disabled
+								id="cookbook-description"
+								class="input input-bordered rounded-none"
+								type="text"
+								name="cookbook-description"
+							/>
+							<div class="card-actions justify-end">
+								<button class="badge badge-primary rounded-none px-6 py-4 hover:scale-[1.1]">
+									Create
+								</button>
+								<div class="btn btn-sm rounded-none btn-circle btn-ghost absolute left-2 top-2" onclick="new_app.close()">✕</div>
+							</div>
+						</form>
+					</div>
+					<script>
+						if (!window.newappModalListenersAdded) {
+							document.addEventListener('closeNewappModal', function() {
+								const modal = document.getElementById('new_app');
+								if (modal) {
+									console.log("Closing new app modal via event.");
+									modal.close();
+								}
+							});
+
+							const form = document.getElementById('new-app-form');
+							if (form) {
+								form.addEventListener('htmx:responseError', function(event) {
+									console.error("Error creating app:", event.detail.error);
+								});
+							}
+
+							window.newappModalListenersAdded = true;
+						}
+					</script>
+					<div class="toast-alerts"></div>
+				</dialog>
+			</div>
+		</div>
+	</div>
+
+	<div id="apps-list" class="bg-base-100 p-9 edges gap-12 mx-12 my-4">
+		@AppsList(v)
+	</div>
+}
+
+templ AppsList(v models.AppsView) {
+		<div class="grid grid-cols-1 gap-12">
+			if len(v.Apps) != 0 {
+				<div class="overflow-x-auto">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Thumbnail</th>
+								<th>Name</th>
+								<th>Description</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							for _, cb := range v.Apps {
+								<tr>
+									<td>
+										<img
+											class="object-contain h-48 w-48 min-w-48"
+											alt="lemc thumbnail"
+											src={ string(templ.URL(fmt.Sprintf("/lemc/app/thumbnail/download/%s", cb.UUID))) }
+										/>
+									</td>
+									<td>{ cb.Name }</td>
+									<td>
+										<p class="truncate w-96">
+											{ cb.Description }
+										</p>
+									</td>
+									<td>
+										if cb.UserPerms != nil && cb.UserPerms.CanIndividual {
+											<a
+												hx-target="#app"
+												hx-swap="innerHTML transition:true"
+												hx-push-url={ fmt.Sprintf("/lemc/app/index/%s/%s", "individual", cb.UUID) }
+												href={ templ.URL(fmt.Sprintf("/lemc/app/index/%s/%s?partial=true", "individual", cb.UUID)) }
+												class="btn text-lg rounded-none m-1"
+											>
+												App
+											</a>
+										}
+										if cb.UserPerms != nil && cb.UserPerms.CanShared {
+											<!--
+											<a
+												hx-target="#app"
+												hx-swap="innerHTML transition:true"
+												hx-push-url={ fmt.Sprintf("/lemc/app/index/s/%s/%s", "shared", cb.UUID) }
+												href={ templ.URL(fmt.Sprintf("/lemc/app/index/s/%s/%s?partial=true", "shared", cb.UUID)) }
+												class="btn text-lg rounded-none m-1"
+											>
+												Shared
+											</a>
+											-->
+										}
+										if cb.UserPerms != nil && cb.UserPerms.CanAdminister {
+											<a
+												hx-target="#app"
+												hx-swap="innerHTML transition:true"
+												hx-push-url={ fmt.Sprintf("/lemc/app/index/%s/%s", "acls", cb.UUID) }
+												href={ templ.URL(fmt.Sprintf("/lemc/app/index/%s/%s?partial=true", "acls", cb.UUID)) }
+												class="btn text-lg rounded-none m-1"
+											>
+												ACLs
+											</a>
+										}
+										if cb.UserPerms != nil && cb.UserPerms.CanAdminister {
+											<button
+												hx-post={ fmt.Sprintf("/lemc/app/refresh/%s", cb.UUID) }
+												hx-swap="none"
+												class="btn text-lg rounded-none btn-outline m-1"
+											>
+												Refresh
+											</button>
+										}
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+			} else {
+				<p>It appears that no apps have not been created...yet.</p>
+			}
+		</div>
+		<!-- Pagination Controls -->
+		if v.TotalPages > 0 {
+			<div class="flex justify-center items-center space-x-4 mt-8">
+				<!-- Previous Button -->
+				if v.CurrentPage > 1 {
+					<a
+						href={ templ.URL(fmt.Sprintf("/lemc/apps?page=%d&limit=%d", v.CurrentPage-1, v.Limit)) }
+						hx-get={ fmt.Sprintf("/lemc/apps?page=%d&limit=%d&partial=true", v.CurrentPage-1, v.Limit) }
+						hx-target="#app"
+						hx-swap="innerHTML transition:true scroll:none"
+						hx-push-url={ fmt.Sprintf("/lemc/apps?page=%d&limit=%d", v.CurrentPage-1, v.Limit) }
+						class="btn btn-sm btn-outline rounded-none"
+					>
+						&lt;
+					</a>
+				} else {
+					<button class="btn btn-sm btn-outline rounded-none" disabled>
+						&lt;
+					</button>
+				}
+				<!-- Page Info -->
+				<span class="text-sm">
+					Page { fmt.Sprintf("%d", v.CurrentPage) } of { fmt.Sprintf("%d", v.TotalPages) }
+				</span>
+				<!-- Next Button -->
+				if v.CurrentPage < v.TotalPages {
+					<a
+						href={ templ.URL(fmt.Sprintf("/lemc/apps?page=%d&limit=%d", v.CurrentPage+1, v.Limit)) }
+						hx-get={ fmt.Sprintf("/lemc/apps?page=%d&limit=%d&partial=true", v.CurrentPage+1, v.Limit) }
+						hx-target="#app"
+						hx-swap="innerHTML transition:true scroll:none"
+						hx-push-url={ fmt.Sprintf("/lemc/apps?page=%d&limit=%d", v.CurrentPage+1, v.Limit) }
+						class="btn btn-sm btn-outline rounded-none"
+					>
+						&gt;
+					</a>
+				} else {
+					<button class="btn btn-sm btn-outline rounded-none" disabled>
+						&gt;
+					</button>
+				}
+			</div>
+		}
+}
+
+templ AppsIndex(v models.AppsView, cmp templ.Component) {
+	@layout.Base(v.BaseView) {
+		@cmp
+	}
+}

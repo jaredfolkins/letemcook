@@ -1,0 +1,198 @@
+package pages
+
+import (
+	"fmt"
+	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/views/layout"
+)
+
+templ Cookbooks(v models.CookbooksView) {
+	<div id="cookbooknav" class="cookbooknav-attrs flex flex-col justify-end md:flex-row mx-12 mb-2">
+		<div class="flex-1 flex items-center justify-start">
+			<h1 class="text-2xl font-bold">Cookbooks</h1>
+		</div>
+		<div class="flex flex-row gap-12 justify-end">
+			<div>
+				if v.BaseView.UserContext.ActingAs.CanCreateCookbook() {
+				<button class="btn btn-primary rounded-none" onclick="new_cookbook.showModal()">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
+					</svg>
+					</button>
+				}
+				<dialog id="new_cookbook" class="modal overscroll-none">
+					<div class="p-12 overscroll-none">
+						<form
+							id="new-cookbook-form"
+							hx-target="#cookbooks-list"
+							hx-swap="innerHTML"
+							hx-headers="js:{'X-TimeZone': Intl.DateTimeFormat().resolvedOptions().timeZone}"
+							hx-post="/lemc/cookbook/create"
+							class="drop-shadow-xl flex flex-col gap-4 p-12 bg-base-100 rounded-none"
+						>
+							<label class="flex flex-col justify-start gap-2 rounded-none">
+								Name:
+								<input
+									class="input input-bordered bg-white input-primary rounded-none"
+									type="text"
+									name="name"
+								/>
+							</label>
+							<label class="flex flex-col justify-start gap-2 relative rounded-none">
+								Description:
+								<textarea
+									style="min-height: 200px;"
+									class="input input-bordered bg-white input-primary rounded-none"
+									name="description"
+								></textarea>
+							</label>
+							<div class="card-actions justify-end">
+								<button class="badge badge-primary rounded-none px-6 py-4 hover:scale-[1.1]">
+									Create
+								</button>
+								<div class="btn btn-sm rounded-none btn-circle btn-ghost absolute left-2 top-2" onclick="new_cookbook.close()">✕</div>
+							</div>
+						</form>
+						<script>
+							if (!window.newCookbookModalListenersAdded) {
+								document.addEventListener('closeNewCookbookModal', function() {
+									const modal = document.getElementById('new_cookbook');
+									if (modal) {
+										console.log("Closing new cookbook modal via event."); // Added for debugging
+										modal.close();
+									}
+								});
+
+								const form = document.getElementById('new-cookbook-form');
+								if (form) {
+									form.addEventListener('htmx:responseError', function(event) {
+										console.error("Error creating cookbook:", event.detail.error);
+									});
+								}
+
+								window.newCookbookModalListenersAdded = true;
+							}
+						</script>
+					</div>
+					<div class="toast-alerts"></div>
+				</dialog>
+			</div>
+		</div>
+	</div>
+	<div id="cookbooks-list" class="bg-base-100 p-9 edges gap-12 mx-12 my-4">
+		@CookbooksList(v)
+	</div>
+}
+
+templ CookbooksList(v models.CookbooksView) {
+	if len(v.Cookbooks) != 0 {
+		<div class="overflow-x-auto">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Thumbnail</th>
+						<th>Name</th>
+						<th>Description</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					for _, cb := range v.Cookbooks {
+						<tr>
+							<td>
+								<div class="relative">
+									<img
+										class="object-contain h-48 w-48 min-w-48"
+										alt="lemc thumbnail"
+										src={ string(templ.URL(fmt.Sprintf("/lemc/cookbook/thumbnail/download/%s?ts=%s", cb.UUID, cb.ThumbnailTimestamp))) }
+									/>
+								</div>
+							</td>
+							<td>
+								<p>{ cb.Name }</p>
+							</td>
+							<td>
+								<p class="truncate w-96">
+									{ cb.Description }
+								</p>
+							</td>
+							<td>
+								<!-- Show Individual/Shared if user CanView -->
+								if cb.UserPerms != nil && cb.UserPerms.CanView {
+									<a
+										hx-target="#app"
+										hx-swap="innerHTML transition:true"
+										hx-push-url={ fmt.Sprintf("/lemc/cookbook/edit/%s/%s", "individual", cb.UUID) }
+										href={ templ.URL(fmt.Sprintf("/lemc/cookbook/edit/%s/%s?partial=true", "individual", cb.UUID)) }
+										class="rounded-none text-lg btn m-1"
+									>
+										Cookbook
+									</a>
+								}
+								<!-- Show ACLs if user CanEdit -->
+								if cb.UserPerms != nil && cb.UserPerms.CanEdit {
+									<a
+										hx-target="#app"
+										hx-swap="innerHTML transition:true"
+										hx-push-url={ fmt.Sprintf("/lemc/cookbook/edit/%s/%s", "acls", cb.UUID) }
+										href={ templ.URL(fmt.Sprintf("/lemc/cookbook/edit/%s/%s?partial=true", "acls", cb.UUID)) }
+										class="rounded-none text-lg btn m-1"
+									>
+										ACLs
+									</a>
+								}
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	} else {
+		<p>Cookbooks Have Not Been Created...yet.</p>
+	}
+	if v.TotalPages > 0 {
+		<div class="flex justify-center items-center space-x-4 mt-8">
+			if v.CurrentPage > 1 {
+				<a
+					href={ templ.URL(fmt.Sprintf("/lemc/cookbooks?page=%d&limit=%d", v.CurrentPage-1, v.Limit)) }
+					hx-get={ fmt.Sprintf("/lemc/cookbooks?page=%d&limit=%d&partial=true", v.CurrentPage-1, v.Limit) }
+					hx-target="#app"
+					hx-swap="innerHTML transition:true scroll:top"
+					hx-push-url={ fmt.Sprintf("/lemc/cookbooks?page=%d&limit=%d", v.CurrentPage-1, v.Limit) }
+					class="btn btn-sm btn-outline rounded-none"
+				>
+					&lt;
+				</a>
+			} else {
+				<button class="btn btn-sm btn-outline rounded-none" disabled>
+					&lt;
+				</button>
+			}
+			<span class="text-sm">
+				Page { fmt.Sprintf("%d", v.CurrentPage) } of { fmt.Sprintf("%d", v.TotalPages) }
+			</span>
+			if v.CurrentPage < v.TotalPages {
+				<a
+					href={ templ.URL(fmt.Sprintf("/lemc/cookbooks?page=%d&limit=%d", v.CurrentPage+1, v.Limit)) }
+					hx-get={ fmt.Sprintf("/lemc/cookbooks?page=%d&limit=%d&partial=true", v.CurrentPage+1, v.Limit) }
+					hx-target="#app"
+					hx-swap="innerHTML transition:true scroll:top"
+					hx-push-url={ fmt.Sprintf("/lemc/cookbooks?page=%d&limit=%d", v.CurrentPage+1, v.Limit) }
+					class="btn btn-sm btn-outline rounded-none"
+				>
+					&gt;
+				</a>
+			} else {
+				<button class="btn btn-sm btn-outline rounded-none" disabled>
+					&gt;
+				</button>
+			}
+		</div>
+	}
+}
+
+templ CookbooksIndex(v models.CookbooksView, cmp templ.Component) {
+	@layout.Base(v.BaseView) {
+		@cmp
+	}
+}

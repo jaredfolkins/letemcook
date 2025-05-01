@@ -1,0 +1,9 @@
+.env
+.git
+.idea
+.vscode
+.cursor
+*.log
+*.air.*
+tmp/
+data/ 

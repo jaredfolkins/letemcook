@@ -1,0 +1,76 @@
+package partials
+
+import (
+    "fmt"
+)
+
+templ JobStatusView(uuid string, pageid string, scope string, now, in, every bool) {
+    <div class="flex mb-4">
+
+            <div class="w-1/3 p-4 rounded-none badge badge-lg p-4 border-none">
+                <div id={ string(fmt.Sprintf("lemc-cpu-icon-%s-%s", uuid, pageid)) }>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z" />
+                    </svg>
+                </div>
+
+                <div id={ string(fmt.Sprintf("lemc-cpu-int-%s-%s-%s", uuid, pageid, scope)) } class="text-sm">
+                    <div class="indicator p-2">
+                      <span class="indicator-item indicator-end indicator-middle badge">
+                          if (now) {
+                            1
+                          } else {
+                            0
+                          }
+                      </span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="w-1/3 border-none rounded-none badge badge-lg p-4">
+
+                <div id={ string(fmt.Sprintf("lemc-clock-icon-%s-%s-%s", uuid, pageid, scope)) }>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                </div>
+
+                <div id={ string(fmt.Sprintf("lemc-clock-int-%s-%s-%s", uuid, pageid, scope)) } class="text-sm">
+                    <div class="indicator p-2">
+                      <span class="indicator-item indicator-middle indicator-end badge">
+                          if (in) {
+                            1
+                          } else {
+                            0
+                          }
+                      </span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="w-1/3 rounded-none badge badge-lg p-4 border-none">
+
+                <div id={ string(fmt.Sprintf("lemc-cron-icon-%s-%s-%s", uuid, pageid, scope)) }>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0 4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3" />
+                    </svg>
+                </div>
+
+                <div id={ string(fmt.Sprintf("lemc-cron-int-%s-%s-%s", uuid, pageid, scope)) } class="text-sm">
+                    <div class="indicator p-2">
+                      <span class="indicator-item  indicator-end indicator-middle badge">
+                          if (every) {
+                            1
+                          } else {
+                            0
+                          }
+                      </span>
+                    </div>
+                </div>
+
+            </div>
+      </div>
+
+}

@@ -1,0 +1,46 @@
+<h2>[%%date%%] Hello, World!</h2> 
+<p>Welcome to the Let'em Cook (LEMC) Example!</p>
+<p>This container demonstrates a basic LEMC setup. Here's what's happening:</p>
+<ul>
+<li>The Dockerfile defines the container environment (based on Alpine Linux).</li>
+<li>This script (<code>entrypoint.sh</code>) is run when the container starts.</li>
+<li>It prints this informational message.</li>
+</ul>
+
+<h2>LEMC Environment Variables</h2>
+<p>LEMC uses environment variables for configuration and context.</p>
+
+<h3>System-Provided Context Variables</h3>
+<p>These are often set by the LEMC execution environment to provide context to the job:</p>
+<ul>
+<li><code>LEMC_UUID</code>: A unique identifier, often for the specific recipe instance (Currently: <code>%%LEMC_UUID%%</code>)</li>
+<li><code>LEMC_SCOPE</code>: The execution scope (e.g., individual, team) (Currently: <code>%%LEMC_SCOPE%%</code>)</li>
+<li><code>LEMC_USER_ID</code>: The ID of the initiating user (Currently: <code>%%LEMC_USER_ID%%</code>)</li>
+<li><code>LEMC_USERNAME</code>: The username of the initiating user (Currently: <code>%%LEMC_USERNAME%%</code>)</li>
+<li><code>LEMC_RECIPE_NAME</code>: The name of the executed recipe (Currently: <code>%%LEMC_RECIPE_NAME%%</code>)</li>
+<li><code>LEMC_PAGE_ID</code>: The ID of the associated web page (if applicable) (Currently: <code>%%LEMC_PAGE_ID%%</code>)</li>
+<li><code>LEMC_STEP</code>: The specific step within the action (Currently: <code>%%LEMC_STEP%%</code>)</li>
+<li><code>LEMC_HTTP_DOWNLOAD_BASE_URL</code>: Base URL for artifact downloads (Currently: <code>%%LEMC_HTTP_DOWNLOAD_BASE_URL%%</code>)</li>
+</ul>
+
+<h3>Developer Defined Recipe Variables</h3>
+<p>Some example environment variables are configured by the developer when the recipe is created:</p>
+<ul>
+<li><code>USER_DEFINED_PUBLIC_ENV_VAR</code>: (Example Public Var) Specifies the primary recipe/build file (Currently: <code>%%USER_DEFINED_PUBLIC_ENV_VAR%%</code>)</li>
+<li><code>USER_DEFINED_PRIVATE_ENV_VAR</code>: (Example Private Var) Specifies the primary recipe/build file (Currently: <code>%%USER_DEFINED_PRIVATE_ENV_VAR%%</code>)</li>
+</ul>
+
+<h2>Container Mount Points</h2>
+<p>The container has several directories mounted from the host system:</p>
+<ul>
+    <li><code>/lemc/public</code>: Directory for public artifacts. Files here are available for download.</li>
+    <li><code>/lemc/private</code>: Directory for private artifacts. Files here are kept here for state or for future use. Not available for download.</li>
+    <li><code>/lemc/global</code>: Directory for globally shared resources for a cookbook/app.</li>
+    <li><code>/lemc/shared</code>: Directory for shared resources (potentially writable, often admin-only).</li>
+</ul>
+
+<h2>File Download Example</h2>
+<p>This example creates a file in the public directory and provides a link to download it:</p>
+<p>%%DOWNLOAD_LINK_PLACEHOLDER%%</p>
+
+<strong>%%final_message%%</strong> 

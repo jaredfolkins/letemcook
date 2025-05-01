@@ -1,0 +1,26 @@
+cookbook:
+  configuration:
+    environment:
+      - DEBUG=true
+    http-variables:
+      - USER-ID=string
+  pages:
+    - page: 1
+      name: 'Do In And Every'
+      recipes:
+        - recipe: do-in-and-every
+          description: 10 iterations of 1 second sleep call
+          form: []
+          steps:
+            - step: 1
+              image: docker.io/jfolkins/lemc-echo:latest
+              do: now
+              timeout: 10.minutes
+            - step: 2
+              image: docker.io/jfolkins/lemc-do-in:latest
+              do: in.5.seconds
+              timeout: 10.minutes
+            - step: 2
+              image: docker.io/jfolkins/lemc-do-every:latest
+              do: every.3.seconds
+              timeout: 10.minutes

@@ -1,0 +1,103 @@
+package pages
+
+import (
+	"fmt"
+	"strconv"
+	"time"
+
+	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/views/layout"
+)
+
+func formatJobTime(t time.Time) string {
+	if t.IsZero() {
+		return "N/A"
+	}
+	return t.Format("2006-01-02 15:04:05") // Example format
+}
+
+templ JobsPage(v models.JobsView) {
+	<div id="jobsnav" class="cookbooknav-attrs flex flex-col justify-end md:flex-row mx-12 mb-2">
+		<div class="flex-1 flex items-center justify-start">
+			<h1 class="text-2xl font-bold">Jobs</h1>
+		</div>
+		<div class="flex flex-row gap-12 justify-end">
+		</div>
+	</div>
+	<div id="jobs-content-box" class="bg-base-100 p-9 edges gap-12 mx-12 my-4">
+		<div id="job-list-container" class="grid grid-cols-1 gap-12">
+			if len(v.Jobs) == 0 {
+				<p>No jobs found.</p>
+			} else {
+				<div class="overflow-x-auto">
+					<table class="table w-full">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Recipe</th>
+								<th>User</th>
+								<th>Type</th>
+								<th>Status</th>
+								<th>Created At</th>
+								<th>Next Run / Scheduled At</th>
+							</tr>
+						</thead>
+						<tbody>
+							for _, job := range v.Jobs {
+								<tr>
+									<td>
+										{ job.ID } 
+									</td>
+									<td>{ job.RecipeName }</td>
+									<td>{ job.Username }</td>
+									<td>{ job.Type }</td>
+									<td>{ job.Status }</td>
+									<td>{ formatJobTime(job.CreatedAt) }</td>
+									<td>{ formatJobTime(job.ScheduledAt) }</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+			}
+		</div>
+
+		if v.TotalPages > 1 {
+			<div class="flex justify-center items-center space-x-4 mt-8">
+				if v.CurrentPage > 1 {
+					<a
+						href={ templ.URL(fmt.Sprintf("/lemc/jobs?page=%d&limit=%d", v.CurrentPage-1, v.Limit)) }
+						hx-get={ fmt.Sprintf("/lemc/jobs?page=%d&limit=%d&partial=true", v.CurrentPage-1, v.Limit) }
+						hx-target="#app"
+						hx-swap="innerHTML transition:true scroll:top"
+						hx-push-url={ fmt.Sprintf("/lemc/jobs?page=%d&limit=%d", v.CurrentPage-1, v.Limit) }
+						class="btn btn-sm btn-outline rounded-none"
+					>&lt;</a>
+				} else {
+					<button class="btn btn-sm btn-outline rounded-none" disabled>&lt;</button>
+				}
+				<span class="text-sm">
+					Page { strconv.Itoa(v.CurrentPage) } of { strconv.Itoa(v.TotalPages) }
+				</span>
+				if v.CurrentPage < v.TotalPages {
+					<a
+						href={ templ.URL(fmt.Sprintf("/lemc/jobs?page=%d&limit=%d", v.CurrentPage+1, v.Limit)) }
+						hx-get={ fmt.Sprintf("/lemc/jobs?page=%d&limit=%d&partial=true", v.CurrentPage+1, v.Limit) }
+						hx-target="#app"
+						hx-swap="innerHTML transition:true scroll:top"
+						hx-push-url={ fmt.Sprintf("/lemc/jobs?page=%d&limit=%d", v.CurrentPage+1, v.Limit) }
+						class="btn btn-sm btn-outline rounded-none"
+					>&gt;</a>
+				} else {
+					<button class="btn btn-sm btn-outline rounded-none" disabled>&gt;</button>
+				}
+			</div>
+		}
+	</div>
+}
+
+templ JobsIndex(v models.JobsView, jobsList templ.Component) {
+	@layout.Base(v.BaseView) {
+		@jobsList
+	}
+}

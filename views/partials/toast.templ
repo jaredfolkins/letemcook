@@ -1,0 +1,10 @@
+package partials
+
+templ OpenMonitorModal(uuid, pageid, msg string) {
+  @openMonitorModal(uuid, pageid, msg)
+}
+
+script openMonitorModal(uuid, id, msg string) {
+    var modal = document.getElementById("pageid_" + id + "_modal");
+    modal.showModal();
+}

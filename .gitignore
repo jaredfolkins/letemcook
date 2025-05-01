@@ -1,0 +1,10 @@
+.DS_Store
+.cursor
+.env
+.goenv
+.idea
+.vscode
+data/*
+data/
+tmp/*
+*_templ.go

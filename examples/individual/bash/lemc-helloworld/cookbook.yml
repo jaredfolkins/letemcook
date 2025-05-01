@@ -1,0 +1,18 @@
+cookbook:
+    environment:
+        public:
+            - USER_DEFINED_PUBLIC_ENV_VAR=somesillypublicvar
+        private:
+            - USER_DEFINED_PRIVATE_ENV_VAR=somesillyprivatevarthatyouwantsecret
+    pages:
+        - page: 1
+          name: Hello World Page
+          recipes:
+            - recipe: hello world
+              description: basic hello world lemc example
+              form: []
+              steps:
+                - step: 1
+                  image: docker.io/jfolkins/lemc-helloworld:latest
+                  do: now
+                  timeout: 10.minutes

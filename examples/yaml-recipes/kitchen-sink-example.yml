@@ -1,0 +1,190 @@
+cookbook:
+  environment:
+    public:
+      - DEBUG=true
+    private:
+      - SECRET=SOME-DUMB-SECRET
+  pages:
+    - page: 1
+      name: 'Page #1'
+      recipes:
+        - recipe: sleep
+          description: 10 iterations of 1 second sleep call
+          form:
+            - description: This is a form that will be used to gather input for the sleep recipe
+            - name: password
+              type: password
+              defaults: ["enter your password here"]
+            - name: "favorite color"
+              type: radio
+              defaults: ["red", "blue", "green"]
+            - name: "favorite food"
+              type: select
+              defaults: ["pizza", "spaghetti", "hamburger"]
+            - name: blog
+              type: textarea
+              defaults: ["input your blog entry"]
+          steps:
+            - step: 1
+              image: docker.io/jfolkins/lemc-sleep:latest
+              do: now
+              timeout: 10.minutes
+        - recipe: echo
+          description: Print Echo To The Output
+          form: []
+          steps:
+            - step: 1
+              image: docker.io/jfolkins/lemc-echo:latest
+              do: now
+              timeout: 10.minutes
+        - recipe: clear
+          description: Clear The Output Pane
+          form: []
+          steps:
+            - step: 1
+              image: docker.io/jfolkins/lemc-clear:latest
+              do: now
+              timeout: 10.minutes
+        - recipe: css-font-small
+          description: Make The Font Small In The Output Pane
+          form: []
+          steps:
+            - step: 1
+              image: docker.io/jfolkins/lemc-css-font-small:latest
+              do: now
+              timeout: 10.minutes
+        - recipe: css-font-yuge
+          description: Make The Font YUGE In The Output Pane
+          form: []
+          steps:
+            - step: 1
+              image: docker.io/jfolkins/lemc-css-font-big:latest
+              do: now
+              timeout: 10.minutes
+        - recipe: css-rotate
+          description: Rotate The Color Of The Output Pane Using Css
+          form: []
+          steps:
+            - step: 1
+              image: docker.io/jfolkins/lemc-css-rotate:latest
+              do: now
+              timeout: 10.minutes
+        - recipe: punch-saint
+          description: Have The Enemy Beat The Crap Out Of A Saint
+          form: []
+          steps:
+            - step: 1
+              image: docker.io/jfolkins/lemc-punchout:latest
+              do: now
+              timeout: 10.minutes
+        - recipe: env
+          description: Print Environment Variables
+          form: []
+          steps:
+            - step: 1
+              image: docker.io/jfolkins/lemc-env:latest
+              do: now
+              timeout: 10.minutes
+        - recipe: show env with form input
+          description: accepts form input and prints the environment variables
+          form:
+            - name: password
+              type: password
+              defaults: ["enter your password here"]
+            - name: "favorite color"
+              type: radio
+              defaults: ["red", "blue", "green"]
+            - name: "favorite food"
+              type: select
+              defaults: ["pizza", "spaghetti", "hamburger"]
+            - name: blog
+              type: textarea
+              defaults: ["input your blog entry"]
+          steps:
+            - step: 1
+              image: docker.io/jfolkins/lemc-env:latest
+              do: now
+              timeout: 10.minutes
+    - page: 2
+      name: 'Page #2'
+      recipes:
+        - recipe: print-hello-world
+          description: Print hello world
+          form: []
+          steps:
+            - step: 1
+              image: gcr.io/jaredfolkins/print-hello-world
+              do: now
+              timeout: 10.minutes
+        - recipe: status
+          description: Check status
+          form: []
+          steps:
+            - step: 1
+              image: gcr.io/jaredfolkins/status
+              do: now
+              timeout: 1.minutes
+        - recipe: down
+          description: Destroy
+          form: []
+          steps:
+            - step: 1
+              image: gcr.io/jaredfolkins/destroy
+              do: now
+              timeout: 10.minutes
+        - recipe: up
+          description: This button will bring the resources back down and back up.
+          form: []
+          steps:
+            - step: 1
+              image: gcr.io/jaredfolkins/cleanup
+              do: now
+              timeout: 10.minutes
+            - step: 2
+              image: gcr.io/jaredfolkins/build
+              do: now
+              timeout: 30.minutes
+            - step: 3
+              image: gcr.io/jaredfolkins/maintenance
+              do: in.1.hours
+              timeout: 10.minutes
+            - step: 4
+              image: gcr.io/jaredfolkins/status
+              do: every.1.minutes
+              timeout: 30.seconds
+    - page: 3
+      name: curl my ipv4
+      recipes:
+        - recipe: alert
+          description: Fire the alert() js function
+          form: []
+          steps:
+            - step: 1
+              image: docker.io/jfolkins/lemc-alert:latest
+              do: now
+              timeout: 10.minutes
+        - recipe: curl my ipv4
+          description: Print the ipv4 address of the server
+          form: []
+          steps:
+            - step: 1
+              image: docker.io/jfolkins/lemc-curl:latest
+              do: now
+              timeout: 10.minutes
+        - recipe: create file
+          description: create new file and echo comment into it
+          form: []
+          steps:
+            - step: 1
+              image: docker.io/jfolkins/lemc-newfile:latest
+              do: now
+              timeout: 10.minutes
+        - recipe: bash hello world
+          description: Print the hello world using bash
+          form: []
+          steps:
+            - step: 1
+              image: docker.io/jfolkins/lemc-helloworld:latest
+              do: now
+              timeout: 10.minutes
+

@@ -1,0 +1,134 @@
+package pages
+
+import (
+	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/views/layout"
+)
+
+// ProfilePage renders just the profile content (for partial/HTMX updates)
+templ ProfilePage(v models.UserDetailView) {
+	<div class="cookbooknav-attrs flex flex-col justify-end md:flex-row mx-12 mb-4">
+		<div class="flex-1 flex items-center justify-start">
+			<h1 class="text-2xl font-bold">My Profile</h1>
+		</div>
+	</div>
+
+	<div class="flex flex-col md:flex-row gap-6 mx-12 mt-6">
+		<!-- User Information Card -->
+		<section class="card rounded-none bg-base-100 flex-1 edges">
+			<div class="card-body">
+				<h2 class="card-title border-b border-b-slate-600 pb-[4px]">Account Information</h2>
+				<div class="p-4 space-y-4">
+					<div class="flex flex-col">
+						<span class="font-semibold">Username</span>
+						<span class="text-lg">{ v.User.Username }</span>
+					</div>
+					<div class="flex flex-col">
+						<span class="font-semibold">Email</span>
+						<span class="text-lg">{ v.User.Email }</span>
+					</div>
+					<div class="flex flex-col">
+						<span class="font-semibold">Account</span>
+						<span class="text-lg">{ v.User.Account.Name }</span>
+					</div>
+					<div class="flex flex-col">
+						<span class="font-semibold">Member Since</span>
+						<span class="text-lg">{ v.User.Created.Format("January 2, 2006") }</span>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Password Change Card -->
+		<section class="card rounded-none bg-base-100 flex-1 edges">
+			<div class="card-body">
+				<h2 class="card-title border-b border-b-slate-600 pb-[4px]">Change Password</h2>
+				<form
+					hx-post="/lemc/profile/password"
+					hx-target="#app"
+					hx-swap="innerHTML"
+					class="drop-shadow-xl flex flex-col gap-4 p-4"
+				>
+					<label class="flex flex-col justify-start gap-2 rounded-none">
+						Current Password:
+						<input
+							class="input input-bordered bg-white input-primary rounded-none"
+							type="password"
+							name="current_password"
+							required
+						/>
+					</label>
+					<label class="flex flex-col justify-start gap-2 rounded-none">
+						New Password:
+						<input
+							class="input input-bordered bg-white input-primary rounded-none"
+							type="password"
+							name="new_password"
+							required
+						/>
+					</label>
+					<label class="flex flex-col justify-start gap-2 rounded-none">
+						Confirm New Password:
+						<input
+							class="input input-bordered bg-white input-primary rounded-none"
+							type="password"
+							name="confirm_password"
+							required
+						/>
+					</label>
+					<div class="card-actions justify-end">
+						<button
+							class="rounded-none btn btn-primary"
+						>
+							Update Password
+						</button>
+					</div>
+				</form>
+			</div>
+		</section>
+	</div>
+
+	<!-- User Settings Section -->
+	<div class="flex flex-col md:flex-row gap-6 mx-12 mt-6">
+		@UserSettingsSection(v)
+	</div>
+}
+
+// UserSettingsSection component for user settings that can be updated independently
+templ UserSettingsSection(v models.UserDetailView) {
+	<section id="user-settings-section" class="card rounded-none bg-base-100 w-full edges">
+		<div class="card-body">
+			<h2 class="card-title border-b border-b-slate-600 pb-[4px]">User Settings</h2>
+			<div class="p-4 space-y-4">
+				<form
+					id="heckle-toggle-form"
+					class="flex items-center justify-between"
+				>
+					<div class="flex-1">
+						<span class="font-semibold">Heckle Feature</span>
+						<p class="text-sm text-gray-600">Enable the heckle feature</p>
+					</div>
+					<div class="form-control">
+						<label class="cursor-pointer label">
+							<input
+								type="checkbox"
+								class="toggle toggle-primary"
+								name="heckle_enabled"
+								checked?={ v.User.Heckle }
+								hx-post="/lemc/profile/settings/heckle"
+								hx-trigger="change"
+							/>
+						</label>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+}
+
+// ProfileIndex wraps the profile page content in the base layout (for full page loads)
+templ ProfileIndex(v models.UserDetailView, profileContent templ.Component) {
+	@layout.Base(v.BaseView) {
+		@profileContent
+	}
+} 

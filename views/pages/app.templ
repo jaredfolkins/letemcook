@@ -1,0 +1,109 @@
+package pages
+
+import (
+	"fmt"
+	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/views/layout"
+	"github.com/jaredfolkins/letemcook/views/partials"
+)
+
+templ App(v models.CoreView) {
+    <div class="mb-8">
+        @RenderAppNav(v)
+    </div>
+	<div class="flex mx-12 bg-base-100 drop-shadow-md mb-8">
+		<div class="flex w-full h-full flex-row justify-start">
+			<div class="flex flex-col">
+				<div class="image-container">
+					<img
+						class="image"
+						alt="lemc thumbnail"
+						src={ string(templ.URL(fmt.Sprintf("/lemc/app/thumbnail/download/%s", v.YamlDefault.UUID))) }
+					/>
+				</div>
+			</div>
+			<div class="flex flex-grow flex-col p-4">
+				<div class="mb-2">
+					<div
+						id="cookbook_name"
+						class="flex text-2xl input w-full h-full flex-grow md:flex-row rounded-none"
+						name="cookbook_name"
+					>
+						{ v.Cookbook.Name }
+					</div>
+				</div>
+				<div class="flex-1 flex flex-col">
+					<div
+						name="cookbook_desc"
+						id="cookbook_desc"
+						class="flex text-lg input w-full h-full flex-grow rounded-none"
+					>
+						{ v.Cookbook.Description }
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="mb-8">
+        @RenderappRecipesNav(v)
+    </div>
+
+	<div id="cookbook" class="mx-12">
+		switch v.ViewType {
+			case "acls":
+				@partials.AppAcls(v)
+			default:
+				@partials.App(v)
+		}
+	</div>
+}
+
+templ AppIndex(v models.CoreView, cmp templ.Component) {
+	@layout.Base(v.BaseView) {
+		@cmp
+	}
+}
+
+templ RenderappRecipesNav(v models.CoreView) {
+<div id="recipesnav" class="cookbooknav-attrs flex flex-col justify-end md:flex-row mx-12 mb-2">
+      <div class="flex-1 flex items-center justify-start">
+        {{ var activeUser, activeAdmin, activeAcls string }}
+        if v.ViewType == "individual" {
+            {{ activeUser = "active-cookbook" }}
+        } else if v.ViewType == "shared" {
+            {{ activeAdmin = "active-cookbook" }}
+        } else {
+            {{ activeAcls = "active-cookbook" }}
+        }
+
+
+         <a
+            hx-target="#app"
+            hx-swap="innerHTML transition:true"
+            hx-push-url={ fmt.Sprintf("/lemc/app/index/i/individual/%s", v.Cookbook.UUID) }
+            href={ templ.URL(fmt.Sprintf("/lemc/app/index/i/individual/%s?partial=true", v.Cookbook.UUID)) }
+            class={ fmt.Sprintf("rounded-none btn text-lg %s", activeUser) }>
+            Individual
+         </a>
+          <a
+             hx-target="#app"
+             hx-swap="innerHTML transition:true"
+             hx-push-url={ fmt.Sprintf("/lemc/app/index/s/shared/%s", v.Cookbook.UUID) }
+             href={ templ.URL(fmt.Sprintf("/lemc/app/index/s/shared/%s?partial=true", v.Cookbook.UUID)) }
+             class={ fmt.Sprintf("rounded-none btn mx-2 text-lg %s", activeAdmin) }>
+             Shared
+          </a>
+          <a
+             hx-target="#app"
+             hx-swap="innerHTML transition:true"
+             hx-push-url={ fmt.Sprintf("/lemc/app/index/a/acls/%s", v.Cookbook.UUID) }
+             href={ templ.URL(fmt.Sprintf("/lemc/app/index/a/acls/%s?partial=true", v.Cookbook.UUID)) }
+             class={ fmt.Sprintf("rounded-none btn text-lg %s", activeAcls) }>
+             ACLs
+          </a>
+     </div>
+
+      <div class="flex-1 flex justify-end">
+     </div>
+</div>
+}

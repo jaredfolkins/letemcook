@@ -1,0 +1,96 @@
+package pages
+
+import (
+	"fmt"
+	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/views/partials"
+)
+
+templ AppGo(v models.CoreView) {
+	<div class="mb-8">
+		@RenderAppGoTopNav(v)
+	</div>
+	<div class="mb-8">
+		@RenderAppGoNav(v)
+	</div>
+	<div id="cookbook" class="mx-12">
+	   @partials.App(v)
+	</div>
+}
+
+templ RenderAppGoTopNav(v models.CoreView) {
+<div class="cookbooknav-attrs flex flex-col justify-end md:flex-row mx-12 mb-2">
+      <div class="flex-1 flex items-center justify-start">
+        <h1 class="text-2xl font-bold">App: { v.App.Name }</h1>
+      </div>
+      if v.ViewType != "acls" && v.App.UserPerms.CanAdminister {
+        <div class="flex-1 flex justify-end">
+                    <div class="dropdown dropdown-end">
+                        <button tabindex="0" role="button" class="btn btn-primary rounded-none mx-2">
+                            Actions
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </button>
+
+                        <ul tabindex="0" class="dropdown-content menu m-1 bg-base-100 rounded-none z-[1] w-52 p-2 shadow" style="z-index: 1000;">
+                            <li>
+                                <div class="form-control flex flex-row items-center justify-between w-full px-4 py-2 rounded-none">
+                                    <span class="label-text">On Register</span>
+                                    <input
+                                        id="published-toggle-dropdown"
+                                        type="checkbox"
+                                        class="toggle toggle-primary"
+                                        hx-swap="none"
+                                        hx-patch={string(templ.URL(fmt.Sprintf("/lemc/app/onregister/toggle/%s", v.YamlDefault.UUID)))}
+                                        if v.App.OnRegister {
+                                            checked="checked"
+                                        }
+                                    />
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+            </div>
+        }
+</div>
+}
+
+templ RenderAppGoNav(v models.CoreView) {
+{{ var activeUser, activeAdmin string }}
+
+<div id="recipesnav" class="cookbooknav-attrs flex flex-col justify-end md:flex-row mx-12 mb-2">
+
+      <div class="flex-1 flex items-center justify-start">
+        if v.ViewType == "individual" {
+            {{ activeUser = "active-cookbook" }}
+        } else if v.ViewType == "shared" {
+            {{ activeAdmin = "active-cookbook" }}
+        }
+
+
+        if v.App.UserPerms.CanIndividual {
+         <a
+            hx-target="#app"
+            hx-swap="innerHTML transition:true"
+            hx-push-url={ fmt.Sprintf("/lemc/app/index/%s/%s", "individual", v.YamlDefault.UUID) }
+            href={ templ.URL(fmt.Sprintf("/lemc/app/index/%s/%s?partial=true", "individual", v.YamlDefault.UUID)) }
+            class={ fmt.Sprintf("rounded-none btn text-lg %s", activeUser) }>
+            Individual
+         </a>
+        }
+        if v.App.UserPerms.CanShared {
+          <a
+             hx-target="#app"
+             hx-swap="innerHTML transition:true"
+             hx-push-url={ fmt.Sprintf("/lemc/app/index/%s/%s", "shared", v.YamlDefault.UUID) }
+             href={ templ.URL(fmt.Sprintf("/lemc/app/index/%s/%s?partial=true", "shared", v.YamlDefault.UUID)) }
+             class={ fmt.Sprintf("rounded-none btn mx-2 text-lg %s", activeAdmin) }>
+             Shared
+          </a>
+        }
+     </div>
+
+ 
+</div>
+}

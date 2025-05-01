@@ -1,0 +1,46 @@
+package pages
+
+import (
+	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/views/layout"
+)
+
+templ Home(v models.HomeView) {
+	<section class="card rounded-none bg-base-100 text-center mx-auto mb-8 w-fit edges">
+		<div class="card-body pb-2 drop-shadow-md">
+			<div class="p-4">
+				<h1 class="text-5xl font-bold">Welcome to Let'em Cook!</h1>
+				<br/>
+				<p class="text-2xl font-thin">
+					The <i>Safe & Effective</i><span class="sup">&reg;</span> way to Ops your Devs
+				</p>
+				<br/>
+				if !v.BaseView.IsProtected {
+					<p class="text-base font-thin">Have an account?</p>
+					<footer class="flex gap-4 justify-center p-1">
+						<button
+							hx-swap="transition:true"
+							href="/register"
+							class="badge badge-secondary rounded-none px-6 py-4 hover:scale-[1.1] text-lg font-thin"
+						>
+							Register
+						</button>
+						<button
+							hx-swap="transition:true"
+							href="/login"
+							class="badge badge-primary rounded-none px-6 py-4 hover:scale-[1.1] text-lg font-thin"
+						>
+							Log In
+						</button>
+					</footer>
+				}
+			</div>
+		</div>
+	</section>
+}
+
+templ HomeIndex(v models.HomeView, cmp templ.Component) {
+	@layout.Base(v.BaseView) {
+		@cmp
+	}
+}

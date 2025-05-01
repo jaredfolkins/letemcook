@@ -1,0 +1,353 @@
+package partials
+
+templ Javascript() {
+<script>
+
+    window.addEventListener('load', function () {
+        // Prevent re-initialization on back/forward navigation
+        if (window.lemcInitialized) {
+            return;
+        }
+        window.lemcInitialized = true;
+
+        if (typeof socket === 'undefined') {
+            let socket;
+        }
+
+        if (typeof elt === 'undefined') {
+            let elt;
+        }
+
+        if (typeof added === 'undefined') {
+            var added = false;
+        }
+
+        if (typeof buffers === 'undefined') {
+            var buffers = new Map();
+            buffers.set('css', new Map());
+            buffers.set('html', new Map());
+            buffers.set('js', new Map());
+        }
+
+
+        if (!added) {
+            document.addEventListener("visibilitychange", function (evt) {
+                if (!socket) {
+                    return;
+                }
+
+                if (socket) {
+                    socket.send(document.visibilityState, elt);
+                }
+            });
+
+            document.body.addEventListener("htmx:wsOpen", function (evt) {
+                socket = evt.detail.socketWrapper;
+                elt = evt.detail.elt;
+            });
+
+            document.body.addEventListener("htmx:beforeRequest", function (evt) {
+                if (evt.target.id != 'navtop') {
+                    showSpinner();
+                }
+            });
+
+            document.body.addEventListener("htmx:afterRequest", function (evt) {
+                if (evt.target.id != 'navtop') {
+                    var errObj = JSON.parse(evt.detail.xhr.getResponseHeader('X-Lemc-Flash-Error'));
+                    var successObj = JSON.parse(evt.detail.xhr.getResponseHeader('X-Lemc-Flash-Success'));
+
+                    if (errObj) {
+                        hideSpinner(errObj, "error", evt.detail.requestConfig.verb);
+                    } else if (successObj) {
+                        hideSpinner(successObj, "success", evt.detail.requestConfig.verb);
+                    } else {
+                        hideSpinner({}, "", evt.detail.requestConfig.verb);
+                    }
+                }
+            });
+
+            document.body.addEventListener("htmx:wsClose", function (evt) {
+            });
+
+            document.body.addEventListener("htmx:wsError", function (evt) {
+            });
+
+            document.body.addEventListener("htmx:wsAfterMessage", function (evt) {
+                try {
+                    var jo = JSON.parse(evt.detail.message);
+                    var key = 'uuid-' + jo.UUID + '-pageid-' + jo.PageID + '-scope-' + jo.ViewType;
+                    console.log('key', key);
+                    console.log('jo', jo);
+                    switch (jo.Cmd) {
+                        case 'lemc.css.buffer;':
+                            var _map = buffers.get('css');
+                            var buf = _map.get(key);
+                            if (buf === undefined) {
+                                buf = '';
+                            }
+                            console.log('lemc.css.buffer; buf', buf);
+                            var newbuf = buf + jo.Msg;
+                            console.log('lemc.css.buffer; newbuf', newbuf);
+                            _map.set(key, newbuf);
+                            buffers.set('css', _map);
+                            break;
+                        case 'lemc.css.trunc;':
+                            var _map = buffers.get('css');
+                            var buf = _map.get(key);
+                            if (buf === undefined) {
+                                buf = '';
+                            }
+                            var output = buf + jo.Msg;
+                            document.getElementById(key + '-style').innerHTML = output;
+                            _map.set(key, '');
+                            buffers.set('css', _map);
+                            break;
+                        case 'lemc.css.append;':
+                            var _map = buffers.get('css');
+                            var buf = _map.get(key);
+                            if (buf === undefined) {
+                                buf = '';
+                            }
+                            var output = buf + jo.Msg;
+                            document.getElementById(key + '-style').innerHTML += output;
+                            _map.set(key, '');
+                            buffers.set('css', _map);
+                            break;
+                        case 'lemc.html.buffer;':
+                            var _map = buffers.get('html');
+                            var buf = _map.get(key);
+                            if (buf === undefined) {
+                                buf = '';
+                            }
+                            var newbuf = buf + jo.Msg;
+                            _map.set(key, newbuf);
+                            buffers.set('html', _map);
+                            break; 
+                        case 'lemc.html.trunc;':
+                            var _map = buffers.get('html');
+                            var buf = _map.get(key);
+                            if (buf === undefined) {
+                                buf = '';
+                            }
+                            var output = buf + jo.Msg;
+                            document.getElementById(key + '-html').innerHTML = output;
+                            _map.set(key, '');
+                            buffers.set('html', _map);
+                            break;
+                        case 'lemc.html.append;':
+                            var _map = buffers.get('html');
+                            var buf = _map.get(key);
+                            if (buf === undefined) {
+                                buf = '';
+                            }
+                            var output = buf + jo.Msg;
+                            document.getElementById(key + '-html').innerHTML += output;
+                            _map.set(key, '');
+                            buffers.set('html', _map);
+                            break;
+                        case 'lemc.html.js;':
+                            var _map = buffers.get('js');
+                            var buf = _map.get(key);
+                            if (buf === undefined) {
+                                buf = '';
+                            }
+                            var output = buf + jo.Msg;
+                            document.getElementById(key + '-script').innerHTML = output;
+                            _map.set(key, '');
+                            buffers.set('html', _map);
+                            break;
+                        case 'lemc.js.buffer;':
+                            var _map = buffers.get('js');
+                            var buf = _map.get(key);
+                            if (buf === undefined) {
+                                buf = '';
+                            }
+                            var newbuf = buf + jo.Msg;
+                            _map.set(key, newbuf);
+                            buffers.set('js', _map);
+                            break;
+                        case 'lemc.js.exec;':
+                            var _map = buffers.get('js');
+                            var buf = _map.get(key);
+                            if (buf === undefined) {
+                                buf = '';
+                            }
+
+                            var output = buf + jo.Msg;
+
+                            var element = document.getElementById(key + "-script");
+                            if (element) {
+                                element.remove();
+                            }
+
+                            var script = document.createElement("script");
+                            script.textContent = output;
+                            script.id = key + "-script";
+
+                            var inner = document.getElementById(key + "-outer");
+                            inner.appendChild(script);
+
+                            _map.set(key, '');
+                            buffers.set('js', _map);
+                            break;
+                    }
+                } catch (e) {
+                    console.log('htmx:wsAfterMessage:' + evt.detail.message);
+                }
+            });
+            added = true;
+        }
+    });
+
+    let svgCheck = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5"><path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd" /></svg>';
+
+    let svgErr = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5"><path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495ZM10 5a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 10 5Zm0 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" /></svg>';
+
+    let svgServer = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="size-5"><path d="M10.75 4a.75.75 0 0 0-.75.75V6.5a.75.75 0 1 0 1.5 0V4.75a.75.75 0 0 0-.75-.75Zm-6.5-2c-.625 0-1.163.288-1.563.688C2.288 3.087 2 3.625 2 4.25v11.5c0 .625.288 1.163.688 1.563.399.399.937.687 1.562.687h11.5c.625 0 1.163-.288 1.563-.688.399-.399.687-.937.687-1.562V6.5a.75.75 0 0 0-.219-.531l-3.75-3.75A.75.75 0 0 0 13.5 2Zm1.5 1.5h6.75a.75.75 0 0 1 .75.75V7a.75.75 0 0 1-.75.75H5.75A.75.75 0 0 1 5 7V4.25a.75.75 0 0 1 .75-.75Zm0 6.75h8.5A.75.75 0 0 1 15 11v4.25a.75.75 0 0 1-.75.75h-8.5a.75.75 0 0 1-.75-.75V11a.75.75 0 0 1 .75-.75z"></path></svg>';
+
+    let svgExclaim = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5"><path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" /></svg>';
+
+    if (typeof lemcSpinnerQueue === 'undefined') {
+        var lemcSpinnerQueue = [];
+    }
+
+    function showSpinner() {
+        var toastAlerts = document.querySelectorAll('div.toast-alerts');
+
+        requestAnimationFrame(() => {
+            toastAlerts.forEach(ta => {
+                var container = ta.querySelectorAll('div.loading-container');
+                var newContainer;
+
+                if (container.length == 0) {
+                    newContainer = document.createElement('div');
+                    newContainer.classList.add('loading-container');
+                    ta.appendChild(newContainer);
+                } else {
+                    newContainer = container[0];
+                }
+
+                if (newContainer.children.length > 0) {
+                   newContainer.querySelectorAll('span').forEach(s => s.remove());
+                }
+
+                for (let i = 0; i < ta.attributes.length; i++) {
+                    var newSpinner = document.createElement('span');
+                    newSpinner.classList.add('loading', 'loading-bars', 'loading-xs', 'fixed', 'bottom-4', 'right-4');
+                    newContainer.appendChild(newSpinner);
+                    lemcSpinnerQueue.push(newSpinner);
+                }
+            });
+        });
+    }
+
+    function resolveSpinnerState(state, method) {
+        var svg = '';
+        if (method === 'delete' || method === 'post' || method === 'put') {
+            if (state === 'success') {
+                svg = svgServer;
+            } else {
+                svg = svgExclaim;
+            }
+        }
+
+        if (!svg) return;
+
+        var toastAlerts = document.querySelectorAll('div.toast-alerts');
+
+        requestAnimationFrame(() => {
+            toastAlerts.forEach(ta => {
+                var container = ta.querySelectorAll('div.loading-container');
+                var newContainer;
+
+                if (container.length == 0) {
+                    newContainer = document.createElement('div');
+                    newContainer.classList.add('loading-container');
+                    ta.appendChild(newContainer);
+                } else {
+                    newContainer = container[0];
+                }
+
+                for (let i = 0; i < ta.attributes.length; i++) {
+                    var newState = document.createElement('span');
+                    newState.classList.add('fixed', 'bottom-4', 'right-4');
+                    newState.innerHTML = svg;
+                    newContainer.appendChild(newState);
+                    setTimeout(function () {
+                        requestAnimationFrame(() => newState.remove());
+                    }, 5000);
+                }
+            });
+        });
+    }
+
+    function hideSpinner(obj, flashType, method) {
+        if (lemcSpinnerQueue.length > 0) {
+            var alertIncrement = 70;
+            var alertTimer = 30
+
+            setTimeout(function () {
+                requestAnimationFrame(() => {
+                    const spinnersToRemove = [...lemcSpinnerQueue];
+                    lemcSpinnerQueue = [];
+                    spinnersToRemove.forEach(spinner => {
+                        if (spinner && spinner.parentNode) {
+                           spinner.remove();
+                        }
+                    });
+                    resolveSpinnerState(flashType, method);
+                });
+            }, 600);
+
+            setTimeout(function () {
+                for (let key in obj) {
+                    if (obj.hasOwnProperty(key)) {
+                        setTimeout(function () {
+                            showToasts(obj[key], flashType);
+                        }, alertTimer);
+                    }
+                    alertTimer += alertIncrement;
+                }
+            }, 400);
+        }
+    }
+
+    function showToasts(msg, alertType) {
+        var toastAlerts = document.querySelectorAll('div.toast-alerts');
+
+        requestAnimationFrame(() => {
+            toastAlerts.forEach(ta => {
+                for (let i = 0; i < ta.attributes.length; i++) {
+
+                    var toast = ta.querySelector(".toasty");
+
+                    if (!toast) {
+                        toast = document.createElement('div');
+                        toast.classList.add('toasty', 'toast', 'toast-bottom', 'toast-center', 'flex', 'items-center', 'justify-center');
+                        ta.appendChild(toast);
+                    }
+
+                    var newAlert = document.createElement('div');
+                    if (alertType == 'success') {
+                        newAlert.classList.add('alert', 'alert-success');
+                    } else {
+                        newAlert.classList.add('alert', 'alert-error');
+                    }
+
+                    var newInner = document.createElement('div');
+                    newInner.classList.add('flex', 'items-center', 'justify-center');
+                    newInner.innerHTML = '<p>' + msg + '</p>';
+
+                    newAlert.appendChild(newInner);
+                    toast.appendChild(newAlert);
+
+                    setTimeout(function () {
+                        requestAnimationFrame(() => newAlert.remove());
+                    }, 5000);
+                }
+            });
+        });
+    }
+</script>
+}

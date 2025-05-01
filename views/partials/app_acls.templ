@@ -1,0 +1,70 @@
+package partials
+
+import (
+    "github.com/jaredfolkins/letemcook/models"
+    "fmt"
+)
+
+templ AppAcls(v models.CoreView) {
+        <div id="acl-main" class="cookbook-lower-container bg-base-100 pl-5 pr-5 pt-8">
+         <div class="flex flex-grow flex-col">
+                  <div class="acl-search-container w-auto flex flex-row">
+                        if v.App != nil {
+                            <input
+                            id="acl-search-input"
+                            placeholder="username/email"
+                            class="flex input w-full h-full flex-grow md:flex-row rounded-none cookbook-meta-bg"
+                            name="acl-search"
+                            hx-params="acl-search"
+                            hx-get={ string(templ.URL(fmt.Sprintf("/lemc/app/acl/search/users/%s", v.App.UUID))) }
+                            hx-trigger="keyup changed delay:500ms"
+                            hx-target="#acl-search-results" />
+                        } else {
+                            <input
+                            id="acl-search-input"
+                            placeholder="app not available"
+                            class="flex input w-full h-full flex-grow md:flex-row rounded-none cookbook-meta-bg"
+                            name="acl-search"
+                            disabled />
+                        }
+                     @DisplayAppAclSearchResults(v)
+                  </div>
+                    if len(v.AppAcls) == 0 {
+                        <p>No Acls Found</p>
+                    } else {
+                            <div class="overflow-x-auto mt-4">
+                                    <table id="acl-users-table" class="table">
+                                      <thead>
+                                        <tr>
+                                            <th>
+                                                <p>Username</p>
+                                            </th>
+                                            <th>
+                                                <p>Email</p>
+                                            </th>
+                                            <th>
+                                                <p>Individual</p>
+                                            </th>
+                                            <th>
+                                                <p>Shared</p>
+                                            </th>
+                                            <th>
+                                                <p>Admin</p>
+                                            </th>
+                                            <th>
+                                                <p>Remove</p>
+                                            </th>
+                                        </tr>
+                                      </thead>
+                                      <tbody id="acl-users-table-body">
+                                            for _, acl := range v.AppAcls {
+                                                @printappAclRow(v, acl)
+                                            }
+                                      </tbody>
+
+                                    </table>
+                                </div>
+                    }
+        </div>
+    </div>
+} 

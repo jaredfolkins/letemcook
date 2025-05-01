@@ -1,0 +1,55 @@
+package pages
+
+import (
+	"fmt"
+	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/views/layout"
+)
+
+templ Login(v models.LoginView) {
+	<section class="card rounded-none bg-base-100 mx-auto mb-8 w-fit edges">
+		<div class="card-body pb-2">
+			<h1 class="card-title border-b border-b-slate-600 pb-[4px]">
+				Login
+			</h1>
+			<form
+				hx-post={ string(fmt.Sprintf("/lemc/login?squid=%s&account=%s", v.BaseView.AccountSquid, v.BaseView.AccountName)) }
+				hx-target="#app"
+				hx-swap="innerHTML"
+				class="drop-shadow-xl flex flex-col gap-4 p-12 rounded-none"
+			>
+				<label class="flex flex-col justify-start gap-2 rounded-none">
+					Username:
+					<input
+						class="input input-bordered bg-white input-primary rounded-none"
+						type="text"
+						name="username"
+						required
+						autofocus
+					/>
+				</label>
+				<label class="flex flex-col justify-start gap-2 relative rounded-none">
+					Password:
+					<input
+						class="input input-bordered bg-white input-primary rounded-none"
+						type="password"
+						name="password"
+					/>
+				</label>
+				<div class="card-actions justify-end">
+					<button
+						class="rounded-none btn btn-primary"
+					>
+						Login
+					</button>
+				</div>
+			</form>
+		</div>
+	</section>
+}
+
+templ LoginIndex(v models.LoginView, cmp templ.Component) {
+	@layout.Base(v.BaseView) {
+		@cmp
+	}
+}

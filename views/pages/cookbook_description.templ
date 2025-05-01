@@ -1,0 +1,84 @@
+package pages
+
+import (
+    "github.com/jaredfolkins/letemcook/models"
+    "fmt"
+)
+
+templ CookbookDescription(v models.CoreView) {
+    <dialog id="cookbook_description_modal" class="modal overscroll-none">
+        <div class="flex mx-12 bg-base-100 drop-shadow-md mb-8">
+            <div class="description-container">
+                <div class="flex w-full h-full flex-row justify-start">
+                    <div class="flex flex-col">
+                             <label
+                                id="close-cookbook-description-modal"
+                                class="btn btn-sm btn-circle btn-ghost absolute left-2 rounded-none top-2">
+                                    ✕
+                            </label>
+                            <script>
+                                document.addEventListener('click', function(event) {
+                                    if (event.target && event.target.id === 'close-cookbook-description-modal') {
+                                        const modal = document.getElementById('cookbook_description_modal');
+                                        if (modal) {
+                                            modal.close();
+                                        }
+                                    }
+                                });
+                            </script>
+                        <div class="image-container">
+                            <img
+                            id="lemc-cookbook-thumbnail"
+                            class="image"
+                            alt="lemc thumbnail"
+                            src={ string(templ.URL(fmt.Sprintf("/lemc/cookbook/thumbnail/download/%s?ts=%s", v.YamlDefault.UUID, v.YamlDefault.Cookbook.Storage.Thumbnail.Timestamp))) }>
+
+                            <div class="button-container">
+                                <form
+                                    id="thumbnail-upload-form"
+                                    data-uuid={ string(fmt.Sprintf("%s", v.YamlDefault.UUID)) }
+                                    data-type={ string(fmt.Sprintf("%s", v.ViewType)) }>
+                                    <div class="rounded-none btn btn-primary">
+                                        <input id="thumbnail-file-upload" name="file" type="file" style="width: 50px; height: 50px;" class="absolute opacity-0 cursor-pointer" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
+                                        </svg>
+                                    </div>
+                                </form>
+                                @uploadCookbookThumbnailScript()
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-grow flex-col cookbook-meta">
+                        <div class="mb-2 cookbook-meta-name">
+                            <input
+                            id="cookbook_name"
+                            class="flex text-2xl input flex-grow md:flex-row rounded-none cookbook-meta-bg input-bordered bg-white rounded-none w-full h-full flex-grow md:flex-row"
+                            name="cookbook_name"
+                            hx-post={ string(templ.URL(fmt.Sprintf("/lemc/cookbook/meta/update/%s", v.YamlDefault.UUID))) }
+                            hx-trigger="keyup delay:700ms changed"
+                            hx-target="#cookbook_name"
+                            value={ fmt.Sprintf("%s", v.Cookbook.Name) } />
+                        </div>
+                        <div class="flex-1 flex flex-col">
+                                <textarea
+                                    hx-post={ string(templ.URL(fmt.Sprintf("/lemc/cookbook/meta/update/%s", v.YamlDefault.UUID))) }
+                                    hx-trigger="keyup delay:700ms changed"
+                                    hx-target="#cookbook_desc"
+                                    hx-swap="innerHTML"
+                                    name="cookbook_desc"
+                                    id="cookbook_desc"
+                                    class="flex text-lg input flex-grow md:flex-row rounded-none cookbook-meta-bg input-bordered bg-white rounded-none w-full h-full flex-grow md:flex-row">
+
+                                    { v.Cookbook.Description }
+
+                                </textarea>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </dialog>
+}

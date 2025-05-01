@@ -1,0 +1,164 @@
+package partials
+
+import (
+    "github.com/jaredfolkins/letemcook/models"
+    "fmt"
+)
+
+script CookbookReplaceSearchElements(uuid, name, description string) {
+    document.getElementById('cookbook-uuid').value = uuid;
+    document.getElementById('cookbook-name').value = name;
+    document.getElementById('cookbook-description').value = description;
+    document.getElementById('acl-search-results').innerHTML = '';
+    document.getElementById('acl-search-input').value = '';
+}
+
+templ DisplayCookbookSearchResults(v models.CoreView) {
+        <div id="acl-search-results">
+            if len(v.CookbookSearchResults) > 0 {
+                    <div id="acl-search-display">
+                        for _, obj := range v.CookbookSearchResults{
+                            <div
+                                hx-swap="outerHTML"
+                                hx-trigger="click"
+                                hx-target="#acl-main"
+                                onclick={ CookbookReplaceSearchElements(obj.UUID, obj.Name, obj.Description) }
+                                class="hover:bg-base-200 p-2 rounded-none cursor-pointer">
+
+                                @templ.Raw(obj.HtmlName)
+                                &nbsp;-&nbsp;
+                                @templ.Raw(obj.HtmlDescription)
+                            </div>
+                        }
+                    </div>
+            }
+            <script>
+
+            </script>
+        </div>
+}
+
+templ Cookbook(v models.CoreView) {
+
+    if len(v.YamlDefault.Cookbook.Pages) == 0 {
+        <div class="cookbook-lower-container bg-base-100">
+        <div class="flex flex-1 justify-center">
+            <p class="p-20">
+                Please use the <span class="bg-warning p-1">edit</span> or <span class="bg-warning p-1">upload</span> buttons to add recipes to this cookbook using the yaml format.
+            </p>
+        </div>
+        </div>
+    }
+    <div class="grid grid-cols-1">
+        <div role="tablist" class="tabs tabs-lifted">
+            for _, e := range v.YamlDefault.Cookbook.Pages {
+              <input
+                if e.PageID == 1 {
+                    checked="checked"
+                }
+                type="radio"
+                role="tab"
+                class="tab whitespace-nowrap"
+                name="cookbook-tabs"
+                aria-label={ string(fmt.Sprintf("%s", e.Name)) } />
+
+              <div role="tabpanel" class="tab-content bg-base-100 p-6">
+                <div
+                    hx-get={ string(templ.URL(fmt.Sprintf("/lemc/cookbook/job/status/uuid/%s/page/%d/scope/%s", v.YamlDefault.UUID, e.PageID, v.ViewType))) }
+                    hx-trigger="every 6s"
+                    hx-swap="innerHTML"
+                    id={ string(fmt.Sprintf("job-status-page-%d-scope-%s", e.PageID, v.ViewType)) }>
+                    @JobStatusView(v.YamlDefault.UUID, fmt.Sprintf("%d", e.PageID), v.ViewType, false, false, false)
+                </div>
+                <div class="grid grid-cols-3 gap-12">
+                    <div class="col-span-2 mt-2 lemc-max-editor-height">
+                        <div
+                            class="mt-12 lemc-editors-group"
+                            data-uuid={ string(fmt.Sprintf("%s", v.YamlDefault.UUID)) }
+                            data-pageid={ string(fmt.Sprintf("%d", e.PageID)) }
+                            data-type={ string(fmt.Sprintf("%s", v.ViewType)) }
+                            id={ string(fmt.Sprintf("editor-%d", e.PageID)) }
+                            style="font-family: 'Lora', Helvetica, sans-serif; background-color: white; display: none;">
+
+                            for i, w := range v.YamlDefault.Cookbook.Storage.Wikis {
+                                if i == e.PageID {
+                                    @printWiki(w)
+                                }
+                            }
+                        </div>
+                    </div>
+
+                    <div class="col-span-1">
+                        <div class="card mb-4">
+                            <dialog
+                                id={ string(fmt.Sprintf("pageid_%d_modal", e.PageID)) }
+                                class="modal">
+
+                                <div class="output-box edges p-12 ">
+                                    <button
+                                        onclick={ eval(fmt.Sprintf("pageid_%d_modal.close()", e.PageID)) }
+                                        class="btn btn-sm btn-circle btn-ghost absolute left-2 rounded-none top-2">
+                                            ✕
+                                    </button>
+                                    <div id={ string(fmt.Sprintf("uuid-%s-pageid-%d-scope-%s-outer", v.YamlDefault.UUID, e.PageID, v.ViewType)) } class="page-outer bg-base-200">
+
+                                        @templ.Raw(e.CssCache)
+                                        @templ.Raw(e.HtmlCache)
+                                        @templ.Raw(e.JsCache)
+
+                                    </div>
+                                </div>
+                                <div class="toast-alerts"></div>
+                            </dialog>
+                            <button
+                                onclick={ eval(fmt.Sprintf("pageid_%d_modal.showModal()", e.PageID)) }
+                                class="rounded-none btn btn-primary mt-2 mb-2">
+                                Monitor
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" />
+                                </svg>
+                                <div
+                                style="display: none;"
+                                id={ string(fmt.Sprintf("pageid_%d_badge", e.PageID)) }
+                                class="badge badge-warning badge-xs badge-animation">
+                                </div>
+                             </button>
+                        </div>
+                        if len(e.Recipes) > 0 {
+                            for _, r := range e.Recipes {
+                                <div class="card bg-base-200 p-4 mb-4">
+                                    <div class="mb-2">{ r.Description }</div>
+                                    <div>
+                                        if len(r.Form) > 0 {
+                                            @renderJobFormModal(r.Form, "cookbook", v.ViewType, v.YamlDefault.UUID, r.Name, e.PageID)
+                                            <button
+                                                onclick={ eval(string(fmt.Sprintf("job_form_page_%d_%s_modal.showModal()", e.PageID, replaceDashWithUnderscore(r.Name) ))) }
+                                                class="rounded-none btn btn-primary mt-2 mb-2">
+                                                { r.Name }
+                                             </button>
+                                        } else {
+                                            <button
+                                                hx-swap="afterbegin"
+                                                hx-target="#toasty"
+                                                hx-put={ string(fmt.Sprintf("/lemc/cookbook/job/%s/uuid/%s/page/%d/recipe/%s", v.ViewType, v.YamlDefault.UUID, e.PageID, r.Name)) }
+                                                class="rounded-none btn btn-primary mt-2 mb-2">
+                                                { r.Name }
+                                             </button>
+                                        }
+                                     </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+
+
+              </div>
+            }
+        </div>
+    </div>
+
+    @readwriteEditors()
+
+}

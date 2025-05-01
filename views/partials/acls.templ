@@ -1,0 +1,269 @@
+package partials
+
+import (
+    "github.com/jaredfolkins/letemcook/models"
+    "fmt"
+)
+
+templ printBool(b bool) {
+    if b {
+        @templ.Raw("true")
+    } else {
+        @templ.Raw("false")
+    }
+}
+
+
+templ DisplayAclSearchResults(v models.CoreView) {
+        <div id="acl-search-results">
+            if len(v.CookbookAclSearchResults) > 0 {
+                    <div id="acl-search-display">
+                        for _, acl := range v.CookbookAclSearchResults {
+                            <div
+                                hx-post={ string(templ.URL(fmt.Sprintf("/lemc/cookbook/acl/user/add/%s/%d", v.Cookbook.UUID, acl.UserID))) }
+                                hx-swap="outerHTML"
+                                hx-trigger="click"
+                                hx-target="#acl-main"
+                                class="hover:bg-base-200 p-2 rounded-none cursor-pointer">
+
+                                @templ.Raw(acl.Username)
+                                &nbsp;-&nbsp;
+                                @templ.Raw(acl.Email)
+                            </div>
+                        }
+                    </div>
+            }
+            <script>
+
+            </script>
+        </div>
+}
+
+templ DisplayAppAclSearchResults(v models.CoreView) {
+	<div id="acl-search-results">
+		if len(v.AppAclSearchResults) > 0 {
+			<div id="acl-search-display" class="mt-2 border border-base-300 rounded-none max-h-48 overflow-y-auto">
+				for _, acl := range v.AppAclSearchResults {
+					<div
+						hx-post={ string(templ.URL(fmt.Sprintf("/lemc/app/acl/user/add/%s/%d", v.App.UUID, acl.UserID))) }
+						hx-swap="outerHTML"
+						hx-trigger="click"
+						hx-target="#acl-main"
+						class="hover:bg-base-200 p-2 rounded-none cursor-pointer">
+						@templ.Raw(acl.Username)
+						&nbsp;-&nbsp;
+						@templ.Raw(acl.Email)
+					</div>
+				}
+			</div>
+		}
+	</div>
+}
+
+templ printappAclRow(v models.CoreView, acl models.AppAcl) {
+	<tr>
+		<td>
+			<p>{ acl.Username }</p>
+		</td>
+		<td><p>{ acl.Email }</p></td>
+		<td>
+			if acl.IsOwner {
+				<input disabled type="checkbox" checked="checked" class="checkbox rounded-none" />
+			} else {
+				if v.App != nil {
+					<input
+						hx-put={ fmt.Sprintf("/lemc/app/acl/user/toggle/individual/%s/%d", v.App.UUID, acl.UserID) }
+						hx-swap="outerHTML"
+						hx-target="#acl-main"
+						type="checkbox"
+						checked?={ acl.CanIndividual }
+						class="checkbox rounded-none" />
+				} else {
+					<input disabled type="checkbox" checked?={ acl.CanIndividual } class="checkbox rounded-none" />
+				}
+			}
+		</td>
+		<td>
+			if acl.IsOwner {
+				<input disabled type="checkbox" checked="checked" class="checkbox rounded-none" />
+			} else {
+				if v.App != nil {
+					<input
+						hx-put={ fmt.Sprintf("/lemc/app/acl/user/toggle/shared/%s/%d", v.App.UUID, acl.UserID) }
+						hx-swap="outerHTML"
+						hx-target="#acl-main"
+						type="checkbox"
+						checked?={ acl.CanShared }
+						class="checkbox rounded-none" />
+				} else {
+					<input disabled type="checkbox" checked?={ acl.CanShared } class="checkbox rounded-none" />
+				}
+			}
+		</td>
+		<td>
+			if acl.IsOwner {
+				<input disabled type="checkbox" checked="checked" class="checkbox rounded-none" />
+			} else {
+				if v.App != nil {
+					<input
+						hx-put={ fmt.Sprintf("/lemc/app/acl/user/toggle/admin/%s/%d", v.App.UUID, acl.UserID) }
+						hx-swap="outerHTML"
+						hx-target="#acl-main"
+						type="checkbox"
+						checked?={ acl.CanAdmin }
+						class="checkbox rounded-none" />
+				} else {
+					<input disabled type="checkbox" checked?={ acl.CanAdmin } class="checkbox rounded-none" />
+				}
+			}
+		</td>
+		<td>
+			if !acl.IsOwner {
+				if v.App != nil {
+					<button class="rounded-none btn btn-primary"
+						hx-delete={ string(templ.URL(fmt.Sprintf("/lemc/app/acl/user/delete/%s/%d", v.App.UUID, acl.UserID))) }
+						hx-swap="outerHTML"
+						hx-trigger="click"
+						hx-target="#acl-main">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+						  <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+						</svg>
+					</button>
+				} else {
+					<button class="btn-disabled rounded-none btn btn-primary tooltip" data-tip="app data unavailable">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+						  <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+						</svg>
+					</button>
+				}
+			} else {
+				<button class="btn-disabled rounded-none btn btn-primary tooltip" data-tip="unable to delete the owner">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+					  <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+					</svg>
+				</button>
+			}
+		</td>
+	</tr>
+}
+
+templ printAclRow(v models.CoreView, acl models.CookbookAcl) {
+        <tr>
+            <td>
+                <p>{ acl.Username }</p>
+            </td>
+            <td><p>{ acl.Email }</p></td>
+            <td>
+                <input
+                    disabled
+                    type="checkbox"
+                    checked="checked"
+                    class="checkbox rounded-none" />
+            </td>
+            <td>
+                if acl.IsOwner {
+                    <input
+                        disabled
+                        type="checkbox"
+                        checked="checked"
+                        class="checkbox rounded-none" />
+                } else if acl.CanEdit {
+                    <input
+                        hx-put={ fmt.Sprintf("/lemc/cookbook/acl/user/toggle/edit/%s/%d", v.YamlDefault.UUID, acl.UserID) }
+                        type="checkbox"
+                        checked="checked"
+                        hx-swap="outerHTML"
+                        hx-trigger="click"
+                        hx-target="#acl-main"
+                        class="checkbox rounded-none" />
+                } else {
+                    <input
+                        hx-put={ fmt.Sprintf("/lemc/cookbook/acl/user/toggle/edit/%s/%d", v.YamlDefault.UUID, acl.UserID) }
+                        type="checkbox"
+                        hx-swap="outerHTML"
+                        hx-trigger="click"
+                        hx-target="#acl-main"
+                        class="checkbox rounded-none" />
+                }
+            </td>
+            <td>
+            if !acl.IsOwner {
+                <button class="rounded-none btn btn-primary"
+                    hx-delete={ string(templ.URL(fmt.Sprintf("/lemc/cookbook/acl/user/delete/%s/%d", v.Cookbook.UUID, acl.UserID))) }
+                    hx-swap="outerHTML"
+                    hx-trigger="click"
+                    hx-target="#acl-main">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                    </svg>
+                </button>
+            } else {
+                <button class="btn-disabled rounded-none btn btn-primary tooltip" data-tip="unable to delete the owner">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                    </svg>
+                </button>
+            }
+            </td>
+        </tr>
+
+}
+
+templ Acls(v models.CoreView) {
+        <div id="acl-main" class="cookbook-lower-container bg-base-100 pl-5 pr-5 pt-8">
+         <div class="flex flex-grow flex-col">
+                  <div class="acl-search-container w-auto flex flex-row">
+                        <input
+                        id="acl-search-input"
+                        placeholder="username/email"
+                        class="flex input w-full h-full flex-grow md:flex-row rounded-none cookbook-meta-bg"
+                        name="acl-search"
+                        hx-params="acl-search"
+                        hx-get={ string(templ.URL(fmt.Sprintf("/lemc/cookbook/acl/search/users/%s", v.YamlDefault.UUID))) }
+                        hx-trigger="keyup changed"
+                        hx-target="#acl-search-results" />
+                     @DisplayAclSearchResults(v)
+                  </div>
+                    if len(v.CookbookAcls) == 0 {
+                        <p>No Acls Found</p>
+                    } else {
+                            <div class="overflow-x-auto mt-4">
+                                    <table id="acl-users-table" class="table">
+                                      <thead>
+                                        <tr>
+                                            <th>
+                                                <p>Username</p>
+                                            </th>
+                                            <th>
+                                                <p>Email</p>
+                                            </th>
+                                            <th>
+                                                <p>View</p>
+                                            </th>
+                                            <th>
+                                                <p>Edit</p>
+                                            </th>
+                                            <th>
+                                                <p>Remove</p>
+                                            </th>
+                                        </tr>
+                                      </thead>
+                                      <tbody id="acl-users-table-body">
+                                            for _, acl := range v.CookbookAcls {
+                                                if acl.IsOwner {
+                                                    @printAclRow(v, acl)
+                                                }
+                                            }
+                                            for _, acl := range v.CookbookAcls {
+                                                if !acl.IsOwner {
+                                                    @printAclRow(v, acl)
+                                                }
+                                            }
+                                      </tbody>
+
+                                    </table>
+                                </div>
+                    }
+        </div>
+    </div>
+}

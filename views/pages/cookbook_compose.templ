@@ -1,0 +1,19 @@
+package pages
+
+import (
+    "github.com/jaredfolkins/letemcook/models"
+    "github.com/jaredfolkins/letemcook/views/partials"
+)
+
+templ CookbookCompose(v models.CoreView) {
+    <div class="mb-8">
+        @RenderCookbookHeader(v)
+    </div>
+    <div class="mb-8">
+        @RenderCookbookSubHeaderAndNav(v)
+    </div>
+    <div id="cookbook" class="mx-12">
+        @partials.Cookbook(v)
+    </div>
+}
+

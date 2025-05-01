@@ -1,0 +1,85 @@
+package layout
+import (
+    "fmt"
+    "github.com/jaredfolkins/letemcook/views/partials"
+    "github.com/jaredfolkins/letemcook/models"
+)
+
+script unsafeInsertAdjacentHTML(key, script string) {
+}
+
+templ Base(v models.BaseView) {
+	<!DOCTYPE html>
+	<html lang="en" data-theme="letemcook">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<meta name="description" content="Let'em Cook!"/>
+			<meta name="google" content="notranslate"/>
+
+            <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.css" />
+			<link rel="stylesheet" href={ string(fmt.Sprintf("/themes/%s/public/css/compiled.css?v=%s", v.Theme, v.CacheBuster)) }/>
+			<link rel="icon" href={ string(fmt.Sprintf("/themes/%s/public/imgs/16x16.ico?v=%s", v.Theme, v.CacheBuster)) } sizes="16x16" type="image/x-icon"/>
+			<link rel="icon" href={ string(fmt.Sprintf("/themes/%s/public/imgs/32x32.ico?v=%s", v.Theme, v.CacheBuster)) } sizes="32x32" type="image/x-icon"/>
+			<link rel="icon" href={ string(fmt.Sprintf("/themes/%s/public/imgs/64x64.ico?v=%s", v.Theme, v.CacheBuster)) } sizes="64x64" type="image/x-icon"/>
+			<link rel="icon" href={ string(fmt.Sprintf("/themes/%s/public/imgs/128x128.ico?v=%s", v.Theme, v.CacheBuster)) } sizes="128x128" type="image/x-icon"/>
+			<link rel="icon" href={ string(fmt.Sprintf("/themes/%s/public/imgs/256x256.ico?v=%s", v.Theme, v.CacheBuster)) } sizes="256x256" type="image/x-icon"/>
+
+            <title>Let'em Cook! { v.Title }</title>
+            <script src="https://unpkg.com/htmx.org@2.0.0" integrity="sha384-wS5l5IKJBvK6sPTKa2WZ1js3d947pvWXbPJ1OmWfEuxLgeHcEbjUUA5i9V5ZkpCw" crossorigin="anonymous"></script>
+            <script src="https://unpkg.com/htmx-ext-ws@2.0.0/ws.js"></script>
+            <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/remove-me.js"></script>
+
+            @partials.Javascript()
+            <style>
+                /* Adjust if 10rem (pt-40) is not the correct navbar height */
+                html {
+                    scroll-padding-top: 10rem; 
+                }
+            </style>
+		</head>
+
+		<body
+			class="sample-transition"
+			hx-boost="true"
+			hx-ext="ws"
+			if v.UserContext.IsAuthenticated() { ws-connect="/ws" } >
+            // bug: no empty src="" or the browser hates you
+            <audio hx-preserve id="audioPlayer"></audio>
+            <script type="importmap">
+                {
+                    "imports": {
+                        "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.js",
+                        "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/42.0.2/"
+                    }
+                }
+            </script>
+			<header>
+                <div id="toasty" hx-ext="remove-me" class="toast toast-top toast-end z-20 rounded-none" ></div>
+				if !v.IsError {
+					@partials.Navbar(v)
+				}
+			</header>
+
+
+            <main class={ templ.KV("pt-40 flex flex-col h-screen justify-between bg-repeat-y bg-cover bg-center bg-lemc", !v.IsError) }>
+                <div id="main-container">
+                    <div id="app" hx-history-elt>
+                        { children... }
+                    </div>
+                </div>
+
+                <div id="footer-container">
+                @partials.Footer()
+                </div>
+
+
+			</main>
+
+            <div class="gradient-overlay"></div>
+            <div class="toast-alerts"></div>
+
+		</body>
+	</html>
+}
+
