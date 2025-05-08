@@ -245,10 +245,6 @@ Now that your recipe is defined in a cookbook, you need to create an "App." An A
 
 Congratulations! You've defined a recipe within a cookbook, created an App to instance that cookbook, and successfully run your first LEMC recipe.
 
-## Sponsors
+## Copyright
 
-???
-
----
-
-Let'em Cook!, LEMC, and all associated code and assets are the property of Jared Folkins. Copyright © 2024 Jared Folkins. All rights reserved.
+Let'em Cook!, LEMC, and all associated logos and assets are the copyright of Jared Folkins. Copyright © 2025 Jared Folkins. All rights reserved.
