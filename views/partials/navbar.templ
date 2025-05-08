@@ -40,6 +40,8 @@ templ Navbar(v models.BaseView) {
 
     <script>
         var isPlaying = false;
+        var allHeckles = [];
+        var playedHeckles = JSON.parse(localStorage.getItem('playedHeckles')) || [];
 
         async function heckle() {
                 // Get current URL params
@@ -52,7 +54,7 @@ templ Navbar(v models.BaseView) {
                     fetchUrl += '?squid=' + encodeURIComponent(squid);
                 }
 
-                console.log('Heckle fetch URL:', fetchUrl); // Log the URL being fetched
+                // console.log('Heckle fetch URL:', fetchUrl); // Log the URL being fetched
 
                 var response = await fetch(fetchUrl, {
                     method: 'GET',
@@ -64,25 +66,52 @@ templ Navbar(v models.BaseView) {
                 switch(response.status) {
                     case 200:
                         var result = await response.json();
-                        console.log('Server response:', result); // Log the server response                        var audioPlayer = document.getElementById('audioPlayer');
+                        // console.log('Server response:', result); // Log the server response
+                        if (!result.files || result.files.length === 0) {
+                            console.log('No heckle files returned from server.');
+                            return;
+                        }
+                        allHeckles = result.files;
+
+                        let availableHeckles = allHeckles.filter(file => !playedHeckles.includes(file));
+
+                        if (availableHeckles.length === 0) {
+                            console.log('All heckles played, resetting.');
+                            playedHeckles = [];
+                            localStorage.setItem('playedHeckles', JSON.stringify(playedHeckles));
+                            availableHeckles = allHeckles; // Use all heckles again
+                        }
+
+                        if (availableHeckles.length === 0) { // Should not happen if allHeckles is not empty
+                            console.log('Still no available heckles after reset, something is wrong.');
+                            return;
+                        }
+
+                        const randomIndex = Math.floor(Math.random() * availableHeckles.length);
+                        const selectedHeckle = availableHeckles[randomIndex];
+
+                        var audioPlayer = document.getElementById('audioPlayer');
                         if (!audioPlayer) {
                             console.error('Audio player element not found');
+                            return;
                         }
 
                         if (isPlaying === false) {
                             isPlaying = true;
                             var logoElm = document.getElementById('logo');
                             logoElm.classList.add('shake');
-                            var audioUrl = result.file;
+                            var audioUrl = '/heckle/public/' + encodeURIComponent(selectedHeckle);
                             audioPlayer.src = audioUrl;
                                 audioPlayer.play();
+                            playedHeckles.push(selectedHeckle);
+                            localStorage.setItem('playedHeckles', JSON.stringify(playedHeckles));
                         }
                         break;
                     case 204:
-                        console.log('204 Not Found');
+                        console.log('204 No Content: Heckle likely disabled or no files found server-side.');
                         break;
                     default:
-                        console.error('Unknown error');
+                        console.error('Unknown error fetching heckles');
                         break;
                 }
                 return;

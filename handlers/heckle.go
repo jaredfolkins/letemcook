@@ -3,11 +3,8 @@ package handlers
 import (
 	"database/sql"
 	"log"
-	"math/rand"
 	"net/http"
-	"net/url"
 	"os"
-	"path"
 	"path/filepath"
 	"strings"
 
@@ -29,10 +26,6 @@ func listFiles(directory string) ([]string, error) {
 	}
 
 	return fileNames, nil
-}
-
-func getRandomFileName(fileNames []string) string {
-	return fileNames[rand.Intn(len(fileNames))]
 }
 
 func GetHeckle(c LemcContext) error {
@@ -154,13 +147,13 @@ func GetHeckle(c LemcContext) error {
 		return c.NoContent(http.StatusNoContent)
 	}
 
-	randomFileName := getRandomFileName(fileNames)
-	encodedFileName := url.PathEscape(randomFileName)
-	h := Heckle{}
-	h.FileName = path.Join("/", "heckle", "public", encodedFileName) // Use forward slashes for URL path
+	// Return all filenames, the JS will construct the full path and handle encoding if necessary.
+	h := Heckle{
+		Files: fileNames, // fileNames already contains only the base names e.g. "sound.mp3"
+	}
 	return c.JSON(http.StatusOK, h)
 }
 
 type Heckle struct {
-	FileName string `json:"file"`
+	Files []string `json:"files"`
 }
