@@ -216,6 +216,7 @@ func PutCookbookJob(c LemcContext) error {
 						}
 					}
 
+					env = append(env, "LEMC_STEP_ID=1")
 					env = append(env, "LEMC_SCOPE="+scope)
 					env = append(env, "LEMC_USER_ID="+fmt.Sprintf("%d", originatingUserID))
 					env = append(env, "LEMC_USERNAME="+username)
