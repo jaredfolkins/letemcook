@@ -53,7 +53,6 @@ func GetAppIndexIndividualHandler(c LemcContext) error {
 	}
 
 	cb.UUID = app.UUID
-	cb.Name = app.Name
 	cb.Description = app.Description
 	cb.YamlShared = app.YAMLShared
 	cb.YamlIndividual = app.YAMLIndividual
