@@ -43,41 +43,6 @@ The ultimate goal being that `LEMC` would help your organization **"Ops their De
 - **Real-time Feedback:** Recipe execution results, including HTML content generated via simple `lemc.` prefixed `echo` or `print` commands (e.g., `echo "lemc.html.buffer; <h1>Update!</h1>"`), are streamed live to the user's web browser via WebSockets. 
 - **Simplified Development + Ai:** The container-centric approach makes it remarkably easy for developers to build and troubleshoot recipes locally. Once satisfied, they can push their container to a shared Docker registry, allowing for straightforward validation and updates by the team. This well-defined, language first, smaller context is also ideal for leveraging AI assistance more effectively.
 
-## Special Thanks
-
-I just wanted to say thanks to [Ed Skoudis](https://x.com/edskoudis) and the [CounterHack.com](https://www.counterhack.com/) team for always encouraging me to push myself! To allow for personal time and space to educate and innovate.
-
-Ed you are truly a wonderful man and I'm thankful you are in my life.
-
-<p align="left">
-  <img src="media/counter-hack-white.png" alt="CounterHack Logo" width="125"/>
-</p>
-
-
-## Technology Stack
-
-*   **Backend:** Go (Golang 1.23.0)
-*   **Web Framework:** [Echo](https://echo.labstack.com/)
-*   **Templating:** [Templ](https://templ.guide/)
-*   **Frontend Interaction:** [HTMX](https://htmx.org/)
-*   **Database:** SQLite
-*   **Database Interaction:** [sqlx](https://github.com/jmoiron/sqlx), [mattn/go-sqlite3](https://github.com/mattn/go-sqlite3)
-*   **Database Migrations:** [pressly/goose](https://github.com/pressly/goose)
-*   **Scheduling:** [go-quartz](https://github.com/reugn/go-quartz)
-*   **Container Interaction:** Docker SDK
-*   **Realtime:** WebSockets ([gorilla/websocket](https://github.com/gorilla/websocket))
-*   **Containerization:** Docker, Docker Compose
-
-## LEMC Core Development Requirements
-
-To contribute to or develop `LEMC`, you'll need:
-
-*   **Go:** Version 1.23.0 (check `.go-version` or `.goenv`).
-*   **Docker & Docker Compose:** For running the application containerized and executing recipes.
-*   **Access to a Docker Daemon Socket:** Required for `LEMC`'s core container interaction features (default `unix:///var/run/docker.sock`).
-*   **[air](https://github.com/cosmtrek/air):** Recommended for live reloading during development (`go install github.com/cosmtrek/air@latest`).
-*   **[templ](https://templ.guide/):** Required for compiling `.templ` files into Go code (`go install github.com/a-h/templ/cmd/templ@latest`).
-*   **Git:** For version control.
 
 ## Getting Started
 
@@ -246,6 +211,43 @@ Now that your recipe is defined in a cookbook, you need to create an "App." An A
 *   You should see the output ("Hello from my LEMC recipe!" and the current date/time) streamed directly to the UI within the App's context.
 
 Congratulations! You've defined a recipe within a cookbook, created an App to instance that cookbook, and successfully run your first LEMC recipe.
+
+## Technology Stack
+
+*   **Backend:** Go (Golang 1.23.0)
+*   **Web Framework:** [Echo](https://echo.labstack.com/)
+*   **Templating:** [Templ](https://templ.guide/)
+*   **Frontend Interaction:** [HTMX](https://htmx.org/)
+*   **Database:** SQLite
+*   **Database Interaction:** [sqlx](https://github.com/jmoiron/sqlx), [mattn/go-sqlite3](https://github.com/mattn/go-sqlite3)
+*   **Database Migrations:** [pressly/goose](https://github.com/pressly/goose)
+*   **Scheduling:** [go-quartz](https://github.com/reugn/go-quartz)
+*   **Container Interaction:** Docker SDK
+*   **Realtime:** WebSockets ([gorilla/websocket](https://github.com/gorilla/websocket))
+*   **Containerization:** Docker, Docker Compose
+
+## LEMC Core Development Requirements
+
+To contribute to or develop `LEMC`, you'll need:
+
+*   **Go:** Version 1.23.0 (check `.go-version` or `.goenv`).
+*   **Docker & Docker Compose:** For running the application containerized and executing recipes.
+*   **Access to a Docker Daemon Socket:** Required for `LEMC`'s core container interaction features (default `unix:///var/run/docker.sock`).
+*   **[air](https://github.com/cosmtrek/air):** Recommended for live reloading during development (`go install github.com/cosmtrek/air@latest`).
+*   **[templ](https://templ.guide/):** Required for compiling `.templ` files into Go code (`go install github.com/a-h/templ/cmd/templ@latest`).
+*   **Git:** For version control.
+
+## Special Thanks
+
+I just wanted to say thanks to [Ed Skoudis](https://x.com/edskoudis) and the [CounterHack.com](https://www.counterhack.com/) team for always encouraging me to push myself! To allow for personal time and space to educate and innovate.
+
+Ed you are truly a wonderful man and I'm thankful you are in my life.
+
+<p align="left">
+  <img src="media/counter-hack-white.png" alt="CounterHack Logo" width="125"/>
+</p>
+
+
 
 ## Copyright
 
