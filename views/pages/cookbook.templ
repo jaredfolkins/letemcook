@@ -172,7 +172,7 @@ templ RenderCookbookHeader(v models.CoreView) {
 
                     <ul tabindex="0" class="dropdown-content menu m-1 bg-base-100 rounded-none z-[1] w-52 p-2 shadow" style="z-index: 1000;">
                         <li>
-                            <div class="form-control flex flex-row items-center justify-between w-full px-4 py-2 rounded-none">
+                            <label class="flex items-center justify-between w-full px-4 py-2 rounded-none cursor-pointer">
                                 <span class="label-text">Published</span>
                                 <input
                                     id="published-toggle-dropdown"
@@ -184,11 +184,11 @@ templ RenderCookbookHeader(v models.CoreView) {
                                         checked="checked"
                                     }
                                 />
-                            </div>
+                            </label>
                         </li>
 
                         <li>
-                           <div class="form-control flex flex-row items-center justify-between w-full px-4 py-2 rounded-none">
+                           <label class="flex items-center justify-between w-full px-4 py-2 rounded-none cursor-pointer">
                                 <span class="label-text">Deleted</span>
                                 <input
                                     id="deleted-toggle-dropdown"
@@ -200,11 +200,11 @@ templ RenderCookbookHeader(v models.CoreView) {
                                         checked="checked"
                                     }
                                 />
-                            </div>
+                            </label>
                         </li>
                         <li>
-                            <button class="btn btn-ghost w-full justify-start rounded-none" onclick="cookbook_description_modal.showModal()">
-                                Description
+                            <button class="w-full px-4 py-2 flex items-center justify-between rounded-none" onclick="cookbook_description_modal.showModal()">
+                                <span>Description</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
                                 </svg>
@@ -219,8 +219,8 @@ templ RenderCookbookHeader(v models.CoreView) {
                                 href={ templ.URL(fmt.Sprintf("/lemc/cookbook/yaml/download/%s/%s", v.ViewType, v.YamlDefault.UUID)) }
                                 download={ string(fmt.Sprintf("%s-%s.yaml", v.YamlDefault.UUID, v.ViewType)) }
                                 hx-disable
-                                class="btn btn-ghost w-full justify-start rounded-none">
-                                Download
+                                class="w-full px-4 py-2 flex items-center justify-between rounded-none">
+                                <span>Download</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                                 </svg>
@@ -232,12 +232,12 @@ templ RenderCookbookHeader(v models.CoreView) {
                                 data-uuid={ string(fmt.Sprintf("%s", v.YamlDefault.UUID)) }
                                 data-type={ string(fmt.Sprintf("%s", v.ViewType)) }
                                 class="w-full">
-                                <button class="btn btn-ghost w-full justify-start rounded-none">
-                                    Upload
-                                    <input id="yaml-file-upload-dropdown" name="file" type="file" style="width: 50px; height: 50px;" class="absolute opacity-0 cursor-pointer" />
+                                <button class="w-full px-4 py-2 flex items-center justify-between rounded-none relative">
+                                    <span>Upload</span>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m6.75 12-3-3m0 0-3 3m3-3v6m-1.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                                     </svg>
+                                    <input id="yaml-file-upload-dropdown" name="file" type="file" class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer" />
                                 </button>
                             </form>
                         </li>

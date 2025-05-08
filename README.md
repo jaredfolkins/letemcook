@@ -1,8 +1,18 @@
 <p align="center">
-  <img src="logo.png" alt="LEMC Logo" width="400"/>
+  <img src="media/lemc-readme-logo.png" alt="Let'em Cook! Logo" width="400"/>
 </p>
 
 # Let'em Cook! 🔥 (LEMC)
+
+## Special Thanks
+
+I just wanted to say thanks to [Ed Skoudis](https://www.counterhack.com/team/) and the [CounterHack.com](https://www.counterhack.com/) team for always encouraging me to push myself! To allow for personal time and space to educate and innovate. 
+
+Ed you are truly a wonderful man and I'm thankful you are in my life.
+
+<p align="center">
+  <img src="media/counter-hack-white.png" alt="CounterHack Logo" width="200"/>
+</p>
 
 ## What problem is `LEMC` solving?
 
@@ -235,3 +245,7 @@ Now that your recipe is defined in a cookbook, you need to create an "App." An A
 *   You should see the output ("Hello from my LEMC recipe!" and the current date/time) streamed directly to the UI within the App's context.
 
 Congratulations! You've defined a recipe within a cookbook, created an App to instance that cookbook, and successfully run your first LEMC recipe.
+
+## Sponsors
+
+???
