@@ -249,3 +249,7 @@ Congratulations! You've defined a recipe within a cookbook, created an App to in
 ## Sponsors
 
 ???
+
+---
+
+Let'em Cook!, LEMC, and all associated code and assets are the property of Jared Folkins. Copyright © 2024 Jared Folkins. All rights reserved.
