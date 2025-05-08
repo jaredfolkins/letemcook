@@ -22,7 +22,7 @@ Far too often these tasks fall under the domain of DevOps and so something like 
 
 `LEMC` is built with the belief that in the age of vibe-coding, developers will out-pace their competition when they own their operations. 
 
-The ultimate goal is that `LEMC` will help your organization **"Ops their Devs."**
+The ultimate goal being that `LEMC` would help your organization **"Ops their Devs."**
 
 ## How does `LEMC` help?
 
