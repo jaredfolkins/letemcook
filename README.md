@@ -38,8 +38,8 @@ Far too often these tasks fall under the domain of DevOps and so something like 
     - Recipe scripts are packaged and distributed as container images using a Docker registry.
     - When a recipe is triggered, `LEMC` ensures the correct container image version is available locally (pulling it if necessary).
     - It then executes the container, automatically passing environment variables to manage state across steps or executions.
-- **Real-time Feedback** Recipe execution results, including HTML content generated via simple `lemc.` prefixed `echo` or `print` commands (e.g., `echo "lemc.html.buffer; <h1>Update!</h1>"`), are streamed live to the user's web browser via WebSockets. 
-- **Simplified Development + Ai** The container-centric approach makes it remarkably easy for developers to build and troubleshoot recipes locally. Once satisfied, they can push their container to a shared Docker registry, allowing for straightforward validation and updates by the team. This well-defined, language first, smaller context is also ideal for leveraging AI assistance more effectively.
+- **Real-time Feedback:** Recipe execution results, including HTML content generated via simple `lemc.` prefixed `echo` or `print` commands (e.g., `echo "lemc.html.buffer; <h1>Update!</h1>"`), are streamed live to the user's web browser via WebSockets. 
+- **Simplified Development + Ai:** The container-centric approach makes it remarkably easy for developers to build and troubleshoot recipes locally. Once satisfied, they can push their container to a shared Docker registry, allowing for straightforward validation and updates by the team. This well-defined, language first, smaller context is also ideal for leveraging AI assistance more effectively.
 
 ## Special Thanks
 
