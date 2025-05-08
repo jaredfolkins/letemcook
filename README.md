@@ -4,16 +4,6 @@
 
 # Let'em Cook! 🔥 (LEMC)
 
-## Special Thanks
-
-I just wanted to say thanks to [Ed Skoudis](https://www.counterhack.com/team/) and the [CounterHack.com](https://www.counterhack.com/) team for always encouraging me to push myself! To allow for personal time and space to educate and innovate. 
-
-Ed you are truly a wonderful man and I'm thankful you are in my life.
-
-<p align="center">
-  <img src="media/counter-hack-white.png" alt="CounterHack Logo" width="200"/>
-</p>
-
 ## What problem is `LEMC` solving?
 
 Have you ever found yourself thinking 
@@ -51,7 +41,17 @@ Far too often these tasks fall under the domain of DevOps and so something like 
 - **Real-time Feedback:** Recipe execution results are streamed live to the user's web browser via WebSockets and displayed within the `LEMC` UI.
 - **Simplified Development & AI:** This container-centric approach simplifies recipe development and troubleshooting (using test harnesses) and provides a well-defined, small context when leveraging AI assistance more effectively.
 
-Below I'll offer a tutorial that will use a real-world use case.
+
+## Special Thanks
+
+I just wanted to say thanks to [Ed Skoudis](https://x.com/edskoudis) and the [CounterHack.com](https://www.counterhack.com/) team for always encouraging me to push myself! To allow for personal time and space to educate and innovate.
+
+Ed you are truly a wonderful man and I'm thankful you are in my life.
+
+<p align="left">
+  <img src="media/counter-hack-white.png" alt="CounterHack Logo" width="125"/>
+</p>
+
 
 ## Technology Stack
 
