@@ -187,13 +187,13 @@ This command builds an image and tags it as `lemc-my-first-recipe:latest`. It's 
 **(Optional but Recommended for Sharing/Production)**
 If you plan to use a Docker registry (like Docker Hub, GitLab Container Registry, etc.), you should tag and push your image:
 ```bash
-# Tag the image with your registry username/namespace
-docker tag lemc-my-first-recipe:latest your-registry-username/lemc-my-first-recipe:latest
+# Tag the image with your registry, e.g., example.com/your-repo/
+docker tag lemc-my-first-recipe:latest example.com/your-username/lemc-my-first-recipe:latest
 
 # Push the image to the registry
-docker push your-registry-username/lemc-my-first-recipe:latest
+docker push example.com/your-username/lemc-my-first-recipe:latest
 ```
-Replace `your-registry-username` with your actual username or namespace.
+Replace `example.com/your-username/` with your actual registry path and username/namespace.
 
 ### 4. Define Your Recipe in a LEMC Cookbook
 
@@ -208,7 +208,7 @@ Replace `your-registry-username` with your actual username or namespace.
         *   **Recipe Name:** Give your recipe a unique name within the cookbook (e.g., "My Hello World").
         *   **Description:** (Optional) Add a short description of what your recipe does.
     *   **Details for the First Step (as recipes consist of one or more steps):**
-        *   **Image Name:** This is the Docker image the step will run (e.g., `lemc-my-first-recipe:latest` if built locally, or `your-registry-username/lemc-my-first-recipe:latest` if pushed to a registry). LEMC will use the Docker daemon to find/pull this image. Consider prefixing your LEMC image names with `lemc-` for better organization.
+        *   **Image Name:** This is the Docker image the step will run (e.g., `lemc-my-first-recipe:latest` if built locally, or `example.com/your-username/lemc-my-first-recipe:latest` if pushed to a registry). LEMC will use the Docker daemon to find/pull this image. Consider prefixing your LEMC image names with `lemc-` for better organization.
         *   **Timeout:** Specify how long this step is allowed to run (e.g., `1.minute`).
         *   **`do` field:** For this initial step, set this to `now`. This ensures the step executes when the recipe is manually triggered from an App.
     *   Leave other fields (such as those for form inputs or additional steps) at their default values for this simple example.
