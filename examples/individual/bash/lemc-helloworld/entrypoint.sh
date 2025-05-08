@@ -57,7 +57,7 @@ send_html_template() {
     local username_val=${LEMC_USERNAME:-"Not Set"}
     local recipe_name_val=${LEMC_RECIPE_NAME:-"Not Set"}
     local page_id_val=${LEMC_PAGE_ID:-"Not Set"}
-    local step_val=${LEMC_STEP:-"Not Set"}
+    local step_id_val=${LEMC_STEP_ID:-"Not Set"}
     local http_dl_val=${LEMC_HTTP_DOWNLOAD_BASE_URL:-"Not Set"}
     local public_var_val=${USER_DEFINED_PUBLIC_ENV_VAR:-"Not Set"}
     local private_var_val=${USER_DEFINED_PRIVATE_ENV_VAR:-"Not Set"} # Note: Example only
@@ -79,7 +79,7 @@ send_html_template() {
       -e "s|%%LEMC_USERNAME%%|$username_val|g" \
       -e "s|%%LEMC_RECIPE_NAME%%|$recipe_name_val|g" \
       -e "s|%%LEMC_PAGE_ID%%|$page_id_val|g" \
-      -e "s|%%LEMC_STEP%%|$step_val|g" \
+      -e "s|%%LEMC_STEP_ID%%|$step_id_val|g" \
       -e "s|%%LEMC_HTTP_DOWNLOAD_BASE_URL%%|$http_dl_val|g" \
       -e "s|%%USER_DEFINED_PUBLIC_ENV_VAR%%|$public_var_val|g" \
       -e "s|%%USER_DEFINED_PRIVATE_ENV_VAR%%|$private_var_val|g" \
