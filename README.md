@@ -122,3 +122,103 @@ These instructions will get you a copy of the project up and running on your loc
 
 *   Open your web browser and navigate to `http://localhost:5362`.
 *   You will be redirected to the `/setup` page to create the initial administrator account.
+
+## Quick Start: Your First Recipe 🔥
+
+This guide will walk you through creating a simple "Hello World" recipe that also displays the current date from within its container.
+
+### 1. Create Your Script (`my_recipe.sh`)
+
+Create a file named `my_recipe.sh` in a new directory (e.g., `my-first-recipe/`) with the following content:
+
+```bash
+#!/bin/sh
+
+echo "lemc.html.buffer; <h1>Hello from my LEMC recipe!</h1>"
+echo "lemc.html.buffer; <p>The current date and time in the container is: <strong>$(date)</strong></p>"
+echo "lemc.html.append;"
+```
+
+This script uses special `lemc.` prefixed commands:
+*   `lemc.html.buffer; <HTML_CONTENT>`: Streams the `<HTML_CONTENT>` to the LEMC UI.
+*   `lemc.html.append;`: Signals that a block of HTML has been completely sent and can be appended to the display.
+
+Make the script executable:
+```bash
+chmod +x my_recipe.sh
+```
+
+### 2. Create a Dockerfile
+
+In the same `my-first-recipe/` directory, create a file named `Dockerfile` with the following content:
+
+```dockerfile
+FROM alpine:latest
+
+# Copy the script into the image
+COPY my_recipe.sh /app/my_recipe.sh
+
+# Set the working directory
+WORKDIR /app
+
+# Make the script executable (though already done, good practice in Dockerfile)
+RUN chmod +x my_recipe.sh
+
+# Command to run when the container starts
+CMD ["/app/my_recipe.sh"]
+```
+
+This `Dockerfile` does the following:
+*   Uses the lightweight `alpine:latest` base image.
+*   Copies your `my_recipe.sh` script into the `/app/` directory in the image.
+*   Sets `/app/` as the working directory.
+*   Ensures the script is executable.
+*   Specifies `my_recipe.sh` as the command to run when the container starts.
+
+### 3. Build Your Docker Image
+
+Navigate into your `my-first-recipe/` directory in the terminal and run the following command to build your Docker image:
+
+```bash
+docker build -t my-first-recipe:latest .
+```
+This command builds an image and tags it as `my-first-recipe:latest`.
+
+**(Optional but Recommended for Sharing/Production)**
+If you plan to use a Docker registry (like Docker Hub, GitLab Container Registry, etc.), you should tag and push your image:
+```bash
+# Tag the image with your registry username/namespace
+docker tag my-first-recipe:latest your-registry-username/my-first-recipe:latest
+
+# Push the image to the registry
+docker push your-registry-username/my-first-recipe:latest
+```
+Replace `your-registry-username` with your actual username or namespace.
+
+### 4. Add the Recipe in the LEMC UI
+
+1.  **Open LEMC:** Navigate to your LEMC instance in your web browser (e.g., `http://localhost:5362`).
+2.  **Go to Cookbooks:** Find the "Cookbooks" section in the navigation.
+3.  **Create/Select a Cookbook:**
+    *   If you don't have a cookbook, create a new one (e.g., "My Test Cookbook").
+    *   Otherwise, select an existing cookbook where you want to add your recipe.
+4.  **Add New Recipe:**
+    *   Within the cookbook, find the option to add a new recipe.
+    *   **Recipe Name:** Give your recipe a name (e.g., "My Hello World").
+    *   **Description:** (Optional) Add a short description.
+    *   **Image Name (Crucial):**
+        *   If you pushed to a registry: `your-registry-username/my-first-recipe:latest`.
+        *   If you built the image locally and did not push: `my-first-recipe:latest`. LEMC will attempt to use the local image if it can find it via the Docker daemon.
+    *   **Timeout:** Set a timeout (e.g., `1.minute`).
+    *   **`do` field**: For this simple example, ensure the `do` field for the step is set to `now`.
+    *   Leave other fields at their default for now.
+5.  **Save the Recipe.**
+
+### 5. Run Your Recipe!
+
+*   Once the recipe is saved, you should see it listed.
+*   Click the "Run" (or similar) button next to your new recipe.
+*   LEMC will pull the image (if not available locally and a full registry path was provided) and then run the container.
+*   You should see the output ("Hello from my LEMC recipe!" and the current date/time) streamed to the UI.
+
+Congratulations! You've created and run your first LEMC recipe. From here, you can explore more complex scripts, multi-step recipes, and other LEMC features.

@@ -214,9 +214,13 @@ func main() {
 		scopePrefix = "shd"
 	}
 
-	// Construct the resource prefix - prepend 'l-' to ensure it starts with a letter
-	prefix = fmt.Sprintf("lemc-%s-%s-%s-%s", uuidPrefix, user, userid, scopePrefix)
-	log.Printf("Constructed resource prefix: %s", prefix)
+	if len(envMap["DEFAULT_STATIC_PREFIX"]) < 4 {
+		prefix = fmt.Sprintf("lemc-%s-%s-%s-%s", uuidPrefix, user, userid, scopePrefix)
+		log.Printf("Constructed resource prefix: %s", prefix)
+	} else {
+		prefix = envMap["DEFAULT_STATIC_PREFIX"]
+		log.Printf("Using default static prefix: %s", prefix)
+	}
 
 	// Add explicitly mapped variables (including project ID from key)
 	for envKey, tfKey := range varMap {

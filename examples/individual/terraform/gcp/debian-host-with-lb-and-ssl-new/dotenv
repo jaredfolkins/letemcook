@@ -22,14 +22,20 @@ LEMC_HTTP_DOWNLOAD_BASE_URL="/lemc/locker/uuid/${LEMC_UUID}/page/${LEMC_PAGE_ID}
 
 # --- Terraform Configuration ---
 # Default instance type
-FORM_MACHINE_TYPE="e2-small"
+#FORM_MACHINE_TYPE="e2-small"
+FORM_MACHINE_TYPE="e2-standard-4"
+
 # Default OS image
-FORM_IMAGE="debian-cloud/debian-11"
+#FORM_IMAGE="debian-cloud/debian-11"
+FORM_IMAGE="hhc24-prod-app-1-migrated-image"
 
 # --- User-Defined Root Domain/Zone --- (ALL CAPS,  prefix)
 # Replace with actual values for real tests
-ROOT_DOMAIN=w-a-s-d.com
-ROOT_ZONE=w-a-s-d-com 
+#ROOT_DOMAIN=w-a-s-d.com
+#ROOT_ZONE=w-a-s-d-com 
+ROOT_DOMAIN=hhc25-ops.com
+DEFAULT_STATIC_PREFIX=hhc25-dev-app
+ROOT_ZONE= hhc25-ops-com 
 GCP_PROJECT_ID=your-gcp-project-id-here
 COOKBOOK_IDENTIFIER=local-tf-demo
 GCP_REGION=us-central1
