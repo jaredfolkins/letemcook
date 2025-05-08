@@ -247,4 +247,6 @@ Congratulations! You've defined a recipe within a cookbook, created an App to in
 
 ## Copyright
 
-Let'em Cook!, LEMC, and all associated logos and assets are the copyright of Jared Folkins. Copyright © 2025 Jared Folkins. All rights reserved.
+Let'em Cook!, LEMC, and all associated logos and assets are the copyright of Jared Folkins. 
+Copyright © 2025 Jared Folkins. 
+All rights reserved.
