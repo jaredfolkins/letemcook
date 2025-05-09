@@ -40,7 +40,7 @@ The ultimate goal being that `LEMC` would help your organization **"Ops their De
     - Recipe scripts are packaged and distributed as container images using a Docker registry.
     - When a recipe is triggered, `LEMC` ensures the correct container image version is available locally (pulling it if necessary).
     - It then executes the container, automatically passing environment variables to manage state across steps or executions.
-- **Real-time Feedback:** Recipe execution results, including HTML content generated via simple `lemc.` prefixed `echo` or `print` commands (e.g., `echo "lemc.html.buffer; <h1>Update!</h1>"`), are streamed live to the user's web browser via WebSockets. 
+- **Real-time Feedback:** Recipe execution results, including HTML content generated via simple `lemc` prefixed verbs (e.g., `echo "lemc.html.buffer; <h1>Update!</h1>"`), which are then streamed live to the user's web browser via WebSockets. 
 - **Simplified Development + Ai:** The container-centric approach makes it remarkably easy for developers to build and troubleshoot recipes locally. Once satisfied, they can push their container to a shared Docker registry, allowing for straightforward validation and updates by the team. This well-defined, language first, smaller context is also ideal for leveraging AI assistance more effectively.
 
 
@@ -221,6 +221,7 @@ Congratulations! You've defined a recipe within a cookbook, created an App to in
 *   **Database:** SQLite
 *   **Database Interaction:** [sqlx](https://github.com/jmoiron/sqlx), [mattn/go-sqlite3](https://github.com/mattn/go-sqlite3)
 *   **Database Migrations:** [pressly/goose](https://github.com/pressly/goose)
+*   **Tailwind CSS** [tailwindcss](https://tailwindcss.com/)
 *   **Scheduling:** [go-quartz](https://github.com/reugn/go-quartz)
 *   **Container Interaction:** Docker SDK
 *   **Realtime:** WebSockets ([gorilla/websocket](https://github.com/gorilla/websocket))
