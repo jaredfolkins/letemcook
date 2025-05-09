@@ -18,7 +18,7 @@ import (
 )
 
 const (
-	FORM_FIELD_PREFIX  = "lemc_field_"
+	FORM_FIELD_PREFIX  = "LEMC_FIELD_"
 	ENV_PRIVATE_PREVIX = "LEMC_PRIVATE_"
 	ENV_PUBLIC_PREFIX  = "LEMC_PUBLIC_"
 )
@@ -204,13 +204,15 @@ func PutCookbookJob(c LemcContext) error {
 				if r.Name == recipe {
 					for key, values := range formValues {
 						if strings.HasPrefix(key, FORM_FIELD_PREFIX) {
-							varName := strings.TrimPrefix(key, FORM_FIELD_PREFIX)
-							if validateFormName(varName) != nil {
-								c.AddErrorFlash("error", "error parsing form field names")
+							varNamePart := strings.TrimPrefix(key, FORM_FIELD_PREFIX)
+							if validateFormName(varNamePart) != nil {
+								c.AddErrorFlash("error", "error parsing form field names, invalid characters in: "+varNamePart)
 								return c.NoContent(http.StatusConflict)
 							}
+							uppercasedVarNamePart := strings.ToUpper(varNamePart)
+							fullEnvVarName := FORM_FIELD_PREFIX + uppercasedVarNamePart
 							for _, value := range values {
-								addEnv := fmt.Sprintf("%s=%s", varName, value)
+								addEnv := fmt.Sprintf("%s=%s", fullEnvVarName, value)
 								env = append(env, addEnv)
 							}
 						}
@@ -373,13 +375,15 @@ func PutAppJob(c LemcContext) error {
 				if r.Name == recipe {
 					for key, values := range formValues {
 						if strings.HasPrefix(key, FORM_FIELD_PREFIX) {
-							varName := strings.TrimPrefix(key, FORM_FIELD_PREFIX)
-							if validateFormName(varName) != nil {
-								c.AddErrorFlash("error", "error parsing form field names")
+							varNamePart := strings.TrimPrefix(key, FORM_FIELD_PREFIX)
+							if validateFormName(varNamePart) != nil {
+								c.AddErrorFlash("error", "error parsing form field names, invalid characters in: "+varNamePart)
 								return c.NoContent(http.StatusConflict)
 							}
+							uppercasedVarNamePart := strings.ToUpper(varNamePart)
+							fullEnvVarName := FORM_FIELD_PREFIX + uppercasedVarNamePart
 							for _, value := range values {
-								addEnv := fmt.Sprintf("%s=%s", varName, value)
+								addEnv := fmt.Sprintf("%s=%s", fullEnvVarName, value)
 								env = append(env, addEnv)
 							}
 						}
