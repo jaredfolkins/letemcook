@@ -46,6 +46,15 @@ The ultimate goal being that `LEMC` would help your organization **"Ops their De
 *   **Realtime:** WebSockets ([gorilla/websocket](https://github.com/gorilla/websocket))
 *   **Containerization:** Docker, Docker Compose
 
+## Documentation
+
+*   [Architecture](docs/ARCHITECTURE.md)
+*   [Getting Started](docs/GETTING_STARTED.md)
+*   [Features](docs/FEATURES.md)
+*   [Philosophy](docs/PHILOSOPHY.md)
+*   [Agent](docs/AGENT.md)
+*   [Frequently Asked Questions (FAQ)](docs/FAQ.md)
+
 ## LEMC Core Development Requirements
 
 To contribute to or develop `LEMC`, you'll need:
