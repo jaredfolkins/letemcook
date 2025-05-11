@@ -26,7 +26,7 @@ This document outlines the key features of LEMC, designed to help developers, LL
 
 ## Core Concept
 
-LEMC (Let'em Cook) is an open-source tool for automating and executing predefined "recipes" (scripts) on demand, with results streamed live to a web interface. It empowers developers to perform operational tasks ("Ops your Devs") by packaging scripts into containers and providing a UI for execution. For a deeper understanding of the design principles and motivations behind LEMC, please see [[PHILOSOPHY.md]].
+LEMC (Let'em Cook) is an open-source tool for automating and executing predefined "recipes" (scripts) on demand, with results streamed live to a web interface. It empowers developers to perform operational tasks ("Ops your Devs") by packaging scripts into containers and providing a UI for execution. For a deeper understanding of the design principles and motivations behind LEMC, please see [PHILOSOPHY.md](PHILOSOPHY.md).
 
 ## Key Components
 
@@ -60,7 +60,7 @@ Scripts communicate with the LEMC UI by printing specially formatted strings (ve
 **Note on `lemc.env`:** The LEMC backend collects `KEY=value` pairs from `lemc.env` outputs. These are then injected as environment variables into the container for the *next* step of the recipe.
 
 **Usage:**
-Use `echo` (shell) or `print` (Python, etc.) to send these commands. Helper functions are recommended for cleaner scripts (see `AGENT.MD` for examples).
+Use `echo` (shell) or `print` (Python, etc.) to send these commands. Helper functions are recommended for cleaner scripts (see [AGENT.md](AGENT.md) for examples).
 
 ## Scheduling
 
