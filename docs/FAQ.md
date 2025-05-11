@@ -1,26 +1,56 @@
 ### How does `LEMC` accomplish this?
 
-- **Cookbooks & Recipes:** `LEMC` is a web application with a lightweight security model for managing "cookbooks," which are collections of "recipes." Recipes can be executed on demand via a button click or scheduled to run periodically.
-- **Script-Based Steps:** Each step within a recipe is a straightforward script, compatible with various languages (Bash, Python, Go, Ruby, Perl) or DSLs (Terraform, Ansible).
-- **Containerized Workflow:**
-    - Recipe scripts are packaged and distributed as container images using a Docker registry.
-    - When a recipe is triggered, `LEMC` ensures the correct container image version is available locally (pulling it if necessary).
-    - It then executes the container, automatically passing environment variables to manage state across steps or executions.
-- **Real-time Feedback:** Recipe execution results, including HTML content generated via simple `lemc` prefixed verbs (e.g., `echo "lemc.html.buffer; <h1>Update!</h1>"`), which are then streamed live to the user's web browser via WebSockets.
-- **Simplified Development + Ai:** The container-centric approach makes it remarkably easy for developers to build and troubleshoot recipes locally. Once satisfied, they can push their container to a shared Docker registry, allowing for straightforward validation and updates by the team. This well-defined, language first, smaller context is also ideal for leveraging AI assistance more effectively.
+LEMC enables script automation through a user-friendly web interface by using a system of Cookbooks and containerized Recipes. Key mechanisms include:
+
+*   **Cookbooks & Recipes:** Organizes tasks into collections (Cookbooks) of executable scripts (Recipes).
+*   **Script-Based Steps:** Individual recipe steps are scripts, allowing use of various languages/DSLs.
+*   **Containerized Workflow:** Scripts are run in Docker containers, ensuring consistency and managing dependencies. LEMC handles image pulling and execution.
+*   **Real-time Feedback:** Script output, including UI updates via LEMC Verbs, is streamed live to the browser.
+
+For a detailed breakdown of these and other capabilities, see [Key Features](FEATURES.md).
 
 ### Is LEMC a framework?
 
-Not exactly. Let’em Cook is closer to a lightweight workflow-automation **platform** than a traditional software framework.
+Not exactly. Let'em Cook is closer to a lightweight workflow-automation **platform** than a traditional software framework.
 
 * **Frameworks** (like Django or React) embed themselves in your code. You write components that run *inside* their life-cycle.
-* **Let’em Cook** sits **outside** your application code. You package each step of a workflow as a container (or script), then describe how those containers chain together in a YAML recipe. At run time the LEMC engine pulls the images, wires the steps, streams their output, and enforces RBAC.
+* **Let'em Cook** sits **outside** your application code. You package each step of a workflow as a container (or script), then describe how those containers chain together in a YAML recipe. At run time the LEMC engine pulls the images, wires the steps, streams their output, and enforces RBAC.
 
 Think of it as:
 
 * **Orchestrator**: Spins up the right containers, handles retries, timeouts, fallbacks.
-* **UI generator**: Reads the “verbs” you print (now, in, every, etc.) and turns them into buttons, logs, and dashboards without extra frontend work.
+* **UI generator**: Reads the "verbs" you print (now, in, every, etc.) and turns them into buttons, logs, and dashboards without extra frontend work.
 * **Distribution format**: Recipes plus docs and assets can be exported, shared, or version-controlled like any artifact.
 
-So while it does give you conventions and helper libraries, you don’t *build* your software inside LEMC. Instead you plug your existing containers or scripts into it and let the platform do the orchestration.
+So while it does give you conventions and helper libraries, you don't *build* your software inside LEMC. Instead you plug your existing containers or scripts into it and let the platform do the orchestration.
+
+### How is LEMC different from Jenkins, GitLab CI, or Rundeck?
+
+While LEMC shares some functional similarities with tools like Jenkins, GitLab CI, and Rundeck (e.g., running automated tasks, scheduling), its primary focus and design philosophy differ:
+
+*   **Developer-Centric & Interactive:** LEMC is designed with a strong emphasis on empowering individual developers and small teams to quickly automate and run their own operational scripts with immediate, rich UI feedback. It prioritizes ease of use for on-demand tasks that benefit from live interaction or visualization.
+*   **Simplified Scope:** Compared to comprehensive CI/CD platforms, LEMC is more lightweight and focused on script execution and simple workflow automation rather than full software delivery pipelines (though it can be part of one).
+*   **UI Generation from Scripts:** A key differentiator is the LEMC verb system, allowing scripts themselves to dynamically build and update the web UI, making it highly suitable for tasks where the output is more than just log lines.
+*   **Runbook Similarities:** Like Rundeck, it allows for creating a catalog of operational procedures. However, LEMC's deep integration of containerization from the ground up and its script-driven UI capabilities offer a different approach to runbook automation.
+
+In essence, LEMC aims to be a more accessible, developer-first tool for tasks that sit between ad-hoc scripting and heavyweight CI/CD/automation platforms, particularly excelling where interactive execution and dynamic UIs are beneficial. For more on LEMC's design goals, see [PHILOSOPHY.md](PHILOSOPHY.md).
+
+### What are the typical use cases for LEMC?
+
+LEMC is well-suited for:
+
+*   Automating common developer/SRE tasks (e.g., cache clearing, service restarts, log analysis, data fetching).
+*   Creating interactive runbooks for incident response or operational procedures.
+*   Building simple internal tools that require running scripts and visualizing their output.
+*   Tasks where a script needs to provide a richer UI than plain text (e.g., showing tables, charts, or custom HTML based on script results).
+*   Scheduled maintenance or reporting scripts that benefit from centralized management and visibility.
+*   Empowering non-developers to safely execute predefined, containerized tasks via a simple web UI.
+
+### Where is LEMC data stored?
+
+LEMC stores its data, including user accounts, cookbook definitions, recipe configurations, and job history/logs, in a **SQLite database** located in the `data/` directory by default. Publicly accessible files generated by recipes are also typically stored in subdirectories within `data/` (e.g., `data/public_files/`). Refer to the [Architecture](ARCHITECTURE.md#file-system-and-volume-mounts) document for more details on file system usage.
+
+### How can I contribute or learn more?
+
+LEMC is an open-source project. You can learn more by exploring its [GitHub repository](https://github.com/jaredfolkins/letemcook) (replace with actual link if different), reading the complete documentation suite, and trying out the examples. Contributions in the form of bug reports, feature requests, documentation improvements, or code are welcome via the project's standard contribution guidelines (e.g., issues and pull requests on GitHub).
 

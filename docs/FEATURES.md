@@ -26,7 +26,7 @@ This document outlines the key features of LEMC, designed to help developers, LL
 
 ## Core Concept
 
-LEMC (Let'em Cook) is an open-source tool for automating and executing predefined "recipes" (scripts) on demand, with results streamed live to a web interface. It empowers developers to perform operational tasks ("Ops your Devs") by packaging scripts into containers and providing a UI for execution. For a deeper understanding of the design principles and motivations behind LEMC, please see [PHILOSOPHY.md](PHILOSOPHY.md).
+LEMC (Let'em Cook) is an open-source tool for automating and executing predefined "recipes" (scripts) on demand, with results streamed live to a web interface, empowering developers to perform operational tasks. For a deeper understanding of the design principles and motivations behind LEMC, please see [PHILOSOPHY.md](PHILOSOPHY.md).
 
 ## Key Components
 
@@ -41,26 +41,17 @@ LEMC (Let'em Cook) is an open-source tool for automating and executing predefine
 
 ## Real-Time UI Communication (LEMC Verbs)
 
-Scripts communicate with the LEMC UI by printing specially formatted strings (verbs) to standard output. The `yeschef` application (LEMC's backend) parses these commands.
+Scripts communicate with the LEMC UI by printing specially formatted strings (verbs) to standard output. The `yeschef` application (LEMC's backend) parses these commands to dynamically update the UI with HTML, CSS, or execute JavaScript, and to pass environment variables between steps.
 
-**LEMC Verb Reference:**
+For a detailed reference of all available LEMC Verbs and examples of their usage, including helper functions, please see [SCRIPT_UI_COMMUNICATION.md](SCRIPT_UI_COMMUNICATION.md).
 
-| Verb                    | Description                                                                 | Example                                                             |
-| ----------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| `lemc.env;KEY=value`    | Sets `KEY=value` as an env var for subsequent steps in the same recipe.     | `echo "lemc.env;MY_VAR=hello"`                                        |
-| `lemc.css.buffer;CSS`   | Appends CSS to a temporary buffer. (Effectively `lemc.css.append;`)         | `echo "lemc.css.buffer;body { color: blue; }"`                      |
-| `lemc.css.trunc;CSS`    | Clears existing CSS and replaces it with `CSS`.                             | `echo "lemc.css.trunc;.new { font-weight: bold; }"`                 |
-| `lemc.css.append;CSS`   | Appends `CSS` to the current CSS and renders.                               | `echo "lemc.css.append;p { margin: 5px; }"`                         |
-| `lemc.html.buffer;HTML` | Appends HTML to a temporary buffer. (Effectively `lemc.html.append;`)       | `echo "lemc.html.buffer;<h2>Section</h2>"`                         |
-| `lemc.html.trunc;HTML`  | Clears existing HTML and replaces it with `HTML`.                           | `echo "lemc.html.trunc;<div>Main Content</div>"`                    |
-| `lemc.html.append;HTML` | Appends `HTML` to the current HTML and renders.                             | `echo "lemc.html.append;<p>More details...</p>"`                     |
-| `lemc.js.trunc;JS`      | Clears existing JavaScript, replaces it with `JS`, then executes `JS`.      | `echo "lemc.js.trunc;console.log('JS Reset');"`                    |
-| `lemc.js.exec;JS`       | Effectively same as `lemc.js.trunc;` - replaces and executes JavaScript.    | `echo "lemc.js.exec;alert('Hello from LEMC!');"`                    |
+**Brief Overview of Verb Categories:**
+*   **`lemc.env;KEY=value`**: Sets environment variables for subsequent steps.
+*   **`lemc.css.*`**: Verbs to manage CSS (append, truncate).
+*   **`lemc.html.*`**: Verbs to manage HTML content (append, truncate).
+*   **`lemc.js.*`**: Verbs to manage and execute JavaScript (truncate, execute).
 
 **Note on `lemc.env`:** The LEMC backend collects `KEY=value` pairs from `lemc.env` outputs. These are then injected as environment variables into the container for the *next* step of the recipe.
-
-**Usage:**
-Use `echo` (shell) or `print` (Python, etc.) to send these commands. Helper functions are recommended for cleaner scripts (see [AGENT.md](AGENT.md) for examples).
 
 ## Scheduling
 
@@ -68,7 +59,7 @@ Use `echo` (shell) or `print` (Python, etc.) to send these commands. Helper func
 *   This allows for managed, recurring tasks with UI feedback and logging.
 
 ## Philosophy
-*(This section has been integrated into the Core Concept and PHILOSOPHY.md)*
+*(This section has been integrated into the Core Concept and [PHILOSOPHY.md](PHILOSOPHY.md))*
 
 ## Tech Stack Highlights
 
@@ -116,16 +107,7 @@ These variables provide scripts with essential runtime information.
 
 ## Quick Start: Creating and Using a Local Script with Docker
 
-This section provides a brief overview of packaging a local script into a Docker container for use in a LEMC recipe. (Consider moving this to a dedicated `QUICK_START.md` or `TUTORIAL.md` for more detail).
-
-**Core Steps:**
-1.  **Create Script:** Write your task script (e.g., `my_task.sh`), using LEMC verbs for UI output.
-2.  **Dockerfile:** Create a `Dockerfile` to package your script and its dependencies (e.g., `FROM alpine`, `COPY my_task.sh`, `CMD ["/app/my_task.sh"]`).
-3.  **Build Image:** Build your Docker image (`docker build -t my-lemc-script:latest .`). Optionally, tag and push to a registry.
-4.  **LEMC Recipe:** In the LEMC UI, create/update a recipe step to use your Docker image name.
-5.  **Run:** Execute the recipe from a LEMC App.
-
-LEMC runs your script in the container, streaming output to the UI.
+For a step-by-step guide on creating your first recipe, including writing a script, containerizing it with Docker, and running it in LEMC, please refer to the [GETTING_STARTED.md](GETTING_STARTED.md) tutorial.
 
 ## Mounted File System in Containers
 
