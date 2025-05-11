@@ -96,6 +96,7 @@ func PostCookbookYamlConfigHandler(c LemcContext) error {
 		err := yaml.Unmarshal([]byte(f), &yaml_default_no_storage)
 		if err != nil {
 			c.AddErrorFlash("yaml", "yaml failed to marshal")
+			log.Printf("yaml.Unmarshal: ", err)
 			return c.NoContent(http.StatusConflict)
 		}
 	}
@@ -106,6 +107,7 @@ func PostCookbookYamlConfigHandler(c LemcContext) error {
 	prettyYAML, err := yaml.Marshal(yaml_default)
 	if err != nil {
 		c.AddErrorFlash("yaml", "yaml failed to marshal")
+		log.Printf("yaml.Marshal: ", err)
 		return c.NoContent(http.StatusConflict)
 	}
 
@@ -115,18 +117,21 @@ func PostCookbookYamlConfigHandler(c LemcContext) error {
 		cb.YamlIndividual, err = prettyPrintYAML(string(prettyYAML))
 		if err != nil {
 			c.AddErrorFlash("yaml", "yaml failed to marshal")
+			log.Printf("yaml.Marshal: ", err)
 			return c.NoContent(http.StatusConflict)
 		}
 	case SCOPE_YAML_TYPE_SHARED:
 		cb.YamlShared, err = prettyPrintYAML(string(prettyYAML))
 		if err != nil {
 			c.AddErrorFlash("yaml", "yaml failed to marshal")
+			log.Printf("yaml.Marshal: ", err)
 			return c.NoContent(http.StatusConflict)
 		}
 
 		isAdmin = true
 	default:
 		c.AddErrorFlash("yaml", "view_type not found")
+		log.Printf("view_type not found")
 		return c.NoContent(http.StatusConflict)
 	}
 

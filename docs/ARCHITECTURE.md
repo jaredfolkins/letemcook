@@ -4,6 +4,10 @@
 
 ## Overall Architecture of LEMC
 
+<p align="center">
+  <img src="../media/diag1.png" alt="diagram1" />
+</p>
+
 &#x20;*Figure: LEMC overall architecture and component interaction.* LEMC’s core is a Go-based server (code-named **YesChef**) that exposes a web UI and orchestrates the execution of recipes. Users interact with LEMC through a browser-based **Web UI** (built with HTMX and Templ) served by the backend. The backend persists data (users, cookbooks, recipes, logs, etc.) in a **SQLite database**, and it leverages the host’s **Docker Daemon** (via Docker’s API socket) to run recipe steps in isolated containers. Each **recipe** consists of one or more **steps**, where each step is a script packaged as a Docker image (containing all its code and dependencies). LEMC is language-agnostic – any language or tool can be used inside steps as long as it can run in a container and print output. A **container registry** (like Docker Hub or a private registry) is used to store and distribute these step images; LEMC will pull the needed image if it’s not already available locally. The web UI and backend communicate in real-time (over WebSockets) so that as containers produce output, the results are immediately pushed to the user’s browser. In essence, the architecture links the **user interface**, the **LEMC server**, the **database**, and **Docker** as an execution sandbox, enabling on-demand automation of tasks.
 
 Key components in this architecture include:
@@ -17,6 +21,10 @@ Key components in this architecture include:
 In the architecture diagram above, the **User** triggers a recipe via the browser, causing the **LEMC Server** to retrieve the recipe definition from **SQLite DB**, then instruct the **Docker Daemon** to run the specified container image for each step. If the image isn’t present, Docker will pull it from the **Container Registry** first. As the container runs, the script’s output (stdout) is monitored by the backend; special **LEMC Verbs** printed in the output are intercepted for UI updates or state passing (instead of being shown raw). The backend streams live feedback to the user’s browser (via WebSocket or server-sent events) so the user can see progress. Multiple steps are executed in sequence (each as a fresh container) – after one step finishes, the next container is started, potentially using environment data passed along. The **Scheduler** can also trigger the backend to start a recipe at predetermined times (dotted line in the diagram). Throughout execution, any files that the script writes to a special shared volume (e.g. `/lemc/public`) will be accessible to the LEMC server for download links (this is shown as the **Bind-Mounted Volume** for outputs) – for example, a script can drop a report file which the UI can present as a downloadable link.
 
 ## Runtime Behavior and Lifecycle of a Recipe Execution
+
+<p align="center">
+  <img src="../media/diag2.png" alt="diagram2" height="600" />
+</p>
 
 LEMC’s runtime behavior follows a clear sequence of events from the moment a recipe is invoked to the completion of all its steps. The system manages the lifecycle of each “job” (recipe run) and maintains state between steps as needed. The diagram below illustrates the typical flow of execution for a recipe:
 
@@ -55,6 +63,11 @@ While most of LEMC’s logic operates at an application level, it interacts with
 In summary, LEMC’s interaction with the host is centered on Docker and file access through controlled channels. It uses Docker to isolate execution, uses the host file system to persist state (DB, env, output files), and uses network connectivity for user access and image distribution. **Host requirements:** To run LEMC, the host needs Docker (with permission for LEMC to access it) and the ability to open the web service port. Because of these interactions, running LEMC typically requires admin/root privileges (for Docker) at least at setup, and it’s geared toward usage in a trusted environment (small team or single user).
 
 ## User Configuration and Invocation of LEMC
+
+<p align="center">
+  <img src="../media/diag3.png" alt="diagram3" />
+</p>
+
 
 From a user or developer’s perspective, using LEMC involves a few setup steps followed by execution. The workflow can be divided into: **writing a script and containerizing it**, **registering it as a recipe in LEMC**, and **running it via the LEMC UI**. The following diagram outlines this process end-to-end:
 
