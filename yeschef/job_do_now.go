@@ -93,12 +93,13 @@ func DoNow(jr *JobRecipe) error {
 	var missingImages []string
 
 	for _, st := range jr.Recipe.Steps {
-		if !imageExists(cli, st.Image) {
-			log.Printf("Image %s not found locally, attempting to pull", st.Image)
-			err := handleImagePull(cli, st.Image)
+		imageSpec := ImageSpec{Name: st.Image, RegistryAuth: st.RegistryAuth}
+		if !imageExists(cli, imageSpec.Name) {
+			log.Printf("Image %s not found locally, attempting to pull with auth (if provided)", imageSpec.Name)
+			err := handleImagePull(cli, imageSpec)
 			if err != nil {
-				log.Printf("Error pulling image %s: %v", st.Image, err)
-				missingImages = append(missingImages, st.Image)
+				log.Printf("Error pulling image %s: %v", imageSpec.Name, err)
+				missingImages = append(missingImages, imageSpec.Name)
 			}
 		}
 	}
@@ -106,6 +107,7 @@ func DoNow(jr *JobRecipe) error {
 	if len(missingImages) == 0 {
 		for _, st := range jr.Recipe.Steps {
 			if !imageExists(cli, st.Image) {
+				log.Printf("Image %s still missing after pull attempt.", st.Image)
 				missingImages = append(missingImages, st.Image)
 			}
 		}

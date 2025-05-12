@@ -2,8 +2,9 @@ package models
 
 import (
 	"encoding/base64"
-	"golang.org/x/net/html"
 	"strings"
+
+	"golang.org/x/net/html"
 )
 
 type YamlDefault struct {
@@ -146,10 +147,14 @@ func (r *Recipe) UsernameOrAdmin() string {
 }
 
 type Step struct {
-	Step    int    `yaml:"step"`
-	Image   string `yaml:"image"`
-	Do      string `yaml:"do"`
-	Timeout string `yaml:"timeout"`
+	Step         int      `yaml:"step"`
+	Name         string   `yaml:"name"`
+	Image        string   `yaml:"image"`
+	RegistryAuth string   `yaml:"registry_auth,omitempty"`
+	Entrypoint   []string `yaml:"entrypoint,omitempty"`
+	Command      []string `yaml:"command,omitempty"`
+	Do           string   `yaml:"do"`
+	Timeout      string   `yaml:"timeout"`
 }
 
 func NewYamlIndividual() *YamlDefault {

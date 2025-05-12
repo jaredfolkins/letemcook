@@ -545,7 +545,9 @@ func TestIntegrationConcurrentJobOperations(t *testing.T) {
 }
 
 func handleImageForTest(t *testing.T, cli *client.Client, imageName string) bool {
-	err := handleImagePull(cli, imageName)
+	// Assume no auth needed for test images or use a default placeholder if required
+	imageSpec := ImageSpec{Name: imageName, RegistryAuth: ""}
+	err := handleImagePull(cli, imageSpec) // Pass ImageSpec
 	if err == nil {
 		t.Logf("Image '%s' successfully handled by handleImagePull.", imageName)
 		return true
@@ -615,7 +617,9 @@ func TestIntegrationImagePullDelete(t *testing.T) {
 	}
 
 	t.Logf("Attempting to pull image %s using handleImagePull", imageToTest)
-	err = handleImagePull(cli, imageToTest)
+	// Assume no auth needed for hello-world or use a default placeholder
+	imageSpec := ImageSpec{Name: imageToTest, RegistryAuth: ""}
+	err = handleImagePull(cli, imageSpec) // Pass ImageSpec
 	if err != nil {
 		t.Fatalf("Failed to pull image %s using handleImagePull: %v", imageToTest, err)
 	}
