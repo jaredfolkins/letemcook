@@ -152,7 +152,7 @@ type Step struct {
 	Image        string   `yaml:"image"`
 	RegistryAuth string   `yaml:"registry_auth,omitempty"`
 	Entrypoint   []string `yaml:"entrypoint,omitempty"`
-	Command      []string `yaml:"command,omitempty"`
+	Env          []string `yaml:"env,omitempty"`
 	Do           string   `yaml:"do"`
 	Timeout      string   `yaml:"timeout"`
 }

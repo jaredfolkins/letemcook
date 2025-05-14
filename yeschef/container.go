@@ -291,7 +291,7 @@ func NewHostConfig(cf *util.ContainerFiles, is_admin bool) *container.HostConfig
 	}
 }
 
-func runContainer(server *CmdServer, job *JobRecipe, uri string) error {
+func runContainer(server *CmdServer, job *JobRecipe, uri string, env []string) error {
 	var err error
 	ctx := context.Background()
 
@@ -353,7 +353,7 @@ func runContainer(server *CmdServer, job *JobRecipe, uri string) error {
 	cfg := &container.Config{
 		StopTimeout:  &job.ContainerTimeoutInSeconds,
 		Image:        image_name,
-		Env:          job.Env,
+		Env:          env,
 		AttachStdout: true,
 		AttachStderr: true,
 		Tty:          false,
