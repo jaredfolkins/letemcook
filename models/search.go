@@ -73,7 +73,7 @@ func SearchForCookbooks(search string, userID, accountID int64, limit int, is_pu
 		order by 
 			cookbooks.name
 		desc limit 
-			$4`
+			$5`
 
 	search = "%" + search + "%"
 	err := db.Db().Select(&cba, query, userID, accountID, search, is_published, limit)

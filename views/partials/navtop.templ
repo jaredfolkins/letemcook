@@ -87,8 +87,8 @@ templ Navtop(v models.BaseView) {
                             <a
                                 hx-target="#app"
                                 hx-swap="innerHTML transition:true"
-                                hx-push-url="/lemc/jobs"
-                                href="/lemc/jobs?partial=true"
+                                hx-push-url="/lemc/account/jobs"
+                                href="/lemc/account/jobs?partial=true"
                                 class="btn btn-ghost rounded-none text-lg"
                             >
                                 Jobs
@@ -196,7 +196,7 @@ templ Navtop(v models.BaseView) {
                         <ul class="p-2">
                             <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/account/settings" href="/lemc/account/settings?partial=true">Settings</a></li>
                             <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/users" href="/lemc/users?partial=true">Users</a></li>
-                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/jobs" href="/lemc/jobs?partial=true">Jobs</a></li>
+                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/account/jobs" href="/lemc/account/jobs?partial=true">Jobs</a></li>
                         </ul>
                     </li>
                  }
