@@ -36,8 +36,7 @@ func (xrv *CmdServer) Run() {
 				select {
 				case xlient.Xend <- msg:
 				default:
-					close(xlient.Xend)
-					delete(xrv.Clients, xlient)
+					// Drop the message for this client if their buffer is full
 				}
 			}
 		}

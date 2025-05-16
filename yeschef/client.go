@@ -43,6 +43,7 @@ func (x *Client) ReadPump() {
 }
 
 func (x *Client) WritePump() {
+	x.Xonn.EnableWriteCompression(true)
 	ticker := time.NewTicker(PING_PERIOD)
 	defer func() {
 		ticker.Stop()
@@ -57,24 +58,21 @@ func (x *Client) WritePump() {
 				return
 			}
 
-			x.Xonn.WriteMessage(websocket.TextMessage, message)
-			/*
-				w, err := x.Xonn.NextWriter(websocket.TextMessage)
-				if err != nil {
-					return
-				}
-				w.Write(message)
+			w, err := x.Xonn.NextWriter(websocket.TextMessage)
+			if err != nil {
+				return
+			}
+			w.Write(message)
 
-				n := len(x.Xend)
-				for i := 0; i < n; i++ {
-					w.Write(newline)
-					w.Write(<-x.Xend)
-				}
+			n := len(x.Xend)
+			for i := 0; i < n; i++ {
+				w.Write(newline)
+				w.Write(<-x.Xend)
+			}
 
-				if err := w.CloseFiles(); err != nil {
-					return
-				}
-			*/
+			if err := w.Close(); err != nil {
+				return
+			}
 		case <-ticker.C:
 			x.Xonn.SetWriteDeadline(time.Now().Add(WRITE_WAIT))
 			if err := x.Xonn.WriteMessage(websocket.PingMessage, []byte{}); err != nil {
