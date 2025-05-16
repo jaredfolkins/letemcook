@@ -61,6 +61,16 @@ echo "lemc.js.exec;console.log('Page updated by container.');"
 echo "lemc.env;JOB_STATUS=completed"
 ```
 
+**Example (error handling using `lemc.err`):**
+```shell
+#!/bin/sh
+config="/etc/myapp/config.json"
+if [ ! -f "$config" ]; then
+  echo "lemc.err;Missing config file: $config"
+  exit 1
+fi
+```
+
 ## Suggestion: Helper Functions
 
 To make your agent scripts cleaner and less prone to typos, consider creating helper functions within your scripts or a shared library if your agent environment supports it.
