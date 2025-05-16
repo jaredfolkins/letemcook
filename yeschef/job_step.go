@@ -16,9 +16,13 @@ type StepJob struct {
 func (dij *StepJob) Execute(ctx context.Context) error {
 	log.Println("StepJob: Execute")
 	log.Printf("StepJob: %v %v %v\n", dij.Step.Image, dij.Step.Step, dij.Step.Do)
-	err := DoStep(ctx, dij.RecipeJob, dij.Step)
+
+	execCtx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	err := DoStep(execCtx, dij.RecipeJob, dij.Step)
 	if err != nil {
-		ctx.Done()
+		cancel()
 		return err
 	}
 	return nil

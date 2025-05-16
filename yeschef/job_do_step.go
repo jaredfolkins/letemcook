@@ -33,18 +33,18 @@ func DoStep(ctx context.Context, job *JobRecipe, st models.Step) error {
 		stepEnv = append(stepEnv, st.Env...)
 	}
 
-	job.StepID = fmt.Sprintf("%d", st.Step)
+	// Work on a copy of the job to avoid races when multiple steps run concurrently
+	jobCopy := *job
+	jobCopy.StepID = fmt.Sprintf("%d", st.Step)
 
-	job.ContainerTimeoutInSeconds, err = timeoutInSeconds(st.Timeout)
+	jobCopy.ContainerTimeoutInSeconds, err = timeoutInSeconds(st.Timeout)
 	if err != nil {
-		ctx.Done()
 		return err
 	}
 
-	err = runContainer(xserver, job, st.Image, stepEnv)
+	err = runContainer(xserver, &jobCopy, st.Image, stepEnv)
 	if err != nil {
 		e := fmt.Errorf("runContainer failed: %v", err)
-		ctx.Done()
 		return e
 	}
 
