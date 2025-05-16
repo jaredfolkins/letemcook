@@ -289,7 +289,9 @@ func runContainer(server *CmdServer, job *JobRecipe, uri string, env []string) e
 		return err
 	}
 
-	jm := util.NewJobMetaFromEnv(job.Env)
+	// Use the environment intended for the container so JobMeta reflects
+	// the correct step-specific values (e.g. LEMC_STEP_ID)
+	jm := util.NewJobMetaFromEnv(env)
 
 	cf, err := util.NewContainerFiles(jm, job.Recipe.IsShared)
 	if err != nil {
