@@ -44,6 +44,10 @@ The following "verbs" (prefixes) can be used with `echo` or `print` statements w
     *   **Action**: Clears any existing JavaScript for the view and replaces it with the provided JavaScript string. This new JavaScript will then be executed on the client-side. *Effectively the same as `lemc.js.trunc;` based on current `yeschef/container.go` implementation.*
     *   **Example**: `echo "lemc.js.exec;alert('This JavaScript was executed!');"`
 
+10.  **`lemc.err;`**: Signals a fatal error and stops the current job.
+    *   **Action**: Sends the error message to the UI using `lemc.html.append;`, then appends `job failed` and terminates the job.
+    *   **Example**: `echo "lemc.err;something went wrong"`
+
 ## Using Verbs
 
 To use these verbs, simply `echo` or `print` (depending on your script's language) the command string. The `yeschef` application will intercept this output.

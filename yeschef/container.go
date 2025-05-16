@@ -33,6 +33,7 @@ var lemc_css_append_rgx = regexp.MustCompile(`^lemc\.css\.append;`)
 var lemc_html_buffer_rgx = regexp.MustCompile(`^lemc\.html\.buffer;`)
 var lemc_html_trunc_rgx = regexp.MustCompile(`^lemc\.html\.trunc;`)
 var lemc_html_append_rgx = regexp.MustCompile(`^lemc\.html\.append;`)
+var lemc_err_rgx = regexp.MustCompile(`^lemc\.err;`)
 var lemc_timeout_rgx = regexp.MustCompile(`^(\d+)\.(\w+)$`)
 var lemc_js_trunc_rgx = regexp.MustCompile(`^lemc\.js\.trunc;`)
 var lemc_js_exec_rgx = regexp.MustCompile(`^lemc\.js\.exec;`)
@@ -373,6 +374,7 @@ func runContainer(server *CmdServer, job *JobRecipe, uri string, env []string) e
 	}
 
 	var wg sync.WaitGroup
+	lemcErrCh := make(chan error, 1)
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
@@ -411,6 +413,15 @@ func runContainer(server *CmdServer, job *JobRecipe, uri string, env []string) e
 			}
 
 			s := strings.TrimSpace(string(readBuf))
+
+			if lemc_err_rgx.MatchString(s) {
+				errMsg := strings.TrimPrefix(s, LEMC_ERR)
+				msg(LEMC_HTML_APPEND+errMsg, imageHash, image_name, job, jm, cf, lf)
+				msg(LEMC_HTML_APPEND+"job failed", imageHash, image_name, job, jm, cf, lf)
+				lemcErrCh <- fmt.Errorf("lemc err: %s", errMsg)
+				return
+			}
+
 			msg(s, imageHash, image_name, job, jm, cf, lf)
 		}
 	}()
@@ -437,6 +448,19 @@ func runContainer(server *CmdServer, job *JobRecipe, uri string, env []string) e
 			}
 			wg.Wait()
 			return nil
+		case err := <-lemcErrCh:
+			close(doneTimeout)
+			timeout := 10
+			_ = cli.ContainerStop(ctx, resp.ID, container.StopOptions{Timeout: &timeout})
+			removeOpts := container.RemoveOptions{
+				RemoveVolumes: true,
+				RemoveLinks:   false,
+				Force:         true,
+			}
+
+			_ = cli.ContainerRemove(ctx, resp.ID, removeOpts)
+			wg.Wait()
+			return err
 		case err := <-errCh:
 			close(doneTimeout)
 			errx := deletePreviousContainer(ctx, cli, job, fm.IndividualUsernameOrSharedUsername)

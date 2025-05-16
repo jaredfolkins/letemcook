@@ -22,6 +22,7 @@ const (
 	LEMC_HTML_APPEND  = "lemc.html.append;"
 	LEMC_JS_EXEC      = "lemc.js.exec;"
 	LEMC_JS_TRUNC     = "lemc.js.trunc;"
+	LEMC_ERR          = "lemc.err;"
 	LEMC_ENV          = "lemc.env;"
 	QUEUE_FOLDER      = "LEMC_QUEUES"
 	OWNED_BY          = "LEMC"

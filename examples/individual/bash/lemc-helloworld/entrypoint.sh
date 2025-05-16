@@ -29,7 +29,7 @@ send_css() {
     local target_id="${LEMC_HTML_ID:-lemc-output-container}" # Use env var or default
 
     if [ ! -f "$css_file" ]; then
-        echo "lemc.error; CSS file not found: $css_file" >&2
+        echo "lemc.err; CSS file not found: $css_file" >&2
         return 1
     fi
 
@@ -45,7 +45,7 @@ send_html_template() {
     local html_file="$1"
 
     if [ ! -f "$html_file" ]; then
-        echo "lemc.error; HTML template file not found: $html_file" >&2
+        echo "lemc.err; HTML template file not found: $html_file" >&2
         return 1
     fi
 
