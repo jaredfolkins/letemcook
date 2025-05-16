@@ -106,44 +106,44 @@ templ Navtop(v models.BaseView) {
                         <a
                             hx-target="#app"
                             hx-swap="innerHTML transition:true"
-                            hx-push-url="/lemc/apps"
-                            href="/lemc/apps?partial=true"
+                            hx-push-url="/lemc/system/settings"
+                            href="/lemc/system/settings?partial=true"
                             class="btn btn-ghost rounded-none text-lg"
                         >
-                            TODO:Settings
+                            Settings
                         </a>
                     </li>
                     <li>
                         <a
                             hx-target="#app"
                             hx-swap="innerHTML transition:true"
-                            hx-push-url="/lemc/account/settings"
-                            href="/lemc/account/settings?partial=true"
+                            hx-push-url="/lemc/system/accounts"
+                            href="/lemc/system/accounts?partial=true"
                             class="btn btn-ghost rounded-none text-lg"
                         >
-                            TODO:Accounts
+                            Accounts
                         </a>
                     </li>
                     <li>
                         <a
                             hx-target="#app"
                             hx-swap="innerHTML transition:true"
-                            hx-push-url="/lemc/apps"
-                            href="/lemc/apps?partial=true"
+                            hx-push-url="/lemc/system/images"
+                            href="/lemc/system/images?partial=true"
                             class="btn btn-ghost rounded-none text-lg"
                         >
-                            TODO:Images
+                            Images
                         </a>
                     </li>
                     <li>
                         <a
                             hx-target="#app"
                             hx-swap="innerHTML transition:true"
-                            hx-push-url="/lemc/apps"
-                            href="/lemc/apps?partial=true"
+                            hx-push-url="/lemc/system/jobs"
+                            href="/lemc/system/jobs?partial=true"
                             class="btn btn-ghost rounded-none text-lg"
                         >
-                            TODO:Jobs
+                            Jobs
                         </a>
                     </li>
                   </ul>
@@ -204,10 +204,10 @@ templ Navtop(v models.BaseView) {
                      <li>
                         <a>System</a>
                         <ul class="p-2">
-                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/apps" href="/lemc/apps?partial=true">TODO:Settings</a></li>
-                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/account/settings" href="/lemc/account/settings?partial=true">TODO:Accounts</a></li>
-                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/apps" href="/lemc/apps?partial=true">TODO:Images</a></li>
-                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/apps" href="/lemc/apps?partial=true">TODO:Jobs</a></li>
+                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/settings" href="/lemc/system/settings?partial=true">Settings</a></li>
+                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/accounts" href="/lemc/system/accounts?partial=true">Accounts</a></li>
+                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/images" href="/lemc/system/images?partial=true">Images</a></li>
+                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/jobs" href="/lemc/system/jobs?partial=true">Jobs</a></li>
                         </ul>
                     </li>
                  }

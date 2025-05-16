@@ -12,7 +12,6 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
-	"regexp"
 	"strconv"
 	"strings"
 	"sync"
@@ -26,18 +25,6 @@ import (
 	"github.com/jaredfolkins/letemcook/util"
 )
 
-var lemc_env_rgx = regexp.MustCompile(`^lemc\.env;`)
-var lemc_css_buffer_rgx = regexp.MustCompile(`^lemc\.css\.buffer;`)
-var lemc_css_trunc_rgx = regexp.MustCompile(`^lemc\.css\.trunc;`)
-var lemc_css_append_rgx = regexp.MustCompile(`^lemc\.css\.append;`)
-var lemc_html_buffer_rgx = regexp.MustCompile(`^lemc\.html\.buffer;`)
-var lemc_html_trunc_rgx = regexp.MustCompile(`^lemc\.html\.trunc;`)
-var lemc_html_append_rgx = regexp.MustCompile(`^lemc\.html\.append;`)
-var lemc_err_rgx = regexp.MustCompile(`^lemc\.err;`)
-var lemc_timeout_rgx = regexp.MustCompile(`^(\d+)\.(\w+)$`)
-var lemc_js_trunc_rgx = regexp.MustCompile(`^lemc\.js\.trunc;`)
-var lemc_js_exec_rgx = regexp.MustCompile(`^lemc\.js\.exec;`)
-
 func msg(message, imageHash, imageName string, job *JobRecipe, jm *util.JobMeta, cf *util.ContainerFiles, lf *util.LogFile) {
 	r := &Response{
 		UUID:     jm.UUID,
@@ -49,7 +36,7 @@ func msg(message, imageHash, imageName string, job *JobRecipe, jm *util.JobMeta,
 
 	lf.StepWriteToLog(jm.StepID, message, imageHash, imageName)
 
-	if lemc_css_trunc_rgx.MatchString(message) {
+	if strings.HasPrefix(message, LEMC_CSS_TRUNC) {
 		r.Cmd = LEMC_CSS_TRUNC
 		r.Msg = strings.TrimPrefix(message, LEMC_CSS_TRUNC)
 		err := cf.Trunc(r.Msg, cf.Css)
@@ -57,7 +44,7 @@ func msg(message, imageHash, imageName string, job *JobRecipe, jm *util.JobMeta,
 			log.Printf("Error truncating file css: %v", err)
 			return
 		}
-	} else if lemc_css_append_rgx.MatchString(message) {
+	} else if strings.HasPrefix(message, LEMC_CSS_APPEND) {
 		r.Cmd = LEMC_CSS_APPEND
 		r.Msg = strings.TrimPrefix(message, LEMC_CSS_APPEND)
 		err := cf.Append(r.Msg, cf.Css)
@@ -65,7 +52,7 @@ func msg(message, imageHash, imageName string, job *JobRecipe, jm *util.JobMeta,
 			log.Printf("Error appending file css: %v", err)
 			return
 		}
-	} else if lemc_css_buffer_rgx.MatchString(message) {
+	} else if strings.HasPrefix(message, LEMC_CSS_BUFFER) {
 		r.Cmd = LEMC_CSS_BUFFER
 		r.Msg = strings.TrimPrefix(message, LEMC_CSS_BUFFER)
 		err := cf.Append(r.Msg, cf.Css)
@@ -75,7 +62,7 @@ func msg(message, imageHash, imageName string, job *JobRecipe, jm *util.JobMeta,
 		}
 	}
 
-	if lemc_html_trunc_rgx.MatchString(message) {
+	if strings.HasPrefix(message, LEMC_HTML_TRUNC) {
 		r.Cmd = LEMC_HTML_TRUNC
 		r.Msg = strings.TrimPrefix(message, LEMC_HTML_TRUNC)
 		err := cf.Trunc(r.Msg, cf.Html)
@@ -83,7 +70,7 @@ func msg(message, imageHash, imageName string, job *JobRecipe, jm *util.JobMeta,
 			log.Printf("Error truncating file html: %v", err)
 			return
 		}
-	} else if lemc_html_append_rgx.MatchString(message) {
+	} else if strings.HasPrefix(message, LEMC_HTML_APPEND) {
 		r.Cmd = LEMC_HTML_APPEND
 		r.Msg = strings.TrimPrefix(message, LEMC_HTML_APPEND)
 		err := cf.Append(r.Msg, cf.Html)
@@ -91,7 +78,7 @@ func msg(message, imageHash, imageName string, job *JobRecipe, jm *util.JobMeta,
 			log.Printf("Error appending file html: %v", err)
 			return
 		}
-	} else if lemc_html_buffer_rgx.MatchString(message) {
+	} else if strings.HasPrefix(message, LEMC_HTML_BUFFER) {
 		r.Cmd = LEMC_HTML_BUFFER
 		r.Msg = strings.TrimPrefix(message, LEMC_HTML_BUFFER)
 		err := cf.Append(r.Msg, cf.Html)
@@ -101,7 +88,7 @@ func msg(message, imageHash, imageName string, job *JobRecipe, jm *util.JobMeta,
 		}
 	}
 
-	if lemc_js_exec_rgx.MatchString(message) {
+	if strings.HasPrefix(message, LEMC_JS_EXEC) {
 		r.Cmd = LEMC_JS_EXEC
 		r.Msg = strings.TrimPrefix(message, LEMC_JS_EXEC)
 		err := cf.Trunc(r.Msg, cf.Js)
@@ -109,7 +96,7 @@ func msg(message, imageHash, imageName string, job *JobRecipe, jm *util.JobMeta,
 			log.Printf("Error processing js exec: %v", err)
 			return
 		}
-	} else if lemc_js_trunc_rgx.MatchString(message) {
+	} else if strings.HasPrefix(message, LEMC_JS_TRUNC) {
 		r.Cmd = LEMC_JS_TRUNC
 		r.Msg = strings.TrimPrefix(message, LEMC_JS_TRUNC)
 		err := cf.Trunc(r.Msg, cf.Js)
@@ -119,7 +106,7 @@ func msg(message, imageHash, imageName string, job *JobRecipe, jm *util.JobMeta,
 		}
 	}
 
-	if lemc_env_rgx.MatchString(message) {
+	if strings.HasPrefix(message, LEMC_ENV) {
 		s := strings.TrimSpace(strings.TrimPrefix(message, LEMC_ENV))
 		job.Env = append(job.Env, s)
 		return
@@ -185,26 +172,24 @@ type Response struct {
 }
 
 func timeoutInSeconds(timeout string) (int, error) {
-	m := lemc_timeout_rgx.FindStringSubmatch(timeout)
-	if len(m) < 2 {
-		return 0, fmt.Errorf("do.in regex matches total failed")
+	parts := strings.SplitN(strings.TrimSpace(timeout), ".", 2)
+	if len(parts) != 2 {
+		return 0, fmt.Errorf("invalid timeout format")
 	}
 
-	digit, err := strconv.Atoi(m[1])
+	digit, err := strconv.Atoi(parts[0])
 	if err != nil {
 		return 0, err
 	}
 
 	var multiplier int
-	switch m[2] {
-	case "second":
+	switch parts[1] {
+	case "second", "seconds":
 		multiplier = 1
-	case "seconds":
-		multiplier = 1
-	case "minute":
+	case "minute", "minutes":
 		multiplier = 60
-	case "minutes":
-		multiplier = 60
+	default:
+		return 0, fmt.Errorf("unknown timeout unit %s", parts[1])
 	}
 
 	return digit * multiplier, nil
@@ -414,7 +399,7 @@ func runContainer(server *CmdServer, job *JobRecipe, uri string, env []string) e
 
 			s := strings.TrimSpace(string(readBuf))
 
-			if lemc_err_rgx.MatchString(s) {
+			if strings.HasPrefix(s, LEMC_ERR) {
 				errMsg := strings.TrimPrefix(s, LEMC_ERR)
 				msg(LEMC_HTML_APPEND+errMsg, imageHash, image_name, job, jm, cf, lf)
 				msg(LEMC_HTML_APPEND+"job failed", imageHash, image_name, job, jm, cf, lf)

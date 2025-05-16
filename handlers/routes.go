@@ -102,5 +102,11 @@ func Routes(e *echo.Echo) {
 	cookbook.POST("/thumbnail/upload/:uuid", middleware.ApplyMiddlewares(PostCookbookThumbnailImage, middleware.CheckPermission(models.CanEditCookbook, models.CanAdministerAccount)))
 	cookbook.PATCH("/toggle/:toggle_type/:uuid", middleware.ApplyMiddlewares(Ctx(PatchCookbookToggle), middleware.CheckPermission(models.CanEditCookbook, models.CanAdministerAccount)))
 
+	system := lemc.Group("/system")
+	system.GET("/settings", middleware.ApplyMiddlewares(Ctx(GetSystemSettingsHandler), middleware.CheckPermission(models.CanAdministerSystem)))
+	system.GET("/accounts", middleware.ApplyMiddlewares(Ctx(GetSystemAccountsHandler), middleware.CheckPermission(models.CanAdministerSystem)))
+	system.GET("/images", middleware.ApplyMiddlewares(Ctx(GetSystemImagesHandler), middleware.CheckPermission(models.CanAdministerSystem)))
+	system.GET("/jobs", middleware.ApplyMiddlewares(Ctx(GetSystemJobsHandler), middleware.CheckPermission(models.CanAdministerSystem)))
+
 	e.Use(middleware.After)
 }

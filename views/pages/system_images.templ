@@ -1,0 +1,20 @@
+package pages
+
+import (
+    "github.com/a-h/templ"
+    "github.com/jaredfolkins/letemcook/models"
+    "github.com/jaredfolkins/letemcook/views/layout"
+)
+
+templ SystemImages(v models.SystemView) {
+    <div class="mx-12 my-4">
+        <h1 class="text-2xl font-bold">System Images</h1>
+        <p>Work in progress.</p>
+    </div>
+}
+
+templ SystemImagesIndex(v models.SystemView, cmp templ.Component) {
+    @layout.Base(v.BaseView) {
+        @cmp
+    }
+}
