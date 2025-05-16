@@ -6,8 +6,13 @@ import (
 )
 
 templ SystemAccounts(v models.SystemView) {
-    <div class="mx-12 my-4">
-        <h1 class="text-2xl font-bold">System Accounts</h1>
+    <div id="systemaccountsnav" class="cookbooknav-attrs flex flex-col justify-end md:flex-row mx-12 mb-2">
+        <div class="flex-1 flex items-center justify-start">
+            <h1 class="text-2xl font-bold">System Accounts</h1>
+        </div>
+        <div class="flex flex-row gap-12 justify-end"></div>
+    </div>
+    <div id="systemaccounts-content-box" class="bg-base-100 p-9 edges gap-12 mx-12 my-4">
         <p>Work in progress.</p>
     </div>
 }
