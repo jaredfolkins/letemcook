@@ -29,11 +29,18 @@ var defaultLogger *slog.Logger
 var once sync.Once
 
 func Init(level slog.Level) {
+	InitWithWriter(level, os.Stdout)
+}
+
+func InitWithWriter(level slog.Level, writer io.Writer) {
 	once.Do(func() {
+		if writer == nil {
+			writer = os.Stdout
+		}
 		opts := &slog.HandlerOptions{
 			Level: level, // Set the minimum level for logs to be processed
 		}
-		handler := NewAiHandler(os.Stdout, opts)
+		handler := NewAiHandler(writer, opts)
 		defaultLogger = slog.New(handler)
 		slog.SetDefault(defaultLogger)
 	})

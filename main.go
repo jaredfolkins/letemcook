@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
+	"io"
 	"io/fs"
 	"log"
 	"log/slog"
@@ -34,7 +35,8 @@ const (
 	FILE_MODE           fs.FileMode = 0744
 	LEMC_FQDN                       = "localhost"
 	LEMC_PORT                       = "8082"
-	LOG_FILE                        = "lemc.log"
+	APP_LOG_FILE                    = "app.log"
+	HTTP_LOG_FILE                   = "http.log"
 	ENV_SECRET_KEY                  = "LEMC_SECRET_KEY"
 	LEMC_ENV                        = "production"
 	DEFAULT_DOCKER_HOST             = "unix:///var/run/docker.sock"
@@ -193,14 +195,36 @@ func init() {
 }
 
 func main() {
-	logger.Init(slog.LevelDebug)
+	var appLogWriter io.Writer = os.Stdout
+	var httpLogWriter io.Writer = os.Stdout
+	env := os.Getenv(LEMC_ENV)
+	if env == LEMC_ENV {
+		appFile, err := os.OpenFile(APP_LOG_FILE, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+		if err != nil {
+			log.Fatalf("error opening app log file: %v", err)
+		}
+		defer appFile.Close()
+		log.SetOutput(appFile)
+		appLogWriter = appFile
+
+		httpFile, err := os.OpenFile(HTTP_LOG_FILE, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+		if err != nil {
+			log.Fatalf("error opening http log file: %v", err)
+		}
+		defer httpFile.Close()
+		httpLogWriter = httpFile
+	}
+
+	logger.InitWithWriter(slog.LevelDebug, appLogWriter)
 
 	e := echo.New()
 	e.Debug = true
+	e.Logger.SetOutput(appLogWriter)
 
 	e.Use(middleware.Recover())
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: `${remote_ip} - ${user} [${time}] "${method} ${uri} ${protocol}" ${status} ${bytes_out} "${referer}" "${user_agent}"` + "\n",
+		Output: httpLogWriter,
 	}))
 
 	sessionPath := filepath.Join(os.Getenv("LEMC_DATA"), "sessions")
@@ -281,16 +305,6 @@ func main() {
 	e.GET("/*", echo.WrapHandler(http.StripPrefix("/", http.FileServer(http.Dir(ap)))))
 
 	e.HTTPErrorHandler = handlers.CustomHTTPErrorHandler
-
-	env := os.Getenv(LEMC_ENV)
-	if env == LEMC_ENV {
-		f, err := os.OpenFile(LOG_FILE, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-		if err != nil {
-			log.Fatalf("error opening file: %v", err)
-		}
-		defer f.Close()
-		log.SetOutput(f)
-	}
 
 	migrationsFS, err := embedded.GetMigrationsFS()
 	if err != nil {
