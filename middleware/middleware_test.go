@@ -1,12 +1,14 @@
 package middleware
 
 import (
-	"net/http"
-	"net/http/httptest"
-	"testing"
+    "net/http"
+    "net/http/httptest"
+    "testing"
 
-	"github.com/jaredfolkins/letemcook/models"
-	"github.com/labstack/echo/v4"
+    "github.com/jaredfolkins/letemcook/models"
+    "github.com/labstack/echo-contrib/session"
+    "github.com/gorilla/sessions"
+    "github.com/labstack/echo/v4"
 )
 
 func TestNewCustomContext(t *testing.T) {
@@ -30,11 +32,13 @@ func TestNewCustomContext(t *testing.T) {
 }
 
 func TestBeforeMiddleware(t *testing.T) {
-	// Setup
-	e := echo.New()
-	req := httptest.NewRequest(http.MethodGet, "/", nil)
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
+        // Setup
+        e := echo.New()
+        // Initialize an in-memory session store so session.Get works
+        e.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
+        req := httptest.NewRequest(http.MethodGet, "/", nil)
+        rec := httptest.NewRecorder()
+        c := e.NewContext(req, rec)
 
 	// Define a handler to use after middleware
 	handler := func(c echo.Context) error {

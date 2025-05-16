@@ -53,13 +53,13 @@ The following "verbs" (prefixes) can be used with `echo` or `print` statements w
 To use these verbs, simply `echo` or `print` (depending on your script's language) the command string. The `yeschef` application will intercept this output.
 
 **Example (shell script):**
-'''shell
+```shell
 #!/bin/sh
 echo "lemc.html.trunc;<h1>My Dynamic Page</h1>"
 echo "lemc.css.append;body { background-color: #eee; }"
 echo "lemc.js.exec;console.log('Page updated by container.');"
 echo "lemc.env;JOB_STATUS=completed"
-'''
+```
 
 ## Suggestion: Helper Functions
 
@@ -68,7 +68,7 @@ To make your agent scripts cleaner and less prone to typos, consider creating he
 These helper functions would encapsulate the `echo` command and the specific LEMC verb.
 
 **Example (shell script helper functions):**
-'''shell
+```shell
 #!/bin/sh
 
 # Helper function to truncate HTML
@@ -97,7 +97,7 @@ lemc_css_append ".important { font-weight: bold; color: red; }"
 lemc_js_exec "document.body.style.filter = 'invert(1)';"
 lemc_set_env "LAST_UPDATE=$(date)"
 
-'''
+```
 
 ### Benefits of Helper Functions:
 
