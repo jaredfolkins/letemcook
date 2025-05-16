@@ -53,8 +53,8 @@ func PostCookbookCreate(c LemcContext) error {
 	cb := &models.Cookbook{
 		AccountID:   c.UserContext().ActingAs.Account.ID,
 		OwnerID:     c.UserContext().ActingAs.ID,
-		Name:        c.FormValue("name"),
-		Description: c.FormValue("description"),
+		Name:        util.Sanitize(c.FormValue("name")),
+		Description: util.Sanitize(c.FormValue("description")),
 	}
 
 	tx, err := db.Db().Beginx()
@@ -266,8 +266,8 @@ type Image struct {
 
 func PostCookbookMetaUpdateHandler(c LemcContext) error {
 	unsafe_uuid := c.Param("uuid")
-	desc := c.FormValue("cookbook_desc")
-	name := c.FormValue("cookbook_name")
+	desc := util.Sanitize(c.FormValue("cookbook_desc"))
+	name := util.Sanitize(c.FormValue("cookbook_name"))
 
 	cbOrig := &models.Cookbook{AccountID: c.UserContext().ActingAs.Account.ID}
 	err := cbOrig.ByName(name)

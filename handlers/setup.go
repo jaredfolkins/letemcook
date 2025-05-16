@@ -46,9 +46,9 @@ func (f FormSetup) Validate() error {
 
 func PostSetupHandler(c LemcContext) error {
 	form := FormSetup{
-		SiteName: c.FormValue("site_name"),
-		Email:    c.FormValue("email"),
-		Username: c.FormValue("username"),
+		SiteName: util.Sanitize(c.FormValue("site_name")),
+		Email:    util.Sanitize(c.FormValue("email")),
+		Username: util.Sanitize(c.FormValue("username")),
 		Password: c.FormValue("password"),
 	}
 

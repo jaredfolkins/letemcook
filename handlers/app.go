@@ -318,8 +318,8 @@ func PostAppCreate(c LemcContext) error {
 	app := &models.App{
 		AccountID:      c.UserContext().ActingAs.Account.ID,
 		OwnerID:        c.UserContext().ActingAs.ID,
-		Name:           c.FormValue("name"),
-		Description:    c.FormValue("description"),
+		Name:           util.Sanitize(c.FormValue("name")),
+		Description:    util.Sanitize(c.FormValue("description")),
 		YAMLShared:     cb.YamlShared,
 		YAMLIndividual: cb.YamlIndividual,
 		CookbookID:     cb.ID,

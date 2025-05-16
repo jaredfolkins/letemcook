@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/util"
 	"github.com/jaredfolkins/letemcook/views/pages"
 )
 
@@ -172,8 +173,8 @@ func CreateUserHandler(c LemcContext) error {
 		return c.String(http.StatusForbidden, "Forbidden")
 	}
 
-	username := c.FormValue("username")
-	email := c.FormValue("email")
+	username := util.Sanitize(c.FormValue("username"))
+	email := util.Sanitize(c.FormValue("email"))
 	password := c.FormValue("password")
 
 	if username == "" || email == "" || password == "" {
