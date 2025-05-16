@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	STEP_ID           = "LEMC_STEP_ID=%s"
+	STEP_ID           = "LEMC_STEP_ID=%d"
 	LEMC_HTML_ID      = "LEMC_HTML_ID=uuid-%s-pageid-%s-scope-%s-html"
 	LEMC_CSS_ID       = "LEMC_CSS_ID=uuid-%s-pageid-%s-scope-%s-style"
 	LEMC_JS_ID        = "LEMC_JS_ID=uuid-%s-pageid-%s-scope-%s-script"
