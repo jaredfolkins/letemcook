@@ -148,11 +148,11 @@ templ UsersPartial(v models.UsersView) {
 		<div class="flex justify-center items-center space-x-4 mt-8">
 			if v.CurrentPage > 1 {
 				<a
-					href={ templ.URL(fmt.Sprintf("/lemc/users?page=%d&limit=%d", v.CurrentPage-1, v.Limit)) }
-					hx-get={ fmt.Sprintf("/lemc/users?page=%d&limit=%d&partial=true", v.CurrentPage-1, v.Limit) }
-					hx-target="#app" 
-					hx-swap="innerHTML transition:true scroll:top"
-					hx-push-url={ fmt.Sprintf("/lemc/users?page=%d&limit=%d", v.CurrentPage-1, v.Limit) }
+                                    href={ templ.URL(fmt.Sprintf("/lemc/account/users?page=%d&limit=%d", v.CurrentPage-1, v.Limit)) }
+                                    hx-get={ fmt.Sprintf("/lemc/account/users?page=%d&limit=%d&partial=true", v.CurrentPage-1, v.Limit) }
+                                    hx-target="#app"
+                                    hx-swap="innerHTML transition:true scroll:top"
+                                    hx-push-url={ fmt.Sprintf("/lemc/account/users?page=%d&limit=%d", v.CurrentPage-1, v.Limit) }
 					class="btn btn-sm btn-outline rounded-none" 
 				>
 					&lt;
@@ -167,11 +167,11 @@ templ UsersPartial(v models.UsersView) {
 			</span>
 			if v.CurrentPage < v.TotalPages {
 				<a
-					href={ templ.URL(fmt.Sprintf("/lemc/users?page=%d&limit=%d", v.CurrentPage+1, v.Limit)) }
-					hx-get={ fmt.Sprintf("/lemc/users?page=%d&limit=%d&partial=true", v.CurrentPage+1, v.Limit) }
-					hx-target="#app" 
-					hx-swap="innerHTML transition:true scroll:top"
-					hx-push-url={ fmt.Sprintf("/lemc/users?page=%d&limit=%d", v.CurrentPage+1, v.Limit) }
+                                    href={ templ.URL(fmt.Sprintf("/lemc/account/users?page=%d&limit=%d", v.CurrentPage+1, v.Limit)) }
+                                    hx-get={ fmt.Sprintf("/lemc/account/users?page=%d&limit=%d&partial=true", v.CurrentPage+1, v.Limit) }
+                                    hx-target="#app"
+                                    hx-swap="innerHTML transition:true scroll:top"
+                                    hx-push-url={ fmt.Sprintf("/lemc/account/users?page=%d&limit=%d", v.CurrentPage+1, v.Limit) }
 					class="btn btn-sm btn-outline rounded-none" 
 				>
 					&gt;

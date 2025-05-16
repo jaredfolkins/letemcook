@@ -46,13 +46,14 @@ func Routes(e *echo.Echo) {
 	lemc.POST("/profile/password", Ctx(PostChangePasswordHandler))
 	lemc.POST("/profile/settings/heckle", Ctx(PostToggleHeckleHandler))
 
-	lemc.GET("/users", middleware.ApplyMiddlewares(Ctx(GetAllUsers), middleware.CheckPermission(models.CanAdministerAccount, models.CanAdministerSystem)))
-	lemc.GET("/user/:id", middleware.ApplyMiddlewares(Ctx(GetUserHandler), middleware.CheckPermission(models.CanAdministerAccount)))
-	lemc.POST("/user/create", middleware.ApplyMiddlewares(Ctx(CreateUserHandler), middleware.CheckPermission(models.CanAdministerAccount)))
-	lemc.PUT("/user/:user_id/account/:account_id/permission/:permission_name", middleware.ApplyMiddlewares(Ctx(PutUserAccountPermissionToggleHandler), middleware.CheckPermission(models.CanAdministerAccount)))
 	lemc.POST("/logout", Ctx(PostLogoutHandler))
 
 	account := lemc.Group("/account")
+	account.GET("/users", middleware.ApplyMiddlewares(Ctx(GetAllUsers), middleware.CheckPermission(models.CanAdministerAccount, models.CanAdministerSystem)))
+	account.GET("/user/:id", middleware.ApplyMiddlewares(Ctx(GetUserHandler), middleware.CheckPermission(models.CanAdministerAccount)))
+	account.POST("/user/create", middleware.ApplyMiddlewares(Ctx(CreateUserHandler), middleware.CheckPermission(models.CanAdministerAccount)))
+	account.PUT("/user/:user_id/account/:account_id/permission/:permission_name", middleware.ApplyMiddlewares(Ctx(PutUserAccountPermissionToggleHandler), middleware.CheckPermission(models.CanAdministerAccount)))
+
 	account.GET("/settings", middleware.ApplyMiddlewares(Ctx(GetAccountSettingsHandler), middleware.CheckPermission(models.CanAdministerAccount))) // Basic logged-in check is enough for now
 	account.POST("/settings", middleware.ApplyMiddlewares(Ctx(PostAccountSettingsHandler), middleware.CheckPermission(models.CanAdministerAccount)))
 	account.GET("/jobs", middleware.ApplyMiddlewares(Ctx(GetJobs), middleware.CheckPermission(models.CanAdministerAccount))) // TODO: i need more permissions here
