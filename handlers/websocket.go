@@ -32,9 +32,9 @@ func Ws(c LemcContext) error {
 	}
 
 	log.Printf("Creating websocket client for user %d", userID)
-	xerver := yeschef.XoxoX.CreadInstance(userID)
+	xerver := yeschef.XoxoX.CreateInstance(userID)
 
-	// It's good practice to check if CreadInstance somehow failed, though it currently doesn't return nil
+	// It's good practice to check if CreateInstance somehow failed, though it currently doesn't return nil
 	if xerver == nil {
 		log.Printf("Failed to get CmdServer instance for user %d", userID)
 		xonn.Close()

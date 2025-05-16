@@ -14,7 +14,7 @@ func DoStep(ctx context.Context, job *JobRecipe, st models.Step) error {
 		return err
 	}
 
-	xserver := XoxoX.CreadInstance(userid)
+	xserver := XoxoX.CreateInstance(userid)
 
 	// Prepare step-specific environment variables
 	// Start with a copy of the job-level environment variables

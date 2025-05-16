@@ -38,21 +38,21 @@ func (x *ChefsKiss) DeleteInstance(user_id int64) {
 	}
 }
 
-func (x *ChefsKiss) CreadInstance(user_id int64) *CmdServer {
+// CreateInstance ensures a CmdServer exists for the given user ID.
+// If an instance already exists it is returned, otherwise a new one is
+// created, started and stored before being returned.
+func (x *ChefsKiss) CreateInstance(userID int64) *CmdServer {
 	x.mu.Lock()
-	// Check again in case another goroutine created it between RUnlock and Lock
-	server, ok := x.apps[user_id]
-	if ok {
-		x.mu.Unlock()
+	defer x.mu.Unlock()
+
+	if server, ok := x.apps[userID]; ok {
 		return server
 	}
 
-	// Create and start the new server instance
-	xrv := NewServer()
-	go xrv.Run()
-	x.apps[user_id] = xrv
-	x.mu.Unlock() // Unlock before returning
-	return xrv
+	srv := NewServer()
+	go srv.Run()
+	x.apps[userID] = srv
+	return srv
 }
 
 // Ensure maps are initialized (this should happen where ChefsKiss is instantiated)
