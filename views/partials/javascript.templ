@@ -99,7 +99,9 @@ templ Javascript() {
                                 buf = '';
                             }
                             var output = buf + jo.Msg;
-                            document.getElementById(key + '-style').innerHTML = output;
+                            requestAnimationFrame(() => {
+                                document.getElementById(key + '-style').innerHTML = output;
+                            });
                             _map.set(key, '');
                             buffers.set('css', _map);
                             break;
@@ -110,7 +112,9 @@ templ Javascript() {
                                 buf = '';
                             }
                             var output = buf + jo.Msg;
-                            document.getElementById(key + '-style').innerHTML += output;
+                            requestAnimationFrame(() => {
+                                document.getElementById(key + '-style').innerHTML += output;
+                            });
                             _map.set(key, '');
                             buffers.set('css', _map);
                             break;
@@ -131,7 +135,9 @@ templ Javascript() {
                                 buf = '';
                             }
                             var output = buf + jo.Msg;
-                            document.getElementById(key + '-html').innerHTML = output;
+                            requestAnimationFrame(() => {
+                                document.getElementById(key + '-html').innerHTML = output;
+                            });
                             _map.set(key, '');
                             buffers.set('html', _map);
                             break;
@@ -142,7 +148,9 @@ templ Javascript() {
                                 buf = '';
                             }
                             var output = buf + jo.Msg;
-                            document.getElementById(key + '-html').innerHTML += output;
+                            requestAnimationFrame(() => {
+                                document.getElementById(key + '-html').innerHTML += output;
+                            });
                             _map.set(key, '');
                             buffers.set('html', _map);
                             break;
@@ -153,7 +161,9 @@ templ Javascript() {
                                 buf = '';
                             }
                             var output = buf + jo.Msg;
-                            document.getElementById(key + '-script').innerHTML = output;
+                            requestAnimationFrame(() => {
+                                document.getElementById(key + '-script').innerHTML = output;
+                            });
                             _map.set(key, '');
                             buffers.set('html', _map);
                             break;
@@ -177,16 +187,18 @@ templ Javascript() {
                             var output = buf + jo.Msg;
 
                             var element = document.getElementById(key + "-script");
-                            if (element) {
-                                element.remove();
-                            }
+                            requestAnimationFrame(() => {
+                                if (element) {
+                                    element.remove();
+                                }
 
-                            var script = document.createElement("script");
-                            script.textContent = output;
-                            script.id = key + "-script";
+                                var script = document.createElement("script");
+                                script.textContent = output;
+                                script.id = key + "-script";
 
-                            var inner = document.getElementById(key + "-outer");
-                            inner.appendChild(script);
+                                var inner = document.getElementById(key + "-outer");
+                                inner.appendChild(script);
+                            });
 
                             _map.set(key, '');
                             buffers.set('js', _map);
