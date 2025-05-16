@@ -40,37 +40,43 @@ func getJobs(page, limit int, c LemcContext) ([]models.JobInfo, int, error) { //
 	}
 	loadedJobs := []persistedJobInfo{}
 
-	files, err := os.ReadDir(jobDataDir)
+	err := filepath.WalkDir(jobDataDir, func(path string, d os.DirEntry, err error) error {
+		if err != nil {
+			// Skip paths we can't stat/read but continue walking
+			log.Printf("Error accessing path '%s': %v", path, err)
+			return nil
+		}
+
+		if d.IsDir() {
+			return nil
+		}
+
+		if filepath.Ext(d.Name()) != ".json" {
+			return nil
+		}
+
+		fileData, readErr := os.ReadFile(path)
+		if readErr != nil {
+			log.Printf("Error reading job file '%s': %v", path, readErr)
+			return nil
+		}
+
+		var jobData persistedJobInfo
+		if unmarshalErr := json.Unmarshal(fileData, &jobData); unmarshalErr != nil {
+			log.Printf("Error unmarshalling job file '%s': %v", path, unmarshalErr)
+			return nil
+		}
+
+		loadedJobs = append(loadedJobs, jobData)
+		return nil
+	})
 	if err != nil {
 		if os.IsNotExist(err) {
 			log.Printf("Job data directory not found: %s. Returning empty job list.", jobDataDir)
 			return []models.JobInfo{}, 0, nil
-		} else {
-			log.Printf("Error reading job data directory '%s': %v", jobDataDir, err)
-			return nil, 0, fmt.Errorf("failed to read job data directory: %w", err)
 		}
-	}
-
-	for _, file := range files {
-		if file.IsDir() || filepath.Ext(file.Name()) != ".json" {
-			continue // Skip directories and non-json files
-		}
-
-		filePath := filepath.Join(jobDataDir, file.Name())
-		fileData, err := os.ReadFile(filePath)
-		if err != nil {
-			log.Printf("Error reading job file '%s': %v", filePath, err)
-			continue // Skip this file on read error
-		}
-
-		var jobData persistedJobInfo
-		err = json.Unmarshal(fileData, &jobData)
-		if err != nil {
-			log.Printf("Error unmarshalling job file '%s': %v", filePath, err)
-			continue // Skip this file on parse error
-		}
-
-		loadedJobs = append(loadedJobs, jobData)
+		log.Printf("Error walking job directory '%s': %v", jobDataDir, err)
+		return nil, 0, fmt.Errorf("failed to read job data directory: %w", err)
 	}
 
 	filteredJobs := []models.JobInfo{}
