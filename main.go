@@ -109,9 +109,23 @@ func init() {
 		log.Fatal("init() error:", err)
 	}
 
-	data := filepath.Join(dir, DATA_FOLDER)
+	envValue := os.Getenv("LEMC_ENV")
+	if envValue == "" {
+		envValue = LEMC_ENV
+	}
+
+	dataRoot := filepath.Join(dir, DATA_FOLDER)
+	if _, err := os.Stat(dataRoot); os.IsNotExist(err) {
+		err = os.Mkdir(dataRoot, FILE_MODE)
+		if err != nil {
+			log.Fatal("init() error:", err)
+		}
+		log.Println("folder created successfully:", dataRoot)
+	}
+
+	data := filepath.Join(dataRoot, envValue)
 	if _, err := os.Stat(data); os.IsNotExist(err) {
-		err = os.Mkdir(data, FILE_MODE)
+		err = os.MkdirAll(data, FILE_MODE)
 		if err != nil {
 			log.Fatal("init() error:", err)
 		}
@@ -136,9 +150,7 @@ func init() {
 		}
 
 		f.WriteString(fmt.Sprintf("LEMC_DATA=%s\n", filepath.Join(dir, DATA_FOLDER)))
-		f.WriteString(fmt.Sprintf("LEMC_LOCKER=%s\n", filepath.Join(dir, DATA_FOLDER, LOCKER_FOLDER)))
-		f.WriteString(fmt.Sprintf("LEMC_QUEUES=%s\n", filepath.Join(dir, DATA_FOLDER, QUEUES_FOLDER)))
-		f.WriteString(fmt.Sprintf("LEMC_ENV=%s\n", LEMC_ENV))
+		f.WriteString(fmt.Sprintf("LEMC_ENV=%s\n", envValue))
 		f.WriteString(fmt.Sprintf("LEMC_FQDN=%s\n", LEMC_FQDN))
 		f.WriteString(fmt.Sprintf("LEMC_DEFAULT_THEME=%s\n", util.DefaultTheme))
 		f.WriteString(fmt.Sprintf("LEMC_GLOBAL_API_KEY=%s\n", api_key))
@@ -158,7 +170,7 @@ func init() {
 		os.Setenv("LEMC_DOCKER_HOST", DEFAULT_DOCKER_HOST)
 	}
 
-	qf := filepath.Join(dir, DATA_FOLDER, QUEUES_FOLDER)
+	qf := util.QueuesPath()
 	if _, err := os.Stat(qf); os.IsNotExist(err) {
 		err = os.Mkdir(qf, FILE_MODE)
 		if err != nil {
@@ -167,7 +179,7 @@ func init() {
 		log.Println("folder created successfully:", qf)
 	}
 
-	nowQf := filepath.Join(dir, DATA_FOLDER, QUEUES_FOLDER, NOW_QUEUE_FOLDER)
+	nowQf := filepath.Join(qf, NOW_QUEUE_FOLDER)
 	if _, err := os.Stat(nowQf); os.IsNotExist(err) {
 		err = os.Mkdir(nowQf, FILE_MODE)
 		if err != nil {
@@ -176,7 +188,7 @@ func init() {
 		log.Println("folder created successfully:", nowQf)
 	}
 
-	inQf := filepath.Join(dir, DATA_FOLDER, QUEUES_FOLDER, IN_QUEUE_FOLDER)
+	inQf := filepath.Join(qf, IN_QUEUE_FOLDER)
 	if _, err := os.Stat(inQf); os.IsNotExist(err) {
 		err = os.Mkdir(inQf, FILE_MODE)
 		if err != nil {
@@ -185,7 +197,7 @@ func init() {
 		log.Println("folder created successfully:", inQf)
 	}
 
-	everyQf := filepath.Join(dir, DATA_FOLDER, QUEUES_FOLDER, EVERY_QUEUE_FOLDER)
+	everyQf := filepath.Join(qf, EVERY_QUEUE_FOLDER)
 	if _, err := os.Stat(everyQf); os.IsNotExist(err) {
 		err = os.Mkdir(everyQf, FILE_MODE)
 		if err != nil {
@@ -194,7 +206,7 @@ func init() {
 		log.Println("folder created successfully:", everyQf)
 	}
 
-	path := filepath.Join(dir, DATA_FOLDER, LOCKER_FOLDER)
+	path := util.LockerPath()
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		err = os.Mkdir(path, FILE_MODE)
 		if err != nil {
