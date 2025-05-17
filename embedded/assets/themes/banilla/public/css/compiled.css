@@ -4658,6 +4658,11 @@ footer {
   background-color: var(--color-navbar-bg);
 }
 
+.navbar a.active{
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .lemc-viewer {
   padding: 20px;
 }
