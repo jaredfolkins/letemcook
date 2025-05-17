@@ -226,3 +226,74 @@ func TestMcpServerApps(t *testing.T) {
 		t.Errorf("unexpected app uuid: %s", appsResp.Result.Apps[0].UUID)
 	}
 }
+
+func TestMcpServerToolsAndResources(t *testing.T) {
+	teardown := setupTestDB(t)
+	defer teardown()
+
+	yamlStr := sampleYAML()
+	app, perm := createSampleApp(t, yamlStr)
+
+	srv := NewMcpServer(app.ID, app.UUID, yamlStr)
+	client := &McpClient{Send: make(chan []byte, 2), UserID: perm.UserID, AccountID: perm.AccountID}
+
+	env := &mcpEnvelope{Msg: &McpMessage{JSONRPC: "2.0", ID: json.RawMessage(`1`), Method: "tools/list"}, Client: client}
+	srv.handleToolsList(env)
+	data := <-client.Send
+	var toolsResp struct {
+		Result struct {
+			Tools []ToolDescriptor `json:"tools"`
+		} `json:"result"`
+	}
+	if err := json.Unmarshal(data, &toolsResp); err != nil {
+		t.Fatalf("unmarshal tools: %v", err)
+	}
+	if len(toolsResp.Result.Tools) != 1 || toolsResp.Result.Tools[0].Name != "run-recipe" {
+		t.Fatalf("unexpected tools: %+v", toolsResp.Result.Tools)
+	}
+
+	args := struct {
+		Page   int    `json:"page"`
+		Recipe string `json:"recipe"`
+	}{Page: 1, Recipe: "testrec"}
+	ab, _ := json.Marshal(args)
+	callParams := ToolCallParams{Name: "run-recipe", Arguments: ab}
+	cb, _ := json.Marshal(callParams)
+	env = &mcpEnvelope{Msg: &McpMessage{JSONRPC: "2.0", ID: json.RawMessage(`2`), Method: "tools/call", Params: cb}, Client: client}
+	srv.handleToolsCall(env)
+	<-client.Send // discard result
+
+	env = &mcpEnvelope{Msg: &McpMessage{JSONRPC: "2.0", ID: json.RawMessage(`3`), Method: "resources/list"}, Client: client}
+	srv.handleResourcesList(env)
+	data = <-client.Send
+	var resList struct {
+		Result struct {
+			Resources []ResourceDescriptor `json:"resources"`
+		} `json:"result"`
+	}
+	if err := json.Unmarshal(data, &resList); err != nil {
+		t.Fatalf("unmarshal resources: %v", err)
+	}
+	if len(resList.Result.Resources) != 1 {
+		t.Fatalf("expected 1 resource, got %d", len(resList.Result.Resources))
+	}
+	uri := resList.Result.Resources[0].URI
+
+	rb, _ := json.Marshal(struct {
+		URI string `json:"uri"`
+	}{URI: uri})
+	env = &mcpEnvelope{Msg: &McpMessage{JSONRPC: "2.0", ID: json.RawMessage(`4`), Method: "resources/read", Params: rb}, Client: client}
+	srv.handleResourcesRead(env)
+	data = <-client.Send
+	var readResp struct {
+		Result struct {
+			Contents []ResourceContent `json:"contents"`
+		} `json:"result"`
+	}
+	if err := json.Unmarshal(data, &readResp); err != nil {
+		t.Fatalf("unmarshal read: %v", err)
+	}
+	if len(readResp.Result.Contents) != 1 || readResp.Result.Contents[0].Text == "" {
+		t.Fatalf("unexpected read result: %+v", readResp.Result.Contents)
+	}
+}
