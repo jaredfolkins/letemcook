@@ -161,6 +161,15 @@ func msg(message, imageHash, imageName string, job *JobRecipe, jm *util.JobMeta,
 			}
 		}
 	}
+
+	if job.AppID != "" {
+		if id, err := strconv.ParseInt(job.AppID, 10, 64); err == nil {
+			mcpSrv := XoxoX.ReadMcpAppInstance(id)
+			if mcpSrv != nil {
+				mcpSrv.broadcast(jsonData)
+			}
+		}
+	}
 }
 
 type Response struct {
