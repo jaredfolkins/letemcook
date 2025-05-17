@@ -219,22 +219,31 @@ func AppByUUIDAndAccountID(uuid string, accountID int64) (*App, error) {
 	return app, nil
 }
 
-func (c *App) Update(tx *sqlx.Tx) error {
+func (c *App) Update(tx *sqlx.Tx) (err error) {
 	c.Updated = time.Now()
 
+	prior := struct {
+		YAMLShared     string `db:"yaml_shared"`
+		YAMLIndividual string `db:"yaml_individual"`
+	}{}
+
+	if err = tx.Get(&prior, `SELECT yaml_shared, yaml_individual FROM apps WHERE id = ? AND account_id = ?`, c.ID, c.AccountID); err != nil {
+		return err
+	}
+
 	query := `
-	UPDATE Apps SET
-		name = :name,
-		description = :description,
-		yaml_shared = :yaml_shared,
-		yaml_individual = :yaml_individual,
-		updated = :updated,
-		-- You might want to allow updating other fields like is_active, etc.
-		is_active = :is_active,
-		is_deleted = :is_deleted,
-		is_assigned_by_default = :is_assigned_by_default
-	WHERE id = :id AND account_id = :account_id -- Ensure we only update the correct App in the correct account
-	`
+        UPDATE Apps SET
+                name = :name,
+                description = :description,
+                yaml_shared = :yaml_shared,
+                yaml_individual = :yaml_individual,
+                updated = :updated,
+                -- You might want to allow updating other fields like is_active, etc.
+                is_active = :is_active,
+                is_deleted = :is_deleted,
+                is_assigned_by_default = :is_assigned_by_default
+        WHERE id = :id AND account_id = :account_id -- Ensure we only update the correct App in the correct account
+        `
 	result, err := tx.NamedExec(query, c)
 	if err != nil {
 		log.Printf("Error updating App ID %d: %v", c.ID, err)
@@ -250,6 +259,12 @@ func (c *App) Update(tx *sqlx.Tx) error {
 	if rowsAffected == 0 {
 		log.Printf("No rows affected when updating App ID %d for account ID %d. App might not exist or belong to this account.", c.ID, c.AccountID)
 		return sql.ErrNoRows // Indicate that no record was updated
+	}
+
+	if prior.YAMLShared != c.YAMLShared || prior.YAMLIndividual != c.YAMLIndividual {
+		if _, err = tx.Exec(`INSERT INTO app_history (app_id, yaml_shared, yaml_individual) VALUES (?, ?, ?)`, c.ID, prior.YAMLShared, prior.YAMLIndividual); err != nil {
+			return err
+		}
 	}
 
 	log.Printf("Successfully updated App ID %d. Rows affected: %d", c.ID, rowsAffected)
