@@ -34,7 +34,7 @@ import (
 const (
 	FILE_MODE           fs.FileMode = 0744
 	LEMC_FQDN                       = "localhost"
-	LEMC_PORT                       = "8082"
+	DEFAULT_PORT                    = "5362"
 	APP_LOG_FILE                    = "app.log"
 	HTTP_LOG_FILE                   = "http.log"
 	ENV_SECRET_KEY                  = "LEMC_SECRET_KEY"
@@ -334,5 +334,9 @@ func main() {
 
 	yeschef.Start()
 
-	e.Logger.Fatal(e.Start(":5362"))
+	port := os.Getenv("LEMC_PORT")
+	if port == "" {
+		port = DEFAULT_PORT
+	}
+	e.Logger.Fatal(e.Start(":" + port))
 }
