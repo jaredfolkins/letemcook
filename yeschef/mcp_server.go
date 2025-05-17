@@ -1,12 +1,16 @@
 package yeschef
 
 import (
+	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"log"
 	"sync"
 	"time"
 
 	"github.com/gorilla/websocket"
+	"github.com/jaredfolkins/letemcook/models"
+	"gopkg.in/yaml.v3"
 )
 
 // McpMessage represents a generic MCP JSON-RPC message.
@@ -24,6 +28,11 @@ type McpClient struct {
 	Send   chan []byte
 }
 
+type mcpEnvelope struct {
+	Msg    *McpMessage
+	Client *McpClient
+}
+
 func (c *McpClient) ReadPump() {
 	defer func() {
 		c.Server.Deprovision <- c
@@ -37,7 +46,7 @@ func (c *McpClient) ReadPump() {
 		}
 		var msg McpMessage
 		if err := json.Unmarshal(message, &msg); err == nil {
-			c.Server.Inbound <- &msg
+			c.Server.Inbound <- &mcpEnvelope{Msg: &msg, Client: c}
 		}
 	}
 }
@@ -72,18 +81,83 @@ func (c *McpClient) WritePump() {
 type McpServer struct {
 	mu          sync.RWMutex
 	Clients     map[*McpClient]bool
-	Inbound     chan *McpMessage
+	Inbound     chan *mcpEnvelope
 	Provision   chan *McpClient
 	Deprovision chan *McpClient
+	AppUUID     string
+	YAML        string
 }
 
-func NewMcpServer() *McpServer {
+func NewMcpServer(uuid string, yamlStr string) *McpServer {
 	return &McpServer{
 		Clients:     make(map[*McpClient]bool),
-		Inbound:     make(chan *McpMessage, 64),
+		Inbound:     make(chan *mcpEnvelope, 64),
 		Provision:   make(chan *McpClient),
 		Deprovision: make(chan *McpClient),
+		AppUUID:     uuid,
+		YAML:        yamlStr,
 	}
+}
+
+type McpRecipeInfo struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Action      string `json:"action"`
+}
+
+type McpPageInfo struct {
+	ID      int             `json:"id"`
+	Name    string          `json:"name"`
+	Wiki    string          `json:"wiki"`
+	Recipes []McpRecipeInfo `json:"recipes"`
+}
+
+type jsonrpcResponse struct {
+	JSONRPC string          `json:"jsonrpc"`
+	ID      json.RawMessage `json:"id,omitempty"`
+	Result  interface{}     `json:"result,omitempty"`
+	Error   interface{}     `json:"error,omitempty"`
+}
+
+func (srv *McpServer) handleMessage(env *mcpEnvelope) {
+	switch env.Msg.Method {
+	case "lemc.pages":
+		srv.handlePages(env)
+	default:
+		log.Printf("MCP unknown method: %s", env.Msg.Method)
+	}
+}
+
+func (srv *McpServer) handlePages(env *mcpEnvelope) {
+	var yd models.YamlDefault
+	if err := yaml.Unmarshal([]byte(srv.YAML), &yd); err != nil {
+		srv.sendError(env, fmt.Sprintf("yaml: %v", err))
+		return
+	}
+	yd.UUID = srv.AppUUID
+	var pages []McpPageInfo
+	for _, p := range yd.Cookbook.Pages {
+		pi := McpPageInfo{ID: p.PageID, Name: p.Name}
+		if w, ok := yd.Cookbook.Storage.Wikis[p.PageID]; ok {
+			if dec, err := base64.StdEncoding.DecodeString(w); err == nil {
+				pi.Wiki = string(dec)
+			}
+		}
+		for _, r := range p.Recipes {
+			action := fmt.Sprintf("/lemc/app/job/shared/uuid/%s/page/%d/recipe/%s", srv.AppUUID, p.PageID, r.Name)
+			pi.Recipes = append(pi.Recipes, McpRecipeInfo{Name: r.Name, Description: r.Description, Action: action})
+		}
+		pages = append(pages, pi)
+	}
+	resp := jsonrpcResponse{JSONRPC: "2.0", ID: env.Msg.ID, Result: map[string]interface{}{"pages": pages}}
+	b, _ := json.Marshal(resp)
+	env.Client.Send <- b
+}
+
+func (srv *McpServer) sendError(env *mcpEnvelope, msg string) {
+	resp := jsonrpcResponse{JSONRPC: "2.0", ID: env.Msg.ID, Error: msg}
+	b, _ := json.Marshal(resp)
+	env.Client.Send <- b
 }
 
 func (srv *McpServer) Run() {
@@ -96,9 +170,8 @@ func (srv *McpServer) Run() {
 				delete(srv.Clients, c)
 				close(c.Send)
 			}
-		case msg := <-srv.Inbound:
-			log.Printf("MCP message received: method=%s", msg.Method)
-			// Placeholder: real MCP handling would go here
+		case env := <-srv.Inbound:
+			srv.handleMessage(env)
 		}
 	}
 }
