@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math"
 	"sync"
 	"time"
 
@@ -13,6 +14,8 @@ import (
 	"github.com/jaredfolkins/letemcook/util"
 	"gopkg.in/yaml.v3"
 )
+
+const defaultAppsLimit = 10
 
 // McpMessage represents a generic MCP JSON-RPC message.
 type McpMessage struct {
@@ -24,9 +27,11 @@ type McpMessage struct {
 
 // McpClient is a WebSocket client connected to an McpServer.
 type McpClient struct {
-	Server *McpServer
-	Conn   *websocket.Conn
-	Send   chan []byte
+	Server    *McpServer
+	Conn      *websocket.Conn
+	Send      chan []byte
+	UserID    int64
+	AccountID int64
 }
 
 type mcpEnvelope struct {
@@ -131,6 +136,12 @@ type McpPageInfo struct {
 	Recipes []McpRecipeInfo `json:"recipes"`
 }
 
+type McpAppInfo struct {
+	UUID        string `json:"uuid"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
 type jsonrpcResponse struct {
 	JSONRPC string          `json:"jsonrpc"`
 	ID      json.RawMessage `json:"id,omitempty"`
@@ -144,6 +155,8 @@ func (srv *McpServer) handleMessage(env *mcpEnvelope) {
 		srv.handlePages(env)
 	case "lemc.recipes":
 		srv.handleRecipes(env)
+	case "lemc.apps":
+		srv.handleApps(env)
 	case "lemc.run":
 		srv.handleRun(env)
 	default:
@@ -190,6 +203,48 @@ func (srv *McpServer) handleRecipes(env *mcpEnvelope) {
 		}
 	}
 	resp := jsonrpcResponse{JSONRPC: "2.0", ID: env.Msg.ID, Result: map[string]interface{}{"recipes": recipes}}
+	b, _ := json.Marshal(resp)
+	env.Client.Send <- b
+}
+
+func (srv *McpServer) handleApps(env *mcpEnvelope) {
+	var params struct {
+		Page  int `json:"page"`
+		Limit int `json:"limit"`
+	}
+	if err := json.Unmarshal(env.Msg.Params, &params); err != nil {
+		srv.sendError(env, fmt.Sprintf("params: %v", err))
+		return
+	}
+	if params.Page < 1 {
+		params.Page = 1
+	}
+	if params.Limit < 1 {
+		params.Limit = defaultAppsLimit
+	}
+
+	userID := env.Client.UserID
+	accountID := env.Client.AccountID
+
+	total, err := models.Countapps(userID, accountID)
+	if err != nil {
+		srv.sendError(env, err.Error())
+		return
+	}
+	apps, err := models.Apps(userID, accountID, params.Page, params.Limit)
+	if err != nil {
+		srv.sendError(env, err.Error())
+		return
+	}
+	totalPages := 0
+	if total > 0 {
+		totalPages = int(math.Ceil(float64(total) / float64(params.Limit)))
+	}
+	var infos []McpAppInfo
+	for _, a := range apps {
+		infos = append(infos, McpAppInfo{UUID: a.UUID, Name: a.Name, Description: a.Description})
+	}
+	resp := jsonrpcResponse{JSONRPC: "2.0", ID: env.Msg.ID, Result: map[string]interface{}{"apps": infos, "page": params.Page, "total_pages": totalPages}}
 	b, _ := json.Marshal(resp)
 	env.Client.Send <- b
 }
