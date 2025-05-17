@@ -9,3 +9,4 @@ data/
 tmp/*
 *_templ.go
 patch.sh
+coverage.out
