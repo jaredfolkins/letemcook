@@ -31,6 +31,7 @@ type App struct {
 	YAMLShared          string    `db:"yaml_shared" json:"yaml_shared"`
 	YAMLIndividual      string    `db:"yaml_individual" json:"yaml_individual"`
 	ApiKey              string    `db:"api_key" json:"api_key,omitempty"`
+	IsMcpEnabled        bool      `db:"is_mcp_enabled" json:"is_mcp_enabled"`
 	IsActive            bool      `db:"is_active" json:"is_active"`
 	IsDeleted           bool      `db:"is_deleted" json:"is_deleted"`
 	IsAssignedByDefault bool      `db:"is_assigned_by_default" json:"is_assigned_by_default"`
@@ -141,11 +142,11 @@ func (c *App) Create(tx *sqlx.Tx) error {
 	c.ApiKey = apiKeyWithTime.String()
 
 	query := `
-	INSERT INTO Apps 
-		(account_id, owner_id, cookbook_id, uuid, name, description, yaml_shared, yaml_individual, api_key, is_active, is_deleted, is_assigned_by_default)
-	VALUES
-		(:account_id, :owner_id, :cookbook_id, :uuid, :name, :description, :yaml_shared, :yaml_individual, :api_key, :is_active, :is_deleted, :is_assigned_by_default)
-	`
+       INSERT INTO Apps
+               (account_id, owner_id, cookbook_id, uuid, name, description, yaml_shared, yaml_individual, api_key, is_mcp_enabled, is_active, is_deleted, is_assigned_by_default)
+       VALUES
+               (:account_id, :owner_id, :cookbook_id, :uuid, :name, :description, :yaml_shared, :yaml_individual, :api_key, :is_mcp_enabled, :is_active, :is_deleted, :is_assigned_by_default)
+       `
 	sqlResponse, err := tx.NamedExec(query, c)
 	if err != nil {
 		return err
@@ -208,8 +209,8 @@ func GetAppsForRegistrationByAccountID(tx *sqlx.Tx, accountID int64) ([]AppRegis
 func AppByUUIDAndAccountID(uuid string, accountID int64) (*App, error) {
 	app := &App{}
 	query := `
-		SELECT 
-			id, created, updated, account_id, owner_id, cookbook_id, uuid, name, description, yaml_shared, yaml_individual, api_key, is_active, is_deleted, is_assigned_by_default, on_register
+               SELECT
+                       id, created, updated, account_id, owner_id, cookbook_id, uuid, name, description, yaml_shared, yaml_individual, api_key, is_mcp_enabled, is_active, is_deleted, is_assigned_by_default, on_register
 		FROM 
 			apps 
 		WHERE 
@@ -242,9 +243,10 @@ func (c *App) Update(tx *sqlx.Tx) (err error) {
                 yaml_individual = :yaml_individual,
                 updated = :updated,
                 -- You might want to allow updating other fields like is_active, etc.
-                is_active = :is_active,
-                is_deleted = :is_deleted,
-                is_assigned_by_default = :is_assigned_by_default
+               is_active = :is_active,
+               is_deleted = :is_deleted,
+               is_mcp_enabled = :is_mcp_enabled,
+               is_assigned_by_default = :is_assigned_by_default
         WHERE id = :id AND account_id = :account_id -- Ensure we only update the correct App in the correct account
         `
 	result, err := tx.NamedExec(query, c)
@@ -278,8 +280,8 @@ func (c *App) Update(tx *sqlx.Tx) (err error) {
 func AppByUUID(uuid string) (*App, error) {
 	app := &App{}
 	query := `
-                SELECT
-                        id, created, updated, account_id, owner_id, cookbook_id, uuid, name, description, yaml_shared, yaml_individual, api_key, is_active, is_deleted, is_assigned_by_default, on_register
+               SELECT
+                       id, created, updated, account_id, owner_id, cookbook_id, uuid, name, description, yaml_shared, yaml_individual, api_key, is_mcp_enabled, is_active, is_deleted, is_assigned_by_default, on_register
                 FROM
                         apps
                 WHERE
@@ -296,8 +298,8 @@ func AppByUUID(uuid string) (*App, error) {
 func AppByAPIKey(apiKey string) (*App, error) {
 	app := &App{}
 	query := `
-                SELECT
-                        id, created, updated, account_id, owner_id, cookbook_id, uuid, name, description, yaml_shared, yaml_individual, api_key, is_active, is_deleted, is_assigned_by_default, on_register
+               SELECT
+                       id, created, updated, account_id, owner_id, cookbook_id, uuid, name, description, yaml_shared, yaml_individual, api_key, is_mcp_enabled, is_active, is_deleted, is_assigned_by_default, on_register
                 FROM
                         apps
                 WHERE
@@ -333,9 +335,9 @@ func AppByUUIDAndUserAPIKey(uuidStr, apiKey string) (*App, *PermApp, error) {
 func AppByID(id int64) (*App, error) {
 	app := &App{}
 	query := `
-                SELECT
-                        id, created, updated, account_id, owner_id, cookbook_id, uuid, name, description,
-                        yaml_shared, yaml_individual, api_key, is_active, is_deleted, is_assigned_by_default, on_register
+               SELECT
+                       id, created, updated, account_id, owner_id, cookbook_id, uuid, name, description,
+                       yaml_shared, yaml_individual, api_key, is_mcp_enabled, is_active, is_deleted, is_assigned_by_default, on_register
                 FROM
                         apps
                 WHERE

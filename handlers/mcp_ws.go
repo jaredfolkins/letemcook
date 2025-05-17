@@ -31,6 +31,9 @@ func McpWs(c LemcContext) error {
 	if perm.ID == 0 {
 		return c.NoContent(http.StatusUnauthorized)
 	}
+	if !app.IsMcpEnabled {
+		return c.NoContent(http.StatusForbidden)
+	}
 
 	conn, err := mcpUpgrader.Upgrade(c.Response(), c.Request(), nil)
 	if err != nil {
