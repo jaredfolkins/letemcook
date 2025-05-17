@@ -6,6 +6,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
@@ -71,5 +72,47 @@ func TestGetJobsRecursiveFiltering(t *testing.T) {
 	}
 	if total != 1 || len(jobs) != 1 {
 		t.Fatalf("expected 1 job for account 2, got total=%d len=%d", total, len(jobs))
+	}
+}
+
+func TestGetJobsHandlerRendersJobs(t *testing.T) {
+	tmp := t.TempDir()
+	t.Setenv("LEMC_QUEUES", tmp)
+	t.Setenv("LEMC_DATA", tmp)
+	t.Setenv("LEMC_ENV", "test")
+
+	nowDir := filepath.Join(tmp, "now")
+	if err := os.MkdirAll(nowDir, 0o755); err != nil {
+		t.Fatalf("failed to create now dir: %v", err)
+	}
+
+	j1 := persistedJobInfo{ID: "1", RecipeName: "r1", Username: "u1", AccountID: 1, JobType: "NOW", Status: "Running", CreatedAt: time.Now()}
+	j2 := persistedJobInfo{ID: "2", RecipeName: "r2", Username: "u1", AccountID: 1, JobType: "NOW", Status: "Running", CreatedAt: time.Now()}
+
+	writeJob(t, nowDir, "j1.json", j1)
+	writeJob(t, nowDir, "j2.json", j2)
+
+	e := echo.New()
+	req := httptest.NewRequest(http.MethodGet, "/lemc/account/jobs?page=1&limit=10", nil)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+	user := &models.User{Account: &models.Account{ID: 1}}
+	uc := &models.UserContext{ActingAs: user, LoggedInAs: user}
+	ctx := middleware.SetUserContext(c, uc)
+
+	if err := GetJobs(ctx); err != nil {
+		t.Fatalf("GetJobs returned error: %v", err)
+	}
+
+	if rec.Code != http.StatusOK {
+		t.Fatalf("expected status 200, got %d", rec.Code)
+	}
+
+	body := rec.Body.String()
+	if strings.Contains(body, "No jobs found") {
+		t.Fatalf("unexpected 'No jobs found' in response: %s", body)
+	}
+	if !strings.Contains(body, j1.RecipeName) || !strings.Contains(body, j2.RecipeName) {
+		t.Fatalf("response missing expected job names: %s", body)
 	}
 }
