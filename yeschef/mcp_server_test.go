@@ -190,3 +190,39 @@ func TestMcpServerPagesAndRecipes(t *testing.T) {
 		t.Errorf("unexpected recipes summary: %+v", recResp.Result.Recipes)
 	}
 }
+
+func TestMcpServerApps(t *testing.T) {
+	teardown := setupTestDB(t)
+	defer teardown()
+
+	yamlStr := sampleYAML()
+	app, perm := createSampleApp(t, yamlStr)
+
+	srv := NewMcpServer(app.ID, app.UUID, yamlStr)
+	client := &McpClient{Send: make(chan []byte, 2), UserID: perm.UserID, AccountID: perm.AccountID}
+
+	params := struct {
+		Page  int `json:"page"`
+		Limit int `json:"limit"`
+	}{Page: 1, Limit: 10}
+	b, _ := json.Marshal(params)
+	env := &mcpEnvelope{Msg: &McpMessage{JSONRPC: "2.0", ID: json.RawMessage(`1`), Method: "lemc.apps", Params: b}, Client: client}
+	srv.handleApps(env)
+	data := <-client.Send
+	var appsResp struct {
+		Result struct {
+			Apps       []McpAppInfo `json:"apps"`
+			Page       int          `json:"page"`
+			TotalPages int          `json:"total_pages"`
+		} `json:"result"`
+	}
+	if err := json.Unmarshal(data, &appsResp); err != nil {
+		t.Fatalf("unmarshal apps: %v", err)
+	}
+	if len(appsResp.Result.Apps) != 1 {
+		t.Fatalf("expected 1 app, got %d", len(appsResp.Result.Apps))
+	}
+	if appsResp.Result.Apps[0].UUID != app.UUID {
+		t.Errorf("unexpected app uuid: %s", appsResp.Result.Apps[0].UUID)
+	}
+}
