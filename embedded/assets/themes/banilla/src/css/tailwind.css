@@ -618,6 +618,12 @@ footer {
     background-color: var(--color-navbar-bg);
 }
 
+/* Add subtle underline to active navigation links */
+.navbar a.active {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
 .lemc-viewer {
     padding: 20px;
 }
