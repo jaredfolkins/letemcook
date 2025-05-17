@@ -12,6 +12,7 @@ import (
 
 	"github.com/jaredfolkins/letemcook/middleware"
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/util"
 	"github.com/labstack/echo/v4"
 )
 
@@ -39,12 +40,13 @@ func writeJob(t *testing.T, dir, name string, info persistedJobInfo) {
 
 func TestGetJobsRecursiveFiltering(t *testing.T) {
 	tmp := t.TempDir()
-	os.Setenv("LEMC_QUEUES", tmp)
+	t.Setenv("LEMC_DATA", tmp)
+	t.Setenv("LEMC_ENV", "test")
 
-	nowDir := filepath.Join(tmp, "now")
+	nowDir := filepath.Join(util.QueuesPath(), "now")
 	nestedDir := filepath.Join(nowDir, "nested")
 	os.MkdirAll(nestedDir, 0o755)
-	otherDir := filepath.Join(tmp, "every")
+	otherDir := filepath.Join(util.QueuesPath(), "every")
 	os.MkdirAll(otherDir, 0o755)
 
 	j1 := persistedJobInfo{ID: "1", RecipeName: "r1", Username: "u1", AccountID: 1, JobType: "NOW", Status: "Running", CreatedAt: time.Now()}
@@ -77,11 +79,10 @@ func TestGetJobsRecursiveFiltering(t *testing.T) {
 
 func TestGetJobsHandlerRendersJobs(t *testing.T) {
 	tmp := t.TempDir()
-	t.Setenv("LEMC_QUEUES", tmp)
 	t.Setenv("LEMC_DATA", tmp)
 	t.Setenv("LEMC_ENV", "test")
 
-	nowDir := filepath.Join(tmp, "now")
+	nowDir := filepath.Join(util.QueuesPath(), "now")
 	if err := os.MkdirAll(nowDir, 0o755); err != nil {
 		t.Fatalf("failed to create now dir: %v", err)
 	}

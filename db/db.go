@@ -8,6 +8,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 
+	"github.com/jaredfolkins/letemcook/util"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -47,12 +48,10 @@ func Db() *sqlx.DB {
 }
 
 func dbName() string {
-	path := os.Getenv("LEMC_DATA")
 	env := os.Getenv("LEMC_ENV")
+	path := util.DataPath()
 	switch env {
-	case "dev":
-		return filepath.Join(path, devDb)
-	case "development":
+	case "dev", "development":
 		return filepath.Join(path, devDb)
 	case "test":
 		return filepath.Join(path, testDb)

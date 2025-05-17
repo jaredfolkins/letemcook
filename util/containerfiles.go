@@ -15,10 +15,9 @@ const (
 	SCOPE_INDIVIDUAL_DIR = "individual"
 	SCOPE_SHARED_DIR     = "shared"
 
-	CACHE_HTML  = "cache.html"
-	CACHE_CSS   = "cache.css"
-	CACHE_JS    = "cache.js"
-	LEMC_LOCKER = "LEMC_LOCKER"
+	CACHE_HTML = "cache.html"
+	CACHE_CSS  = "cache.css"
+	CACHE_JS   = "cache.js"
 )
 
 type ContainerFiles struct {

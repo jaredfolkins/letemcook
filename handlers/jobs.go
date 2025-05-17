@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/util"
 	"github.com/jaredfolkins/letemcook/views/pages"
 	"github.com/labstack/echo/v4"
 )
@@ -33,11 +34,7 @@ func getJobs(page, limit int, c LemcContext) ([]models.JobInfo, int, error) { //
 	}
 	expectedAccountID := userCtx.ActingAs.Account.ID
 
-	jobDataDir := os.Getenv("LEMC_QUEUES")
-	if jobDataDir == "" {
-		jobDataDir = "data/queues" // Default path
-		log.Println("LEMC_QUEUES environment variable not set, using default: data/queues")
-	}
+	jobDataDir := util.QueuesPath()
 	loadedJobs := []persistedJobInfo{}
 
 	err := filepath.WalkDir(jobDataDir, func(path string, d os.DirEntry, err error) error {

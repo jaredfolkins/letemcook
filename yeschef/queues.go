@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"sync"
 
+	"github.com/jaredfolkins/letemcook/util"
 	"github.com/reugn/go-quartz/logger"
 	"github.com/reugn/go-quartz/quartz"
 )
@@ -66,9 +67,12 @@ func NewQuartzQueue(name string) *jobQueue {
 	// if err != nil {
 	// \tlogger.Errorf("Error loading .env file: %s", err)
 	// }
-	dataFolder := os.Getenv(QUEUE_FOLDER)
-	if len(dataFolder) == 0 {
-		log.Fatal("LEMC_QUEUES not found in .env")
+	dataFolder := util.QueuesPath()
+	if _, err := os.Stat(dataFolder); os.IsNotExist(err) {
+		err = os.MkdirAll(dataFolder, FILE_MODE)
+		if err != nil {
+			log.Fatalf("failed to create queues directory: %v", err)
+		}
 	}
 
 	path := filepath.Join(dataFolder, name)
