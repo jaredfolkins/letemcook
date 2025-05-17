@@ -7,15 +7,16 @@ import (
 )
 
 templ AppGo(v models.CoreView) {
-	<div class="mb-8">
-		@RenderAppGoTopNav(v)
-	</div>
-	<div class="mb-8">
-		@RenderAppGoNav(v)
-	</div>
-	<div id="cookbook" class="mx-12">
-	   @partials.App(v)
-	</div>
+        <div class="mb-8">
+                @RenderAppGoTopNav(v)
+        </div>
+        <div class="mb-8">
+                @RenderAppGoNav(v)
+        </div>
+        <div id="cookbook" class="mx-12">
+           @partials.App(v)
+        </div>
+        @AppMcpKeyModal(v)
 }
 
 templ RenderAppGoTopNav(v models.CoreView) {
@@ -35,6 +36,14 @@ templ RenderAppGoTopNav(v models.CoreView) {
 
                         <ul tabindex="0" class="dropdown-content menu m-1 bg-base-100 rounded-none z-[1] w-52 p-2 shadow" style="z-index: 1000;">
                             <li>
+                            </li>
+                            <li>
+                                <button class="w-full px-4 py-2 flex items-center justify-between rounded-none" onclick="mcp_key_modal.showModal()">
+                                    <span>MCP KEY</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                    </svg>
+                                </button>
                             </li>
                             <li>
                                 <div class="form-control flex flex-row items-center justify-between w-full px-4 py-2 rounded-none">
