@@ -10,6 +10,28 @@ templ Javascript() {
         }
         window.lemcInitialized = true;
 
+        function handleTabAnchors() {
+            var hash = window.location.hash;
+            if (hash.startsWith('#page-')) {
+                var pageId = hash.substring(6);
+                var tab = document.getElementById('tab-' + pageId);
+                if (tab) {
+                    tab.checked = true;
+                }
+            }
+
+            document.querySelectorAll('input[name="cookbook-tabs"]').forEach(function(input) {
+                input.addEventListener('change', function() {
+                    if (this.checked) {
+                        history.replaceState(null, '', '#page-' + this.dataset.pageid);
+                    }
+                });
+            });
+        }
+
+        handleTabAnchors();
+        document.body.addEventListener('htmx:afterSwap', handleTabAnchors);
+
         if (typeof socket === 'undefined') {
             let socket;
         }
