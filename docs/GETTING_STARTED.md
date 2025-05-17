@@ -27,7 +27,7 @@ These instructions will get you a copy of the project up and running on your loc
     ```bash
     ./tmp/lemc
     ```
-*   On the first run, LEMC will initialize the `data/` directory, create `data/.env`, run migrations, and start the server (default: `http://localhost:5362`).
+*   On the first run, LEMC will initialize the `data/` directory, create `data/.env`, run migrations, and start the server using the port configured for your environment (default development port: `http://localhost:5362`).
 
 #### Development (Live Reload)
 
@@ -50,7 +50,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 #### Initial Setup (After starting LEMC using any method)
 
-*   Open your web browser and navigate to `http://localhost:5362`.
+*   Open your web browser and navigate to `http://localhost:<PORT>` (development defaults to `5362`).
 *   You will be redirected to the `/setup` page to create the initial administrator account.
 
 ## Quick Start: Your First Recipe 🔥
@@ -127,7 +127,7 @@ Replace `example.com/your-username/` with your actual registry path and username
 
 ### 4. Define Your Recipe in a LEMC Cookbook
 
-1.  **Open LEMC:** Navigate to your LEMC instance in your web browser (e.g., `http://localhost:5362`).
+1.  **Open LEMC:** Navigate to your LEMC instance in your web browser (e.g., `http://localhost:5362` if using the default development port).
 2.  **Go to Cookbooks:** Find the "Cookbooks" section in the navigation.
 3.  **Create or Select a Cookbook:**
     *   If you don't have a cookbook, create a new one (e.g., "My Test Cookbook"). Follow the UI prompts, which may involve clicking a "+" symbol or similar action to create a new cookbook.

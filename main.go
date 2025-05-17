@@ -12,6 +12,7 @@ import (
 	mrand "math/rand"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/gorilla/sessions"
 	"github.com/jaredfolkins/letemcook/db"
@@ -39,6 +40,9 @@ const (
 	HTTP_LOG_FILE                   = "http.log"
 	ENV_SECRET_KEY                  = "LEMC_SECRET_KEY"
 	LEMC_ENV                        = "production"
+	ENV_PORT_DEV                    = "LEMC_PORT_DEV"
+	ENV_PORT_TEST                   = "LEMC_PORT_TEST"
+	ENV_PORT_PROD                   = "LEMC_PORT_PROD"
 	DEFAULT_DOCKER_HOST             = "unix:///var/run/docker.sock"
 
 	LOCKER_FOLDER      = "locker"
@@ -79,6 +83,23 @@ func generateAlphabet() string {
 	})
 
 	return string(alphabet)
+}
+
+func portFromEnv() string {
+	env := strings.ToLower(os.Getenv("LEMC_ENV"))
+	var port string
+	switch env {
+	case "dev", "development":
+		port = os.Getenv(ENV_PORT_DEV)
+	case "test":
+		port = os.Getenv(ENV_PORT_TEST)
+	default:
+		port = os.Getenv(ENV_PORT_PROD)
+	}
+	if port == "" {
+		port = DEFAULT_PORT
+	}
+	return port
 }
 
 func init() {
@@ -334,9 +355,6 @@ func main() {
 
 	yeschef.Start()
 
-	port := os.Getenv("LEMC_PORT")
-	if port == "" {
-		port = DEFAULT_PORT
-	}
+	port := portFromEnv()
 	e.Logger.Fatal(e.Start(":" + port))
 }

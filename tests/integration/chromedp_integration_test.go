@@ -15,9 +15,9 @@ import (
 )
 
 func getBaseURL() string {
-	port := os.Getenv("LEMC_PORT")
+	port := os.Getenv("LEMC_PORT_TEST")
 	if port == "" {
-		port = "5362"
+		port = "15362"
 	}
 	return "http://localhost:" + port
 }
