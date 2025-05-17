@@ -1,8 +1,10 @@
 package yeschef
 
 import (
+	"log"
 	"sync"
 
+	"github.com/jaredfolkins/letemcook/models"
 	"github.com/reugn/go-quartz/quartz"
 )
 
@@ -65,7 +67,13 @@ func (x *ChefsKiss) CreateMcpAppInstance(appID int64) *McpServer {
 		return srv
 	}
 
-	srv := NewMcpServer()
+	app, err := models.AppByID(appID)
+	if err != nil {
+		log.Printf("CreateMcpAppInstance AppByID: %v", err)
+		return nil
+	}
+
+	srv := NewMcpServer(app.UUID, app.YAMLShared)
 	go srv.Run()
 	x.mcpApps[appID] = srv
 	return srv
