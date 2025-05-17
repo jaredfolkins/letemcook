@@ -306,3 +306,22 @@ func AppByAPIKey(apiKey string) (*App, error) {
 	}
 	return app, nil
 }
+
+// AppByID retrieves an App record by its ID.
+func AppByID(id int64) (*App, error) {
+	app := &App{}
+	query := `
+                SELECT
+                        id, created, updated, account_id, owner_id, cookbook_id, uuid, name, description,
+                        yaml_shared, yaml_individual, api_key, is_active, is_deleted, is_assigned_by_default, on_register
+                FROM
+                        apps
+                WHERE
+                        id = $1
+        `
+	err := db.Db().Get(app, query, id)
+	if err != nil {
+		return nil, err
+	}
+	return app, nil
+}
