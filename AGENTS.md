@@ -160,6 +160,464 @@ Scripts can read and write files via directories mounted under `/lemc/` in the c
 These variables and mount points give your script full awareness of its execution context and where it can place artifacts for the UI to display or download.
 
 
+# Let ’Em Cook (LEMC) Architecture and Workflow
+
+LEMC facilitates the automation of predefined “recipes” (scripts) by running them in containerized steps with live web UI feedback. For a deeper understanding of its core concepts and design philosophy, see [PHILOSOPHY.md](PHILOSOPHY.md). This document details LEMC’s architecture, runtime behavior, and system interactions.
+
+## Overall Architecture of LEMC
+
+<p align="center">
+  <img src="../media/diag1.png" alt="diagram1" />
+</p>
+
+&#x20;*Figure: LEMC overall architecture and component interaction.* 
+
+LEMC’s core is a Go-based server (code-named **YesChef**) that exposes a web UI and orchestrates the execution of recipes. Users interact with LEMC through a browser-based **Web UI** (built with HTMX and Templ) served by the backend. The backend persists data (users, cookbooks, recipes, logs, etc.) in a **SQLite database**, and it leverages the host’s **Docker Daemon** (via Docker’s API socket) to run recipe steps in isolated containers. Each **recipe** consists of one or more **steps**, where each step is a script packaged as a Docker image (containing all its code and dependencies). LEMC is language-agnostic – any language or tool can be used inside steps as long as it can run in a container and print output. A **container registry** (like Docker Hub or a private registry) is used to store and distribute these step images; LEMC will pull the needed image if it’s not already available locally. The web UI and backend communicate in real-time (over WebSockets) so that as containers produce output, the results are immediately pushed to the user’s browser. In essence, the architecture links the **user interface**, the **LEMC server**, the **database**, and **Docker** as an execution sandbox, enabling on-demand automation of tasks.
+
+Key components in this architecture include:
+
+* **Cookbooks and Recipes:** In LEMC, recipes (tasks) are organized into *cookbooks*. A cookbook is a collection of related recipes, and each recipe is defined by one or more step containers to run. The LEMC server stores these definitions in the SQLite DB and presents them in the UI as buttons or actions. Recipes can be executed on demand (by user click) or scheduled to run periodically.
+* **YesChef Backend (LEMC Server):** The backend is a Go application (using the Echo framework) that provides a web server and manages job execution. It handles user authentication (an admin account is created on first launch, and additional users can be managed), serves the HTML interface, and implements a WebSocket channel to stream output to the UI. It uses Gorilla WebSocket for real-time updates. The backend also includes a scheduler component (based on go-quartz) to support cron-like scheduling of recipes.
+* **Web UI:** LEMC’s front-end is delivered via server-side rendered pages (Templ templates) enhanced with HTMX for dynamic behavior. Users access the UI through a browser. The UI lists available Apps/Cookbooks and their recipes. When a recipe runs, the UI displays live output (text or HTML) streaming from the container. Special LEMC output commands (discussed below) allow rich content like formatted HTML, CSS, or JavaScript to be displayed in the browser in real time.
+* **Docker Containers (Recipe Steps):** Each recipe step runs inside a Docker container launched by LEMC. This containerization provides isolation and consistency across environments. For example, one step might be a Python script in a Python image, and the next step could be a Bash script in an Alpine Linux image – LEMC handles running each in the appropriate container, passing data between steps as needed. Docker ensures that each step’s code runs with its required dependencies and does not affect the host system directly (aside from controlled interactions like volume mounts). LEMC relies on Docker’s sandboxing as a primary security mechanism.
+* **Persistent Storage:** LEMC uses a local `data/` directory (on the host or container running LEMC) to store its SQLite database and configuration (it auto-initializes this on first run). This storage retains all cookbook definitions, user accounts, execution history, etc., across restarts.
+
+In the architecture diagram above, the **User** triggers a recipe via the browser, causing the **LEMC Server** to retrieve the recipe definition from **SQLite DB**, then instruct the **Docker Daemon** to run the specified container image for each step. If the image isn’t present, Docker will pull it from the **Container Registry** first. As the container runs, the script’s output (stdout) is monitored by the backend; special **LEMC Verbs** printed in the output are intercepted for UI updates or state passing (instead of being shown raw). The backend streams live feedback to the user’s browser (via WebSocket or server-sent events) so the user can see progress. Multiple steps are executed in sequence (each as a fresh container) – after one step finishes, the next container is started, potentially using environment data passed along. The **Scheduler** can also trigger the backend to start a recipe at predetermined times (dotted line in the diagram). Throughout execution, any files that the script writes to a special shared volume (e.g. `/lemc/public`) will be accessible to the LEMC server for download links (this is shown as the **Bind-Mounted Volume** for outputs) – for example, a script can drop a report file which the UI can present as a downloadable link.
+
+## Runtime Behavior and Lifecycle of a Recipe Execution
+
+<p align="center">
+  <img src="../media/diag2.png" alt="diagram2" height="600" />
+</p>
+
+&#x20;*Figure: LEMC recipe execution flow (lifecycle of a run).* 
+
+LEMC’s runtime behavior follows a clear sequence of events from the moment a recipe is invoked to the completion of all its steps. The system manages the lifecycle of each “job” (recipe run) and maintains state between steps as needed. The diagram below illustrates the typical flow of execution for a recipe:
+
+When a recipe is **triggered** – either by a user clicking its run button in the UI, or by an automated schedule – the LEMC backend creates a new job and begins executing the recipe’s steps. If the recipe has multiple steps, they will run **sequentially** (one container after another). The execution lifecycle can be described in stages:
+
+1. **Trigger Phase:** A recipe run can start via manual or scheduled trigger. In a manual case, a user selects an App/page in the web UI and clicks on a recipe’s button to run it, which sends an HTTP request to the server to start the job. In a scheduled case, the built-in scheduler (go-quartz) will automatically initiate the job at the configured time (as if a “virtual click” happened). In both cases, the backend transitions from an idle state to a “recipe running” state for that job.
+2. **Container Launch (Step 1):** The backend looks up the first step of the recipe to determine which Docker image to use and any parameters (like a timeout or input values). It then instructs the Docker daemon to launch a new container for this step. LEMC automatically injects several **environment variables** into the container before it starts – these include context like the step number, the user who triggered it, the recipe name, and a unique job ID, among others. This provides the script with context and a channel to communicate results (for example, knowing `LEMC_HTML_ID` or base URLs for output files). If this is the first step of a recipe, environment variables may include defaults or initial context; if it’s a subsequent step, it will also include any variables set by previous steps (explained below). The Docker container then executes the script (the container’s `CMD` runs the script file).
+3. **Live Execution and Output Streaming:** As the script inside the container runs, it typically prints output to standard output (stdout). The LEMC backend attaches to the container’s output stream (using Docker APIs) and **parses each line** in real-time. **Normal output lines** (without the special prefix) can be forwarded directly to the UI (often as plain text or log output), while lines beginning with `lemc.` are treated as **LEMC commands**:
+
+    * `lemc.html.buffer; ...`, `lemc.html.append;` – these tell LEMC to collect HTML fragments and then append them to the web UI. This allows scripts to build rich HTML output (tables, formatted text, etc.) that appears in the user’s browser.
+    * `lemc.css.append; ...` or `lemc.css.trunc; ...` – similar for injecting CSS styles into the page.
+    * `lemc.js.exec; ...` – for executing JavaScript in the client (if needed for interactive results).
+    * `lemc.env;KEY=value` – this is critical for multi-step recipes: it tells LEMC to set an environment variable `KEY=value` that will persist into the **next step’s** container environment. This is how one step can pass data to subsequent steps.
+
+   The YesChef backend processes these verbs on the fly. For example, if a script prints `lemc.env;STATUS=ok`, the backend will record that `STATUS` should be exported in the environment for the next container before it starts. If the script prints `lemc.html.buffer;<p>Hello</p>`, the backend buffers that HTML snippet and, upon receiving a corresponding `lemc.html.append;` or end-of-step, pushes it to the UI to be rendered. Throughout the step’s execution, LEMC streams output and updates to the user’s browser **in real time**. The UI will update live, showing text logs or rendered HTML content as directed by the script. This is achieved via a WebSocket connection: the backend sends messages to the front-end whenever there’s new output (or uses HTMX triggers for partial updates).
+4. **Step Completion and Transition:** When the script in the container finishes (the process exits), Docker reports the container’s exit status to the LEMC backend. LEMC marks this step as completed (and may log the outcome). If the recipe has another step, the system proceeds to launch the **next container**:
+
+    * Before launching the next step, LEMC prepares its environment. All the `lemc.env` variables that were collected from the previous step’s output are now injected into the next container’s env, so the next script can directly use those values. This mechanism allows state to carry over (for example, Step 1 might produce an API token or compute a value that Step 2 needs).
+    * The Docker daemon is then instructed to run the next step’s image, just like before. LEMC ensures (again) that the correct image version is present (pulling from the registry if needed, which typically would have been done upfront on first use).
+    * The output of Step 2 is streamed in the same fashion, and any further `lemc.env` from step 2 would go to step 3, and so on.
+5. **Recipe Completion:** This loop continues until all defined steps in the recipe have been executed. At that point, the backend marks the entire recipe run as **completed**. Final status (success/failure per step) is recorded, and the UI may display a “completed” message or enable any post-run options (like downloading files). All the live output that was streamed remains visible in the UI, typically appended in the recipe’s output panel for the user to review. If the recipe was triggered manually, the user sees the result immediately; if it was scheduled and ran in the background, a user can likely view the output/logs after the fact by accessing the App and recipe page.
+6. **Result Persistence:** By default, anything printed to the UI (via LEMC verbs or plain output) is captured for the session but not permanently stored in the UI after reload (though logs may be stored in the DB or files). However, if a script needs to deliver a file or artifact, it can place it in the shared **output volume**. LEMC mounts a host directory into each container at a path (like `/lemc/public/`), and any file dropped there will be accessible via an HTTP URL. For instance, a script might create `/lemc/public/report.pdf`; the backend serves this file through a special download route (with a URL containing the cookbook UUID, page, scope, and filename). The user can then download it from the UI. This mechanism enables passing larger results or files out of the container sandbox in a controlled way.
+
+Throughout the runtime, LEMC manages the **state** of the job: it knows which step is currently running and what environment context has been accumulated. If an error occurs (e.g., a container exits with a non-zero status), LEMC would typically stop the remaining steps (unless configured otherwise) and mark the job as failed, presenting the error in the UI. The isolation provided by Docker means that each step’s execution environment is fresh – once a container exits, any filesystem changes inside it (aside from the mounted output folder) are discarded, preventing side effects on subsequent runs. This ensures consistent behavior run-to-run, and if a recipe needs to maintain state across runs, it would do so via external systems or by writing to the mounted volume or database explicitly.
+
+## Interactions with the Host System and External Tools
+
+While most of LEMC’s logic operates at an application level, it interacts with the host operating system and external services in several important ways, as shown in the architecture. Key host/external interactions include:
+
+* **Docker Daemon (Containers on Host):** LEMC requires access to a Docker service on the host machine to run recipe steps. In a typical installation, the LEMC backend has the Docker UNIX socket (`/var/run/docker.sock`) mounted or accessible. By sending commands to this socket (using Docker’s Go SDK or HTTP API), LEMC asks the host’s Docker daemon to perform actions like pulling images, creating containers, starting/stopping containers, and attaching to container logs. This means the LEMC process itself doesn’t spawn system processes directly for user scripts – it delegates to Docker, which in turn creates isolated container processes on the host OS. The benefit is that the actual script execution is confined within Docker’s control (namespaces, cgroups, etc.), offering a layer of isolation from the host. The trade-off is that LEMC inherently trusts the Docker daemon; access to the Docker socket is a powerful capability (effectively root-equivalent on the host), so LEMC is designed for environments where authorized users are trusted or Docker is properly sandboxed. **Security:** Docker acts as the sandbox. LEMC’s documentation notes that it “relies on Docker container isolation as the primary sandboxing mechanism”. It doesn’t run untrusted code directly on the host – only inside containers. Thus, host security is largely delegated to Docker’s security model. Administrators should control who can define or execute recipes, since those users ultimately run code on the host via Docker.
+* **File System and Volume Mounts:** The LEMC server itself uses the host file system to store its data. On first run, LEMC initializes a `data/` directory (in the working directory or a configured path), creates a SQLite database file, and also generates a `.env` file with default configs. All user-created content like cookbook definitions, user accounts, and job logs are stored in the database or in this directory. Additionally, as described, LEMC sets up a **bind mount** into each container for output files. By default, a directory (often under `data/` or a subpath like `data/public/`) is mounted into the container at `/lemc/public`. This allows two-way file exchange: the container can write files that the host (and LEMC server) can read, and theoretically the server could also provide input files via this mount. After execution, any files left in that folder are served by the LEMC backend through an HTTP endpoint (the `LEMC_HTTP_DOWNLOAD_BASE_URL` env variable gives the route structure). This mechanism is the primary means for a container to have side effects on the host (writing output files). Aside from this mounted folder and the Docker socket, containers are not given arbitrary host access – they run with whatever filesystem is in their image plus the mount. The LEMC process itself may also write logs to files or stdout for its own logging, but operationally most data is in the SQLite DB.
+* **Networking and Registry Access:** To fetch container images, the Docker daemon may reach out to external container registries. For example, if a recipe’s Docker image is `dockerhub.com/myrepo/tool:latest` and it’s not already cached, Docker will perform an image pull from the internet. LEMC facilitates this by naming the image and letting Docker handle the download. In the Quick Start example, an image `lemc-my-first-recipe:latest` is built locally, but for sharing, users are encouraged to push images to a registry and then reference them by name. Thus, one external interaction is **Docker Hub/Registry** access. LEMC itself doesn’t directly contact the registry; it relies on Docker to do so when needed. In terms of other network interactions: the LEMC web server listens on a port (default `5362`) for user connections, and it upgrades some connections to WebSockets for live data. It does not, by default, make other outbound network calls – any integration with external systems would happen from within the user’s scripts (inside containers). For instance, if a recipe step calls an API or SSH to a server, that traffic originates from the container, not the LEMC host process.
+* **System Resources and Calls:** Under the hood, running a container involves system calls to create processes, configure namespaces, etc., but those are handled by the Docker engine. LEMC’s backend process is mostly an I/O-bound web app orchestrator. It does schedule jobs (which internally might use goroutines/timers via go-quartz) but does not create OS-level cron jobs or similar – scheduling is in-process via the library. The backend might invoke some OS commands indirectly (for example, if using Docker CLI or performing migrations via Goose), but as per the tech stack, most operations use libraries (Docker SDK, Goose for DB migrations) that handle the system interactions. In *Docker Compose* mode, LEMC itself runs in a Docker container (with the socket and data directory mounted), so from the host’s perspective, it’s just another container.
+* **External Tools/Systems:** Aside from Docker, DB, and the registry, LEMC doesn’t inherently integrate with other external tools. However, recipes authored by users could invoke anything (Terraform, Ansible, cloud CLIs, etc.) inside their containers. For example, a recipe could run a Terraform container to apply infrastructure changes – the LEMC framework treats it as just another step. The results (terraform plan output, etc.) would be streamed back via LEMC’s channels. In this way, LEMC can function similarly to CI/CD or job-runner systems, but with a focus on interactive, on-demand usage.
+
+In summary, LEMC’s interaction with the host is centered on Docker and file access through controlled channels. It uses Docker to isolate execution, uses the host file system to persist state (DB, env, output files), and uses network connectivity for user access and image distribution. **Host requirements:** To run LEMC, the host needs Docker (with permission for LEMC to access it) and the ability to open the web service port. Because of these interactions, running LEMC typically requires admin/root privileges (for Docker) at least at setup, and it’s geared toward usage in a trusted environment (small team or single user).
+
+## User Configuration and Invocation of LEMC
+
+<p align="center">
+  <img src="../media/diag3.png" alt="diagram3" />
+</p>
+
+&#x20;*Figure: Workflow for configuring and invoking a LEMC recipe (from development to execution).*
+
+From a user or developer’s perspective, the general workflow for utilizing LEMC involves:
+1.  **Scripting & Containerization:** Develop a script and package it into a Docker image with all its dependencies. This image becomes the executable unit for a recipe step.
+2.  **Recipe Definition in LEMC:** Within the LEMC UI, define this Docker image as a step within a new or existing recipe. This includes specifying the image name, and any parameters like timeouts.
+3.  **App Creation & Execution:** Instantiate the cookbook (containing the recipe) as an App in LEMC. Then, run the recipe via the App's UI.
+
+This process allows developers to transform standalone scripts into easily executable and shareable automated tasks with UI feedback.
+
+For a detailed, step-by-step tutorial on creating and running your first recipe, please see the [GETTING_STARTED.md](GETTING_STARTED.md) guide.
+
+**References:** The above explanations are based on the LEMC documentation and repository, which describe its container-based execution model, real-time UI feedback via special printed commands, environment variable propagation between steps, and usage of Docker and scheduling. The Quick Start guide in the documentation illustrates how a user would create and run a recipe through LEMC’s UI, which aligns with the workflow described above. LEMC’s architecture is designed to be minimal yet powerful, leveraging existing tools (Docker, web tech, databases) to enable developers to automate tasks easily and safely. The diagrams and steps provided give a comprehensive view of how LEMC works internally and how one would interact with it to get things cooking.
+
+
+# Let'em Cook (LEMC) - Key Features
+
+This document outlines the key features of LEMC, designed to help developers, LLMs, and agents understand how to utilize the system.
+
+## Table of Contents
+*   [Core Concept](#core-concept)
+*   [Key Takeaways](#key-takeaways)
+*   [Key Components](#key-components)
+*   [Execution Environment](#execution-environment)
+*   [Real-Time UI Communication (LEMC Verbs)](#real-time-ui-communication-lemc-verbs)
+*   [Scheduling](#scheduling)
+*   [Tech Stack Highlights](#tech-stack-highlights)
+*   [Security](#security)
+*   [Automatically Injected Environment Variables](#automatically-injected-environment-variables)
+*   [Quick Start: Creating and Using a Local Script with Docker](#quick-start-creating-and-using-a-local-script-with-docker)
+*   [Mounted File System in Containers](#mounted-file-system-in-containers)
+*(This ToC can be expanded and refined)*
+
+## Key Takeaways
+
+*   **Automation Focus:** LEMC automates script execution ("recipes") in containerized environments.
+*   **Developer-Centric:** Designed for developers to manage their own operational tasks ("Ops your Devs").
+*   **UI Feedback:** Scripts communicate with a web UI in real-time using "LEMC verbs."
+*   **Language Agnostic:** Run scripts in any language that can be containerized.
+*   **Core Workflow:** Package scripts in Docker, define them as recipe steps in LEMC, and run via UI or schedule.
+
+## Core Concept
+
+LEMC (Let'em Cook) is an open-source tool for automating and executing predefined "recipes" (scripts) on demand, with results streamed live to a web interface, empowering developers to perform operational tasks. For a deeper understanding of the design principles and motivations behind LEMC, please see [PHILOSOPHY.md](PHILOSOPHY.md).
+
+## Key Components
+
+*   **Cookbooks**: Collections of related recipes (tasks).
+*   **Recipes**: A defined sequence of one or more script-based steps to accomplish a specific task. Presented as runnable actions in the UI.
+*   **Steps**: Individual scripts within a recipe. LEMC is language-agnostic; steps can be written in Bash, Python, Go, etc.
+
+## Execution Environment
+
+*   **Containerized**: Recipes run in Docker containers, ensuring consistent and isolated execution. Each recipe step typically uses a Docker image containing its code and dependencies.
+*   **Language-Agnostic**: Scripts can be written in any language that can run in a container and print to standard output.
+
+## Real-Time UI Communication (LEMC Verbs)
+
+Scripts communicate with the LEMC UI by printing specially formatted strings (verbs) to standard output. The `yeschef` application (LEMC's backend) parses these commands to dynamically update the UI with HTML, CSS, or execute JavaScript, and to pass environment variables between steps.
+
+For a detailed reference of all available LEMC Verbs and examples of their usage, including helper functions, please see [SCRIPT_UI_COMMUNICATION.md](SCRIPT_UI_COMMUNICATION.md).
+
+**Brief Overview of Verb Categories:**
+*   **`lemc.env;KEY=value`**: Sets environment variables for subsequent steps.
+*   **`lemc.css.*`**: Verbs to manage CSS (append, truncate).
+*   **`lemc.html.*`**: Verbs to manage HTML content (append, truncate).
+*   **`lemc.js.*`**: Verbs to manage and execute JavaScript (truncate, execute).
+
+**Note on `lemc.env`:** The LEMC backend collects `KEY=value` pairs from `lemc.env` outputs. These are then injected as environment variables into the container for the *next* step of the recipe.
+
+## Scheduling
+
+*   Recipes can be scheduled to run periodically (cron-like functionality) via the go-quartz library.
+*   This allows for managed, recurring tasks with UI feedback and logging.
+
+## Philosophy
+*(This section has been integrated into the Core Concept and [PHILOSOPHY.md](PHILOSOPHY.md))*
+
+## Tech Stack Highlights
+
+*   **Backend**: Go (Golang) with the Echo web framework.
+*   **Database**: SQLite.
+*   **Frontend**: Server-side templating (Templ) with HTMX for interactivity.
+*   **Styling**: Tailwind CSS.
+*   **Containerization**: Docker.
+
+## Security
+
+*   Relies on Docker container isolation as the primary sandboxing mechanism.
+*   Lightweight user/permission model suitable for small teams.
+*   Admin account created on first launch; admin can manage users.
+Access to the Docker socket is a requirement.
+
+This feature set allows for flexible and powerful automation directly from scripts, with real-time updates to a web interface, making operational tasks more accessible and manageable for development teams.
+
+## Automatically Injected Environment Variables
+
+LEMC injects several environment variables into the step's container for context. Key variables include:
+
+| Variable                      | Description                                                                                                | Example Value / Format                      |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| `LEMC_STEP_ID`                | Current step number in the recipe.                                                                         | `1`, `2`                                    |
+| `LEMC_SCOPE`                  | Job scope: "individual" (user-run) or "shared".                                                          | `individual`                                |
+| `LEMC_USER_ID`                | Numerical ID of the initiating user.                                                                       | `101`                                       |
+| `LEMC_USERNAME`               | Username of the initiating user.                                                                           | `jdoe`                                      |
+| `LEMC_UUID`                   | UUID of the parent Cookbook/App.                                                                           | `ac72b1e9-0489-4b28-9df5-179c70419203`      |
+| `LEMC_RECIPE_NAME`            | Name of the current recipe (sanitized).                                                                    | `my-awesome-recipe`                         |
+| `LEMC_PAGE_ID`                | Numerical ID of the Cookbook page for the recipe.                                                          | `3`                                         |
+| `LEMC_HTTP_DOWNLOAD_BASE_URL` | Base path for constructing download links. Files placed by a script into its `/lemc/public/` mounted directory are automatically made accessible via HTTP GET requests to a URL formed by this base path followed by the filename. The path structure typically includes context like UUID, page ID, and scope, and ends with `/filename/`. | `/lemc/locker/uuid/<UUID>/page/<PAGE_ID>/scope/<SCOPE>/filename/` |
+| `LEMC_HTML_ID`                | Dynamically generated ID for the job's HTML output container in the UI.                                     | `uuid-JOB_UUID-pageid-PAGE_ID-scope-SCOPE-html` |
+| `LEMC_CSS_ID`                 | Dynamically generated ID for the job's CSS `<style>` tag.                                                   | `uuid-JOB_UUID-pageid-PAGE_ID-scope-SCOPE-style` |
+| `LEMC_JS_ID`                  | Dynamically generated ID for the job's JavaScript `<script>` area.                                          | `uuid-JOB_UUID-pageid-PAGE_ID-scope-SCOPE-script` |
+
+**Form-Derived Variables**: For each form field defined in a recipe (e.g., a field named `My_Param` or `my-parameter` in the YAML), LEMC creates an environment variable. The HTML form input will be named `LEMC_FIELD_FORM_NAME_HERE` (where `FORM_NAME_HERE` is derived from your YAML definition, with spaces and hyphens converted to underscores, e.g., `LEMC_FIELD_My_Param` or `LEMC_FIELD_my_parameter`). In the container, the environment variable name will **retain the `LEMC_FIELD_` prefix**, and the part of the name following the prefix (derived from the YAML definition) will be **converted to uppercase**.
+    *   Example: If YAML field is `My_Param` (HTML form name `LEMC_FIELD_My_Param`), the resulting env var in the container is `LEMC_FIELD_MY_PARAM=value`.
+    *   Example: If YAML field is `my_lower_param` (HTML form name `LEMC_FIELD_my_lower_param`), env var is `LEMC_FIELD_MY_LOWER_PARAM=value`.
+    *   Example: If YAML field is `my-mixed-Param` (HTML form name `LEMC_FIELD_my_mixed_Param`), env var is `LEMC_FIELD_MY_MIXED_PARAM=value`.
+
+**Note on `LEMC_HTTP_DOWNLOAD_BASE_URL`**: To form a complete URL, append the specific filename directly after this base path. The path resolves to a file within the job's public artifact store. For example, if `LEMC_HTTP_DOWNLOAD_BASE_URL` is `/lemc/locker/uuid/abc/page/1/scope/individual/filename/` and your file is `report.txt`, the full path used in a link would be `/lemc/locker/uuid/abc/page/1/scope/individual/filename/report.txt`.
+
+These variables provide scripts with essential runtime information.
+
+## Quick Start: Creating and Using a Local Script with Docker
+
+For a step-by-step guide on creating your first recipe, including writing a script, containerizing it with Docker, and running it in LEMC, please refer to the [GETTING_STARTED.md](GETTING_STARTED.md) tutorial.
+
+## Mounted File System in Containers
+
+LEMC mounts several host directories into the container under `/lemc/` to allow scripts to access and store data. Standard mount points include:
+
+| Mount Point      | Host Source (Conceptual)                                          | Purpose                                                                                                                                                                                          |
+| ---------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `/lemc/public/`  | User-specific public directory (`cf.BindPerUserPublicDir`)          | For user-specific files, potentially web-accessible if served.                                                                                                                                   |
+| `/lemc/private/` | User-specific private directory (`cf.BindPerUserPrivateDir`)        | For user-specific private files, not directly served.                                                                                                                                            |
+| `/lemc/global/`  | UUID-specific 'locker' context directory (`cf.BindGlobalDir`)       | Global within `LEMC_UUID` scope (Cookbook/App 'locker'). For shared utilities/data relevant to that UUID's context.                                                                               |
+| `/lemc/shared/`  | Common directory for shared recipes (`cf.BindSharedDir`)            | Mounted for "shared" recipes. For resources accessible to any job running that specific shared recipe.                                                                                           |
+
+These mounts provide structured file system interaction for containerized scripts.
+# Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
+### Prerequisites
+
+*   Go (version specified in `.go-version`)
+*   Docker & Docker Compose (Optional, for running via container)
+*   Access to a Docker daemon socket (required for recipe execution, default: `unix:///var/run/docker.sock`)
+
+### Installation & Running
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/jaredfolkins/letemcook.git
+    cd letemcook
+    ```
+
+2.  **Build the binary (Required for Manual / Live Reload):**
+    ```bash
+    go build -o ./tmp/lemc ./main.go
+    ```
+
+#### Manual Execution
+
+*   Run the compiled binary directly:
+    ```bash
+    ./tmp/lemc
+    ```
+*   On the first run, LEMC will initialize the `data/` directory, create `data/.env`, run migrations, and start the server (default: `http://localhost:5362`).
+
+#### Development (Live Reload)
+
+*   Ensure you have `air` installed (`go install github.com/cosmtrek/air@latest`).
+*   Make sure the binary is built (step 2 above).
+*   Run `air` in the project root:
+    ```bash
+    air
+    ```
+*   `air` will monitor your Go files and automatically rebuild and restart the application on changes.
+
+#### Docker Compose
+
+*   Build and run the application using Docker Compose:
+    ```bash
+    docker-compose up --build
+    ```
+*   This uses the `Dockerfile` and `docker-compose.yml`.
+*   The `data` directory and the Docker socket are automatically mounted into the container.
+
+#### Initial Setup (After starting LEMC using any method)
+
+*   Open your web browser and navigate to `http://localhost:5362`.
+*   You will be redirected to the `/setup` page to create the initial administrator account.
+
+## Quick Start: Your First Recipe 🔥
+
+This guide will walk you through creating a simple "Hello World" recipe that also displays the current date from within its container.
+
+### 1. Create Your Script (`my_recipe.sh`)
+
+Create a file named `my_recipe.sh` in a new directory (e.g., `my-first-recipe/`) with the following content:
+
+```bash
+#!/bin/sh
+
+echo "lemc.html.buffer; <h1>Hello from my LEMC recipe!</h1>"
+echo "lemc.html.buffer; <p>The current date and time in the container is: <strong>$(date)</strong></p>"
+echo "lemc.html.append;"
+```
+
+This script uses special `lemc.` prefixed commands:
+*   `lemc.html.buffer; <HTML_CONTENT>`: Streams the `<HTML_CONTENT>` to the LEMC UI.
+*   `lemc.html.append;`: Signals that a block of HTML has been completely sent and can be appended to the display.
+
+Make the script executable:
+```bash
+chmod +x my_recipe.sh
+```
+
+### 2. Create a Dockerfile
+
+In the same `my-first-recipe/` directory, create a file named `Dockerfile` with the following content:
+
+```dockerfile
+FROM alpine:latest
+
+# Copy the script into the image
+COPY my_recipe.sh /app/my_recipe.sh
+
+# Set the working directory
+WORKDIR /app
+
+# Make the script executable (though already done, good practice in Dockerfile)
+RUN chmod +x my_recipe.sh
+
+# Command to run when the container starts
+CMD ["/app/my_recipe.sh"]
+```
+
+This `Dockerfile` does the following:
+*   Uses the lightweight `alpine:latest` base image.
+*   Copies your `my_recipe.sh` script into the `/app/` directory in the image.
+*   Sets `/app/` as the working directory.
+*   Ensures the script is executable.
+*   Specifies `my_recipe.sh` as the command to run when the container starts.
+
+### 3. Build Your Docker Image
+
+Navigate into your `my-first-recipe/` directory in the terminal and run the following command to build your Docker image:
+
+```bash
+docker build -t lemc-my-first-recipe:latest .
+```
+This command builds an image and tags it as `lemc-my-first-recipe:latest`. It's a good practice to prefix your LEMC-related images with `lemc-` for easier identification.
+
+**(Optional but Recommended for Sharing/Production)**
+If you plan to use a Docker registry (like Docker Hub, GitLab Container Registry, etc.), you should tag and push your image:
+```bash
+# Tag the image with your registry, e.g., example.com/your-repo/
+docker tag lemc-my-first-recipe:latest example.com/your-username/lemc-my-first-recipe:latest
+
+# Push the image to the registry
+docker push example.com/your-username/lemc-my-first-recipe:latest
+```
+Replace `example.com/your-username/` with your actual registry path and username/namespace.
+
+### 4. Define Your Recipe in a LEMC Cookbook
+
+1.  **Open LEMC:** Navigate to your LEMC instance in your web browser (e.g., `http://localhost:5362`).
+2.  **Go to Cookbooks:** Find the "Cookbooks" section in the navigation.
+3.  **Create or Select a Cookbook:**
+    *   If you don't have a cookbook, create a new one (e.g., "My Test Cookbook"). Follow the UI prompts, which may involve clicking a "+" symbol or similar action to create a new cookbook.
+    *   Otherwise, select an existing cookbook to which you want to add your new recipe.
+4.  **Add Your New Recipe to the Cookbook:**
+    *   Within the selected cookbook's interface, find the option to "Add New Recipe" or similar.
+    *   **Recipe-Level Information:**
+        *   **Recipe Name:** Give your recipe a unique name within the cookbook (e.g., "My Hello World").
+        *   **Description:** (Optional) Add a short description of what your recipe does.
+    *   **Details for the First Step (as recipes consist of one or more steps):**
+        *   **Image Name:** This is the Docker image the step will run (e.g., `lemc-my-first-recipe:latest` if built locally, or `example.com/your-username/lemc-my-first-recipe:latest` if pushed to a registry). LEMC will use the Docker daemon to find/pull this image. Consider prefixing your LEMC image names with `lemc-` for better organization.
+        *   **Timeout:** Specify how long this step is allowed to run (e.g., `1.minute`).
+        *   **`do` field:** For this initial step, set this to `now`. This ensures the step executes when the recipe is manually triggered from an App.
+    *   Leave other fields (such as those for form inputs or additional steps) at their default values for this simple example.
+5.  **Save the Recipe.** This action saves the recipe definition within the cookbook. Ensure any overall cookbook changes are also saved if required by the UI.
+
+### 5. Create a LEMC App from Your Cookbook
+
+Now that your recipe is defined in a cookbook, you need to create an "App." An App is an instance of a cookbook, allowing you to run its recipes.
+
+1.  **Go to Apps:** In the LEMC navigation bar, click on "Apps."
+2.  **Initiate New App Creation:** On the "Apps" page, click the "+" button (as seen in the UI screenshot) to start creating a new App.
+3.  **Configure the App:**
+    *   **App Name:** Give your App a descriptive name (e.g., "My First Test App").
+    *   **Select Cookbook:** From the available options, choose the cookbook that contains the "My Hello World" recipe you just defined.
+    *   Fill in any other required App-specific details as prompted.
+4.  **Save the App.** After saving, you should see your new App listed on the "Apps" page.
+
+### 6. Run Your Recipe via the App!
+
+*   **Open Your App:** From the "Apps" page, find your newly created App (e.g., "My First Test App"). Click on its name or the associated "App" button to open its interface.
+*   **Navigate to the Correct Page/Tab:** Within the App's interface, you will see different pages or tabs (e.g., "Hello World Page," "Kitchen Sink," as shown in your screenshot). Click on the page/tab that contains the recipe you want to run. For this Quick Start, this would be the page where you expect your "My Hello World" recipe to be.
+*   **Locate and Execute Your Recipe:** On the correct page, find your "My Hello World" recipe. It will likely be represented by a button labeled with the recipe name (e.g., a "hello world" button as shown in the screenshot under a recipe description like "basic hello world lemc example"). Click this button to execute the recipe.
+*   LEMC will now pull the Docker image (if it's not already available locally and a full registry path was provided) and then execute the container.
+*   You should see the output ("Hello from my LEMC recipe!" and the current date/time) streamed directly to the UI within the App's context.
+
+Congratulations! You've defined a recipe within a cookbook, created an App to instance that cookbook, and successfully run your first LEMC recipe.
+
+# Let'em Cook (LEMC) – Overview and Design
+
+## Executive Summary
+
+LEMC (Let'em Cook) is an open-source tool enabling developers to automate and execute scripts ("recipes") with real-time web UI feedback. Its core philosophy is **developer-centric operations** ("Ops your Devs"), empowering teams to manage their own operational tasks directly. Key principles include:
+
+*   **Simplicity & Script-First:** Prioritizes plain scripts (Bash, Python, etc.) over complex DSLs or UIs, aligning with rapid development and AI-assisted coding.
+*   **Containerization for Consistency:** Leverages Docker to ensure recipes run reliably in isolated, reproducible environments.
+*   **Accessibility:** Makes operational tasks accessible via a simple web interface, removing silos and enabling quicker execution of common procedures.
+*   **Empowerment:** Follows the "You build it, you run it" mantra, encouraging developers to own the full lifecycle of their services, including operational aspects.
+
+This document explores the design choices, influences, and the cultural context LEMC aims to serve.
+
+**Let'em Cook (LEMC)** is an open-source tool that lets developers automate and execute predefined "recipes" (scripts) on demand, with results streamed live to a web interface. It aims to "Ops your Devs," meaning it empowers developers to perform operational tasks themselves, rather than relying on a separate DevOps team. LEMC addresses the scenario where important scripts or glue code are siloed with individual engineers or running ad-hoc on someone's machine. By packaging such scripts into containers and providing a UI to run them, LEMC makes these tasks accessible to the whole team. The core idea is to allow even non-specialist team members – potentially even a manager or customer – to click a button and "just do the thing" that a script would do, in a safe, repeatable way.
+
+## Philosophical Underpinnings of Core Features
+
+LEMC's architecture is a direct reflection of its philosophy. Instead of detailing each feature here (see [Key Components](FEATURES.md#key-components) and [Execution Environment](FEATURES.md#execution-environment) for that), this section explains the *why* behind key design choices:
+
+*   **Cookbooks and Recipes:** The organization into cookbooks and recipes (see [Key Components](FEATURES.md#key-components) for details) is designed for clarity and reusability, allowing teams to build a library of automated tasks. The lightweight permission model supports this by enabling controlled sharing.
+*   **Script-Based Steps:** The choice of plain scripts as the foundation for recipe steps (detailed in [Execution Environment](FEATURES.md#execution-environment)) is central to LEMC. This "language-first" approach maximizes developer familiarity, flexibility, and allows easy integration of existing automation scripts with minimal changes. It avoids vendor lock-in to a specific DSL and embraces the power of general-purpose programming languages.
+*   **Containerized Execution:** Using Docker for execution (see [Execution Environment](FEATURES.md#execution-environment) for details) provides critical benefits: **consistency** (eliminating "works on my machine" issues), **isolation** (preventing interference between tasks or with the host), and **dependency management** (packaging all necessary tools within the image). This aligns with modern DevOps best practices.
+*   **Real-Time Feedback via Web UI:** The verb-based system for real-time UI updates (see [Real-Time UI Communication (LEMC Verbs)](FEATURES.md#real-time-ui-communication-lemc-verbs) for details) is designed to provide immediate visibility into script execution. This transparency is crucial for debugging, monitoring, and building user confidence, transforming scripts from black boxes into interactive processes.
+*   **Scheduling:** The inclusion of scheduling capabilities (see [Scheduling](FEATURES.md#scheduling) for details) extends LEMC from on-demand execution to proactive, automated maintenance and operational tasks, replacing potentially fragile cron jobs with managed, observable processes.
+*   **Tech Stack Choices:** The Go backend, SQLite database, and HTMX frontend (see [Tech Stack Highlights](FEATURES.md#tech-stack-highlights) for details) were chosen for **simplicity, performance, and ease of deployment**. The goal was a self-contained system that is easy to run and maintain, even for small teams.
+
+## Security Philosophy
+
+LEMC's security model is intentionally **lightweight and pragmatic**, designed for trusted environments like internal development teams. The core tenets are:
+
+*   **Container Isolation as Primary Defense:** The primary security mechanism is Docker container isolation (see [Security](FEATURES.md#security) for details). This sandboxing is leveraged to confine script execution and limit potential impact on the host system or other operations. This approach assumes that access to LEMC and its underlying Docker socket is already controlled.
+*   **Simplified User Management:** The user model (admin creation on first launch, basic user management) is designed for ease of use in small to medium-sized teams where complex enterprise-grade RBAC would be overkill. (Details in [Security](FEATURES.md#security)).
+*   **Trust in Developer-Defined Recipes:** LEMC operates on the principle that recipes are created or vetted by the team. The focus is on providing a safe *execution environment* for these trusted scripts, rather than on policing the scripts themselves.
+
+This philosophy prioritizes developer agility and self-service within a trusted context, relying on established container security features.
+
+## "Own Your Ops" Philosophy
+
+LEMC's architecture (simple scripts, containers, minimal config) is meant to flatten this – ideally, the same developers writing application code can also write and run the ops recipes, keeping the loop tight. It's inspired by the idea that in modern teams (especially with AI assistance accelerating coding), a small team can ship faster if they handle their own operational needs. This directly echoes the DevOps mantra "**You build it, you run it**," famously advocated by Amazon's CTO Werner Vogels in 2006. By integrating operations into the development workflow (in this case, via a handy internal tool), LEMC tries to reduce friction and eliminate the scenario of throwing code "over the wall" to ops teams.
+
+## Key Influences and Design Precedents
+
+LEMC builds upon established concepts in system design, automation, and software practices. Understanding these influences provides context for its design choices.
+
+### 1. Job Scheduling & Automation (Cron, CI/CD, Runbook Automation)
+
+*   **Core Idea:** Automating predefined tasks is a foundational concept, from Unix `cron` (1975) for scheduled jobs to modern CI/CD systems (like Jenkins) for event-driven pipelines.
+*   **LEMC's Angle:** Provides a user-friendly UI for on-demand and scheduled execution of containerized scripts, akin to how Jenkins offers a "Build Now" button or Rundeck provides self-service runbook automation. It simplifies the "just run my script" need with modern tooling.
+
+### 2. Isolation & Containerization (Chroot, Docker)
+
+*   **Core Idea:** Running processes in isolated, reproducible environments has evolved from `chroot` (1979) and FreeBSD Jails to modern OS-level virtualization like Docker (2013).
+*   **LEMC's Angle:** Fully embraces Docker to package recipes with their dependencies. This ensures scripts run consistently and safely, isolated from the host and each other, leveraging decades of OS-level isolation advancements.
+
+### 3. Developer-Centric Operations (DevOps, IaC)
+
+*   **Core Idea:** The DevOps movement, particularly the "You build it, you run it" principle, encourages developers to take operational responsibility. Infrastructure as Code (IaC) tools (like Chef, with its "cookbooks" and "recipes") allow ops tasks to be codified.
+*   **LEMC's Angle:** Directly embodies this by enabling developers to write, manage, and execute their own ops scripts. It can be seen as "Operations as Micro-Code," using familiar terminology but for smaller, self-contained tasks.
+
+### 4. Real-time Feedback & Interaction (Actor Model, Live Logging)
+
+*   **Core Idea:** Systems providing real-time insight (e.g., live log streaming via `tail -f`, Jupyter Notebooks for interactive output) enhance usability. The Actor Model (1973) provides a conceptual basis for isolated components communicating via messages.
+*   **LEMC's Angle:** Uses a verb-based system over WebSockets to stream HTML, CSS, and JS from running scripts to the UI. This provides live, rich feedback, making script execution transparent and interactive, conceptually similar to an actor sending status messages.
+
+These historical and conceptual pillars are synthesized in LEMC to create a pragmatic tool for modern development teams.
+
+## References
+
+* LEMC Documentation and README (Jared Folkins, 2025) – for descriptions of LEMC features and philosophy.
+* Unix Cron history – job scheduling in 1975.
+* IBM JCL Basics – multi-step jobs in mainframe systems.
+* Werner Vogels (Amazon) interview, 2006 – "You build it, you run it" DevOps principle.
+* Progress Chef (formerly Chef) documentation – use of "recipes" and "cookbooks" in 2000s config management.
+* Aqua Security: *History of Containers* – evolution from chroot (1979) to Docker (2013).
+* GeeksforGeeks: Sandbox Security Model – on sandboxing untrusted code (Java applet model).
+* Rundeck project intro – self-service runbook automation with web UI (2010s).
+* Penn State Univ. – Jupyter Notebook overview – mixing code and output in one interface (2010s).
+* Atlassian Blog on DevOps/ChatOps – context on DevOps collaboration and ChatOps trend.
+
 # 
 # EXTRA DOCS FOR AGENT REASONING
 #
