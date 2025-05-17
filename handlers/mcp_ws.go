@@ -1,0 +1,51 @@
+package handlers
+
+import (
+	"log"
+	"net/http"
+
+	"github.com/gorilla/websocket"
+	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/yeschef"
+)
+
+var mcpUpgrader = websocket.Upgrader{
+	ReadBufferSize:    1024,
+	WriteBufferSize:   1024,
+	EnableCompression: true,
+}
+
+// McpWs upgrades the connection to a WebSocket implementing a basic MCP channel.
+func McpWs(c LemcContext) error {
+	uuid := c.Param("uuid")
+	apiKey := c.Request().Header.Get("X-API-Key")
+	if apiKey == "" {
+		return c.NoContent(http.StatusUnauthorized)
+	}
+
+	app, err := models.AppByUUID(uuid)
+	if err != nil {
+		log.Printf("AppByUUID: %v", err)
+		return c.NoContent(http.StatusUnauthorized)
+	}
+	if app.ApiKey != apiKey {
+		return c.NoContent(http.StatusUnauthorized)
+	}
+
+	conn, err := mcpUpgrader.Upgrade(c.Response(), c.Request(), nil)
+	if err != nil {
+		return err
+	}
+
+	server := yeschef.XoxoX.CreateMcpAppInstance(app.ID)
+	client := &yeschef.McpClient{
+		Server: server,
+		Conn:   conn,
+		Send:   make(chan []byte, 64),
+	}
+	server.Provision <- client
+	go client.WritePump()
+	go client.ReadPump()
+
+	return nil
+}
