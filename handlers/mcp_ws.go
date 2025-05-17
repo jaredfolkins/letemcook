@@ -23,12 +23,12 @@ func McpWs(c LemcContext) error {
 		return c.NoContent(http.StatusUnauthorized)
 	}
 
-	app, err := models.AppByUUID(uuid)
+	app, perm, err := models.AppByUUIDAndUserAPIKey(uuid, apiKey)
 	if err != nil {
-		log.Printf("AppByUUID: %v", err)
+		log.Printf("AppByUUIDAndUserAPIKey: %v", err)
 		return c.NoContent(http.StatusUnauthorized)
 	}
-	if app.ApiKey != apiKey {
+	if perm.ID == 0 {
 		return c.NoContent(http.StatusUnauthorized)
 	}
 
