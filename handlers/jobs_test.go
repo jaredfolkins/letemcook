@@ -14,7 +14,6 @@ import (
 
 	"github.com/jaredfolkins/letemcook/middleware"
 	"github.com/jaredfolkins/letemcook/models"
-	"github.com/jaredfolkins/letemcook/util"
 	"github.com/labstack/echo/v4"
 )
 

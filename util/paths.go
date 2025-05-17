@@ -37,3 +37,7 @@ func QueuesPath() string {
 func AssetsPath() string {
 	return filepath.Join(EnvPath(), "assets")
 }
+
+func SessionsPath() string {
+	return filepath.Join(EnvPath(), "sessions")
+}
