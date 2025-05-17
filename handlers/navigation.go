@@ -8,21 +8,17 @@ import (
 )
 
 func GetNavtop(c LemcContext) error {
+	nsquid := "squid-not-found"
+	nname := "name-not-found"
 	squid := c.QueryParam("squid")
-
-	var bv models.BaseView
-
-	if squid != "" {
-		if account, err := models.AccountBySquid(squid); err == nil {
-			nsquid, nname, _ := util.SquidAndNameByAccountID(account.ID)
-			bv = NewBaseViewWithSquidAndAccountName(c, nsquid, nname)
-		} else {
-			bv = NewBaseView(c)
-		}
+	account, err := models.AccountBySquid(squid)
+	if err != nil {
+		log.Printf("Failed to find account by squid '%s': %v", squid, err)
 	} else {
-		bv = NewBaseView(c)
+		nsquid, nname, _ = util.SquidAndNameByAccountID(account.ID)
 	}
 
+	bv := NewBaseViewWithSquidAndAccountName(c, nsquid, nname)
 	nt := partials.Navtop(bv)
 	return HTML(c, nt)
 }

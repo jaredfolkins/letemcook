@@ -151,7 +151,10 @@ func NewBaseViewWithSquidAndAccountName(c LemcContext, squid string, name string
 
 	// Find the account using the model function
 	account, err := models.AccountBySquid(squid) // Use the new model function
-	if err == nil && account != nil {
+	if err != nil || account == nil {
+		log.Printf("Could not find account by squid '%s' in NewBaseViewWithSquidAndAccountName: %v", squid, err)
+		// Keep registrationEnabled as false
+	} else {
 		// Use the model function to fetch registration settings
 		registrationEnabled, err = models.AccountSettingsByAccountID(account.ID)
 		if err != nil {
