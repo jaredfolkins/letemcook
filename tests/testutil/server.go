@@ -43,7 +43,7 @@ func StartTestServer() (func(), error) {
 	}
 
 	// allow server to start
-	time.Sleep(2 * time.Second)
+	time.Sleep(10 * time.Second)
 
 	shutdown := func() {
 		cancel()
