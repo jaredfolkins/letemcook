@@ -54,8 +54,9 @@ type SeedUser struct {
 }
 
 func SeedDatabaseIfDev(db *sqlx.DB) {
-	lemcEnv := os.Getenv("LEMC_ENV")
-	isDev := strings.ToLower(lemcEnv) == "development" || strings.ToLower(lemcEnv) == "dev"
+    lemcEnv := os.Getenv("LEMC_ENV")
+    envLower := strings.ToLower(lemcEnv)
+    isDev := envLower == "development" || envLower == "dev" || envLower == "test"
 
 	if isDev {
 		log.Println("🌱 Development environment detected. Seeding database...")
