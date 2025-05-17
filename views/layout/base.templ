@@ -43,6 +43,7 @@ templ Base(v models.BaseView) {
 			class="sample-transition"
 			hx-boost="true"
 			hx-ext="ws"
+                        data-active-nav={ v.ActiveNav }
 			if v.UserContext.IsAuthenticated() { ws-connect="/ws" } >
             // bug: no empty src="" or the browser hates you
             <audio hx-preserve id="audioPlayer"></audio>
