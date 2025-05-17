@@ -3,6 +3,7 @@
 This section describes how containers (scripts running inside Docker containers) can communicate with the `yeschef` application to update environment variables, CSS, HTML, and JavaScript content for the user interface.
 
 Communication is achieved by printing specially formatted strings to standard output. The `yeschef` application listens to the container's output stream and parses these commands.
+Each command should end with a newline (`\n`) so that it is properly detected and processed.
 
 ## LEMC Verbs
 
