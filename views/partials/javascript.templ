@@ -100,7 +100,10 @@ templ Javascript() {
                             }
                             var output = buf + jo.Msg;
                             requestAnimationFrame(() => {
-                                document.getElementById(key + '-style').innerHTML = output;
+                                var styleElem = document.getElementById(key + '-style');
+                                if (styleElem) {
+                                    styleElem.innerHTML = output;
+                                }
                             });
                             _map.set(key, '');
                             buffers.set('css', _map);
@@ -113,7 +116,10 @@ templ Javascript() {
                             }
                             var output = buf + jo.Msg;
                             requestAnimationFrame(() => {
-                                document.getElementById(key + '-style').innerHTML += output;
+                                var styleElem = document.getElementById(key + '-style');
+                                if (styleElem) {
+                                    styleElem.innerHTML += output;
+                                }
                             });
                             _map.set(key, '');
                             buffers.set('css', _map);
@@ -136,7 +142,10 @@ templ Javascript() {
                             }
                             var output = buf + jo.Msg;
                             requestAnimationFrame(() => {
-                                document.getElementById(key + '-html').innerHTML = output;
+                                var htmlElem = document.getElementById(key + '-html');
+                                if (htmlElem) {
+                                    htmlElem.innerHTML = output;
+                                }
                             });
                             _map.set(key, '');
                             buffers.set('html', _map);
@@ -149,7 +158,10 @@ templ Javascript() {
                             }
                             var output = buf + jo.Msg;
                             requestAnimationFrame(() => {
-                                document.getElementById(key + '-html').innerHTML += output;
+                                var htmlElem = document.getElementById(key + '-html');
+                                if (htmlElem) {
+                                    htmlElem.innerHTML += output;
+                                }
                             });
                             _map.set(key, '');
                             buffers.set('html', _map);
@@ -162,7 +174,10 @@ templ Javascript() {
                             }
                             var output = buf + jo.Msg;
                             requestAnimationFrame(() => {
-                                document.getElementById(key + '-script').innerHTML = output;
+                                var scriptElem = document.getElementById(key + '-script');
+                                if (scriptElem) {
+                                    scriptElem.innerHTML = output;
+                                }
                             });
                             _map.set(key, '');
                             buffers.set('html', _map);
@@ -197,7 +212,9 @@ templ Javascript() {
                                 script.id = key + "-script";
 
                                 var inner = document.getElementById(key + "-outer");
-                                inner.appendChild(script);
+                                if (inner) {
+                                    inner.appendChild(script);
+                                }
                             });
 
                             _map.set(key, '');
