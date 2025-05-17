@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net/url"
+	"os"
 	"strings"
 	"testing"
 	"time"
@@ -13,11 +14,19 @@ import (
 	"github.com/chromedp/chromedp"
 )
 
-const (
-	baseURL       = "http://localhost:8082"
-	loginPath     = "/lemc/login"
-	validUsername = "alpha_owner"
-	validPassword = "asdfasdfasdf"
+func getBaseURL() string {
+	port := os.Getenv("LEMC_PORT_TEST")
+	if port == "" {
+		port = "15362"
+	}
+	return "http://localhost:" + port
+}
+
+var (
+	baseURL              = getBaseURL()
+	loginPath            = "/lemc/login"
+	validUsername        = "alpha_owner"
+	validPassword        = "asdfasdfasdf"
 	flashSuccessSelector = `.toast-alerts .alert-success` // Corrected selector
 	flashErrorSelector   = `.toast-alerts .alert-error`   // Corrected selector
 )
@@ -28,12 +37,13 @@ const (
 	loginButtonSelector = `button.btn-primary`
 )
 
-func createNonHeadlessContext(t *testing.T) (context.Context, context.CancelFunc) {
+func createHeadlessContext(t *testing.T) (context.Context, context.CancelFunc) {
 	t.Helper()
 
 	opts := []chromedp.ExecAllocatorOption{
 		chromedp.NoFirstRun,
 		chromedp.NoDefaultBrowserCheck,
+		chromedp.Headless,
 		chromedp.Flag("disable-gpu", true),
 	}
 
@@ -50,7 +60,7 @@ func createNonHeadlessContext(t *testing.T) (context.Context, context.CancelFunc
 }
 
 func TestActualLoginFailure(t *testing.T) {
-	ctx, cancel := createNonHeadlessContext(t)
+	ctx, cancel := createHeadlessContext(t)
 	defer cancel()
 
 	ctx, cancelTimeout := context.WithTimeout(ctx, 20*time.Second)
@@ -132,7 +142,7 @@ func TestSuccessfulLogins(t *testing.T) {
 		t.Run(tc.testName, func(t *testing.T) {
 			t.Parallel() // Run subtests in parallel
 
-			ctx, cancel := createNonHeadlessContext(t)
+			ctx, cancel := createHeadlessContext(t)
 			defer cancel()
 
 			ctx, cancelTimeout := context.WithTimeout(ctx, 20*time.Second)
