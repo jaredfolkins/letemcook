@@ -42,7 +42,7 @@ func NewFileMeta(jm *JobMeta, is_admin bool) (*FileMeta, error) {
 
 	fm.SafeUsername = fmt.Sprintf("%v-%v", AlphaNumHyphen(jm.Username), jm.UserID)
 	fm.PageString = fmt.Sprintf("page-%v", jm.PageID)
-	fm.LemcLocker = os.Getenv(LEMC_LOCKER)
+	fm.LemcLocker = LockerPath()
 	fm.UUID = jm.UUID
 
 	if is_admin {

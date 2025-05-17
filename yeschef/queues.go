@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"sync"
 
+	"github.com/jaredfolkins/letemcook/util"
 	"github.com/reugn/go-quartz/logger"
 	"github.com/reugn/go-quartz/quartz"
 )
@@ -62,16 +63,7 @@ type jobQueue struct {
 var _ quartz.JobQueue = (*jobQueue)(nil)
 
 func NewQuartzQueue(name string) *jobQueue {
-	// err := godotenv.Load()
-	// if err != nil {
-	// \tlogger.Errorf("Error loading .env file: %s", err)
-	// }
-	dataFolder := os.Getenv(QUEUE_FOLDER)
-	if len(dataFolder) == 0 {
-		log.Fatal("LEMC_QUEUES not found in .env")
-	}
-
-	path := filepath.Join(dataFolder, name)
+	path := filepath.Join(util.QueuesPath(), name)
 	return &jobQueue{Path: path, Name: name}
 }
 

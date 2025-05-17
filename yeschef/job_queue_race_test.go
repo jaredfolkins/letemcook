@@ -14,6 +14,7 @@ import (
 	"github.com/docker/docker/api/types/image"
 	"github.com/docker/docker/client"
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/util"
 	"github.com/joho/godotenv"
 	"github.com/reugn/go-quartz/quartz"
 )
@@ -39,7 +40,7 @@ func loadEnvForTest(t *testing.T) {
 
 	t.Logf("Successfully loaded environment from %s", envPath)
 	t.Logf("LEMC_DOCKER_HOST=%s", os.Getenv("LEMC_DOCKER_HOST"))
-	t.Logf("LEMC_QUEUES=%s", os.Getenv("LEMC_QUEUES"))
+	t.Logf("QueuesPath=%s", util.QueuesPath())
 }
 
 func isDockerAvailableForTest(t *testing.T, dockerHost string) bool {
@@ -76,8 +77,6 @@ func setupTestDirectories(t *testing.T, baseDir string) {
 			t.Fatalf("Failed to create queue dir %s: %v", queueDir, err)
 		}
 	}
-
-	os.Setenv("LEMC_QUEUES", baseDir)
 }
 
 func getCommonDockerPaths() []string {
@@ -112,7 +111,7 @@ func skipIfDockerUnavailable(t *testing.T) {
 	}
 
 	t.Logf("DEBUG: LEMC_DOCKER_HOST=%s", os.Getenv("LEMC_DOCKER_HOST"))
-	t.Logf("DEBUG: LEMC_QUEUES=%s", os.Getenv("LEMC_QUEUES"))
+	t.Logf("DEBUG: QueuesPath=%s", util.QueuesPath())
 
 	dockerHost := os.Getenv("LEMC_DOCKER_HOST")
 
@@ -128,17 +127,20 @@ func skipIfDockerUnavailable(t *testing.T) {
 func setupRaceTest(t *testing.T) (string, func()) {
 	loadEnvForTest(t)
 
-	queuesPath := os.Getenv("LEMC_QUEUES")
+	queuesPath := util.QueuesPath()
 	var tmpDir string
 	var err error
 
-	if queuesPath == "" {
+	if os.Getenv("LEMC_DATA") == "" {
 		tmpDir, err = os.MkdirTemp("", "job-queue-test")
 		if err != nil {
 			t.Fatalf("Failed to create temp dir: %v", err)
 		}
-		t.Logf("Created temp directory for queues: %s", tmpDir)
-		setupTestDirectories(t, tmpDir)
+		os.Setenv("LEMC_DATA", tmpDir)
+		os.Setenv("LEMC_ENV", "test")
+		queuesPath = util.QueuesPath()
+		t.Logf("Created temp directory for queues: %s", queuesPath)
+		setupTestDirectories(t, queuesPath)
 	} else {
 		t.Logf("Using existing queues path: %s", queuesPath)
 		tmpDir = queuesPath
@@ -151,11 +153,12 @@ func setupRaceTest(t *testing.T) (string, func()) {
 
 	os.Setenv("LEMC_TEMP_DIR", absPath)
 
-	return tmpDir, func() {
+	return queuesPath, func() {
 		os.Unsetenv("LEMC_TEMP_DIR")
 
-		if queuesPath == "" {
-			os.Unsetenv("LEMC_QUEUES") // Ensure this is unset if we set it temporarily
+		if os.Getenv("LEMC_DATA") == tmpDir {
+			os.Unsetenv("LEMC_DATA")
+			os.Unsetenv("LEMC_ENV")
 			os.RemoveAll(tmpDir)
 		}
 

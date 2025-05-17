@@ -24,7 +24,6 @@ const (
 	LEMC_JS_TRUNC     = "lemc.js.trunc;"
 	LEMC_ERR          = "lemc.err;"
 	LEMC_ENV          = "lemc.env;"
-	QUEUE_FOLDER      = "LEMC_QUEUES"
 	OWNED_BY          = "LEMC"
 	MAX_MESSAGE_SIZE  = 512
 	JOB_TYPE_APP      = "app"

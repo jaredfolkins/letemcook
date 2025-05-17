@@ -27,7 +27,7 @@ These instructions will get you a copy of the project up and running on your loc
     ```bash
     ./tmp/lemc
     ```
-*   On the first run, LEMC will initialize the `data/` directory, create `data/.env`, run migrations, and start the server using the port configured for your environment (default development port: `http://localhost:5362`).
+*   On the first run, LEMC will initialize the `data/<env>/` directory (where `<env>` is your `LEMC_ENV`), create `data/<env>/.env`, run migrations, and start the server using the port configured for your environment (default development port: `http://localhost:5362`).
 
 #### Development (Live Reload)
 

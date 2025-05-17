@@ -71,7 +71,7 @@ func LockerDownload(c LemcContext) error {
 		return c.NoContent(http.StatusBadRequest)
 	}
 
-	dir := filepath.Join(os.Getenv("LEMC_LOCKER"), uuid, scope, username, fmt.Sprintf("page-%s", page), "public")
+	dir := filepath.Join(util.LockerPath(), uuid, scope, username, fmt.Sprintf("page-%s", page), "public")
 	log.Println("DIRECTORY IS: ", dir)
 	if info, err := os.Stat(dir); err == nil && info.IsDir() {
 		log.Printf("Folder exists: %s\n", dir)
