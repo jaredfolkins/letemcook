@@ -328,12 +328,8 @@ func main() {
 		log.Println("Successfully dumped all assets to:", assetsPath)
 	}
 
-	var ap string
-	if os.Getenv("LEMC_ENV") == "dev" || os.Getenv("LEMC_ENV") == "development" {
-		ap = filepath.Join("embedded", "assets")
-	} else {
-		ap = util.AssetsPath()
-	}
+	// Serve assets from the environment specific assets directory
+	ap := util.AssetsPath()
 
 	e.GET("/*", echo.WrapHandler(http.StripPrefix("/", http.FileServer(http.Dir(ap)))))
 
