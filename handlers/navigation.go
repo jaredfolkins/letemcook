@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"log"
+
 	"github.com/jaredfolkins/letemcook/util"
 	"github.com/jaredfolkins/letemcook/views/partials"
 
