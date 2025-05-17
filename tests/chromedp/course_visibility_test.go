@@ -82,12 +82,11 @@ func TestappVisibility(t *testing.T) {
 	}
 
 	var (
-		baseURL              = getBaseURL()
-		loginPath            = "/lemc/login"
-		usernameSelector     = `input[name="username"]`
-		passwordSelector     = `input[name="password"]`
-		loginButtonSelector  = `button.btn-primary`
-		flashSuccessSelector = `.toast-alerts .alert-success`
+		baseURL             = getBaseURL()
+		loginPath           = "/lemc/login"
+		usernameSelector    = `input[name="username"]`
+		passwordSelector    = `input[name="password"]`
+		loginButtonSelector = `button.btn-primary`
 	)
 
 	for _, tc := range testCases {
