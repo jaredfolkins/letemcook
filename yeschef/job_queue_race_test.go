@@ -77,7 +77,6 @@ func setupTestDirectories(t *testing.T, baseDir string) {
 			t.Fatalf("Failed to create queue dir %s: %v", queueDir, err)
 		}
 	}
-
 }
 
 func getCommonDockerPaths() []string {
@@ -154,13 +153,12 @@ func setupRaceTest(t *testing.T) (string, func()) {
 
 	os.Setenv("LEMC_TEMP_DIR", absPath)
 
-	return tmpDir, func() {
+	return queuesPath, func() {
 		os.Unsetenv("LEMC_TEMP_DIR")
 
 		if _, err := os.Stat(queuesPath); os.IsNotExist(err) {
 			os.RemoveAll(tmpDir)
 		}
-
 		stopSchedulers(t)
 	}
 }

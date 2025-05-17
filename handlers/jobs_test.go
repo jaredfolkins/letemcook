@@ -10,6 +10,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/jaredfolkins/letemcook/util"
+
 	"github.com/jaredfolkins/letemcook/middleware"
 	"github.com/jaredfolkins/letemcook/models"
 	"github.com/jaredfolkins/letemcook/util"

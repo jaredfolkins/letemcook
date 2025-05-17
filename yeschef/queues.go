@@ -63,10 +63,6 @@ type jobQueue struct {
 var _ quartz.JobQueue = (*jobQueue)(nil)
 
 func NewQuartzQueue(name string) *jobQueue {
-	// err := godotenv.Load()
-	// if err != nil {
-	// \tlogger.Errorf("Error loading .env file: %s", err)
-	// }
 	dataFolder := util.QueuesPath()
 	if _, err := os.Stat(dataFolder); os.IsNotExist(err) {
 		err = os.MkdirAll(dataFolder, FILE_MODE)
