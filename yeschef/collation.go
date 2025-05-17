@@ -73,7 +73,7 @@ func (x *ChefsKiss) CreateMcpAppInstance(appID int64) *McpServer {
 		return nil
 	}
 
-	srv := NewMcpServer(app.UUID, app.YAMLShared)
+	srv := NewMcpServer(appID, app.UUID, app.YAMLShared)
 	go srv.Run()
 	x.mcpApps[appID] = srv
 	return srv
