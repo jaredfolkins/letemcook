@@ -1,15 +1,14 @@
 package db
 
 import (
-	"log"
-	"os"
-	"path/filepath"
-	"time"
+        "log"
+        "os"
+        "path/filepath"
+        "time"
 
-	"github.com/jmoiron/sqlx"
+        "github.com/jmoiron/sqlx"
 
-	"github.com/jaredfolkins/letemcook/util"
-	_ "github.com/mattn/go-sqlite3"
+        _ "github.com/mattn/go-sqlite3"
 )
 
 var db *sqlx.DB
@@ -48,13 +47,27 @@ func Db() *sqlx.DB {
 }
 
 func dbName() string {
-	env := os.Getenv("LEMC_ENV")
-	path := util.DataPath()
-	switch env {
-	case "dev", "development":
-		return filepath.Join(path, devDb)
-	case "test":
-		return filepath.Join(path, testDb)
-	}
-	return filepath.Join(path, prodDb)
+        env := os.Getenv("LEMC_ENV")
+        path := dataPath()
+        switch env {
+        case "dev", "development":
+                return filepath.Join(path, devDb)
+        case "test":
+                return filepath.Join(path, testDb)
+        }
+        return filepath.Join(path, prodDb)
+}
+
+// dataPath replicates util.DataPath locally to avoid an import cycle.
+// It builds the environment specific data directory location.
+func dataPath() string {
+        base := os.Getenv("LEMC_DATA")
+        if base == "" {
+                base = "./data"
+        }
+        env := os.Getenv("LEMC_ENV")
+        if env == "" {
+                env = "development"
+        }
+        return filepath.Join(base, env)
 }
