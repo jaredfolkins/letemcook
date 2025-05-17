@@ -33,12 +33,12 @@ func TestNewCustomContext(t *testing.T) {
 
 func TestBeforeMiddleware(t *testing.T) {
         // Setup
-        e := echo.New()
-        // Initialize an in-memory session store so session.Get works
-        e.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
-        req := httptest.NewRequest(http.MethodGet, "/", nil)
-        rec := httptest.NewRecorder()
-        c := e.NewContext(req, rec)
+    e := echo.New()
+    // Create the session middleware with an in-memory cookie store
+    sessMiddleware := session.Middleware(sessions.NewCookieStore([]byte("secret")))
+    req := httptest.NewRequest(http.MethodGet, "/", nil)
+    rec := httptest.NewRecorder()
+    c := e.NewContext(req, rec)
 
 	// Define a handler to use after middleware
 	handler := func(c echo.Context) error {
@@ -57,11 +57,11 @@ func TestBeforeMiddleware(t *testing.T) {
 		return nil
 	}
 
-	// Apply middleware
-	middleware := Before(handler)
+    // Apply our middleware after the session middleware so session data is available
+    handlerWithMiddleware := sessMiddleware(Before(handler))
 
-	// Call the middleware
-	err := middleware(c)
+    // Call the composed middleware chain
+    err := handlerWithMiddleware(c)
 
 	// Assert
 	if err != nil {
