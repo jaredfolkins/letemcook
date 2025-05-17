@@ -385,7 +385,7 @@ func (srv *McpServer) handleResourcesList(env *mcpEnvelope) {
 	}
 	var resources []ResourceDescriptor
 	for _, p := range yd.Cookbook.Pages {
-		if w, ok := yd.Cookbook.Storage.Wikis[p.PageID]; ok {
+		if _, ok := yd.Cookbook.Storage.Wikis[p.PageID]; ok {
 			uri := fmt.Sprintf("lemc://app/%s/wiki/%d", srv.AppUUID, p.PageID)
 			resources = append(resources, ResourceDescriptor{URI: uri, Name: fmt.Sprintf("Page %d Wiki", p.PageID), MimeType: "text/html"})
 		}

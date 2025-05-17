@@ -32,7 +32,7 @@ func McpSSE(c LemcContext) error {
 	}
 
 	w := c.Response()
-	flusher, ok := w.(http.Flusher)
+	flusher, ok := w.Writer.(http.Flusher)
 	if !ok {
 		return c.NoContent(http.StatusInternalServerError)
 	}
