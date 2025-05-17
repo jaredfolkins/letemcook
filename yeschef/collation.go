@@ -9,6 +9,7 @@ import (
 type ChefsKiss struct {
 	mu             sync.RWMutex
 	apps           map[int64]*CmdServer // Keyed by user_id
+	mcpApps        map[int64]*McpServer // Keyed by app_id
 	RunningMan     *RunningMan
 	NowQueue       *jobQueue
 	NowScheduler   *quartz.StdScheduler
@@ -53,6 +54,28 @@ func (x *ChefsKiss) CreateInstance(userID int64) *CmdServer {
 	go srv.Run()
 	x.apps[userID] = srv
 	return srv
+}
+
+// CreateMcpAppInstance ensures an MCP server exists for the given app ID.
+func (x *ChefsKiss) CreateMcpAppInstance(appID int64) *McpServer {
+	x.mu.Lock()
+	defer x.mu.Unlock()
+
+	if srv, ok := x.mcpApps[appID]; ok {
+		return srv
+	}
+
+	srv := NewMcpServer()
+	go srv.Run()
+	x.mcpApps[appID] = srv
+	return srv
+}
+
+// ReadMcpAppInstance returns the MCP server for the given app ID.
+func (x *ChefsKiss) ReadMcpAppInstance(appID int64) *McpServer {
+	x.mu.RLock()
+	defer x.mu.RUnlock()
+	return x.mcpApps[appID]
 }
 
 // Ensure maps are initialized (this should happen where ChefsKiss is instantiated)
