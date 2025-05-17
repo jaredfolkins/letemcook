@@ -63,7 +63,15 @@ type jobQueue struct {
 var _ quartz.JobQueue = (*jobQueue)(nil)
 
 func NewQuartzQueue(name string) *jobQueue {
-	path := filepath.Join(util.QueuesPath(), name)
+	dataFolder := util.QueuesPath()
+	if _, err := os.Stat(dataFolder); os.IsNotExist(err) {
+		err = os.MkdirAll(dataFolder, FILE_MODE)
+		if err != nil {
+			log.Fatalf("failed to create queues directory: %v", err)
+		}
+	}
+
+	path := filepath.Join(dataFolder, name)
 	return &jobQueue{Path: path, Name: name}
 }
 

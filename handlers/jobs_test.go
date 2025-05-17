@@ -14,6 +14,7 @@ import (
 
 	"github.com/jaredfolkins/letemcook/middleware"
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/util"
 	"github.com/labstack/echo/v4"
 )
 
@@ -43,12 +44,11 @@ func TestGetJobsRecursiveFiltering(t *testing.T) {
 	tmp := t.TempDir()
 	t.Setenv("LEMC_DATA", tmp)
 	t.Setenv("LEMC_ENV", "test")
-	qRoot := util.QueuesPath()
 
-	nowDir := filepath.Join(qRoot, "now")
+	nowDir := filepath.Join(util.QueuesPath(), "now")
 	nestedDir := filepath.Join(nowDir, "nested")
 	os.MkdirAll(nestedDir, 0o755)
-	otherDir := filepath.Join(qRoot, "every")
+	otherDir := filepath.Join(util.QueuesPath(), "every")
 	os.MkdirAll(otherDir, 0o755)
 
 	j1 := persistedJobInfo{ID: "1", RecipeName: "r1", Username: "u1", AccountID: 1, JobType: "NOW", Status: "Running", CreatedAt: time.Now()}

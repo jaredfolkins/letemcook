@@ -150,7 +150,7 @@ func init() {
 		}
 
 		f.WriteString(fmt.Sprintf("LEMC_DATA=%s\n", filepath.Join(dir, DATA_FOLDER)))
-		f.WriteString(fmt.Sprintf("LEMC_ENV=%s\n", envValue))
+		f.WriteString(fmt.Sprintf("LEMC_ENV=%s\n", LEMC_ENV))
 		f.WriteString(fmt.Sprintf("LEMC_FQDN=%s\n", LEMC_FQDN))
 		f.WriteString(fmt.Sprintf("LEMC_DEFAULT_THEME=%s\n", util.DefaultTheme))
 		f.WriteString(fmt.Sprintf("LEMC_GLOBAL_API_KEY=%s\n", api_key))
@@ -172,7 +172,7 @@ func init() {
 
 	qf := util.QueuesPath()
 	if _, err := os.Stat(qf); os.IsNotExist(err) {
-		err = os.Mkdir(qf, FILE_MODE)
+		err = os.MkdirAll(qf, FILE_MODE)
 		if err != nil {
 			log.Fatal("init() error:", err)
 		}
@@ -181,7 +181,7 @@ func init() {
 
 	nowQf := filepath.Join(qf, NOW_QUEUE_FOLDER)
 	if _, err := os.Stat(nowQf); os.IsNotExist(err) {
-		err = os.Mkdir(nowQf, FILE_MODE)
+		err = os.MkdirAll(nowQf, FILE_MODE)
 		if err != nil {
 			log.Fatal("init() error:", err)
 		}
@@ -190,7 +190,7 @@ func init() {
 
 	inQf := filepath.Join(qf, IN_QUEUE_FOLDER)
 	if _, err := os.Stat(inQf); os.IsNotExist(err) {
-		err = os.Mkdir(inQf, FILE_MODE)
+		err = os.MkdirAll(inQf, FILE_MODE)
 		if err != nil {
 			log.Fatal("init() error:", err)
 		}
@@ -199,7 +199,7 @@ func init() {
 
 	everyQf := filepath.Join(qf, EVERY_QUEUE_FOLDER)
 	if _, err := os.Stat(everyQf); os.IsNotExist(err) {
-		err = os.Mkdir(everyQf, FILE_MODE)
+		err = os.MkdirAll(everyQf, FILE_MODE)
 		if err != nil {
 			log.Fatal("init() error:", err)
 		}
@@ -208,7 +208,7 @@ func init() {
 
 	path := util.LockerPath()
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		err = os.Mkdir(path, FILE_MODE)
+		err = os.MkdirAll(path, FILE_MODE)
 		if err != nil {
 			log.Fatal("init() error:", err)
 		}
@@ -260,9 +260,9 @@ func main() {
 		Output: httpLogWriter,
 	}))
 
-	sessionPath := filepath.Join(os.Getenv("LEMC_DATA"), "sessions")
+	sessionPath := util.SessionsPath()
 	if _, err := os.Stat(sessionPath); os.IsNotExist(err) {
-		err = os.Mkdir(sessionPath, FILE_MODE)
+		err = os.MkdirAll(sessionPath, FILE_MODE)
 		if err != nil {
 			log.Fatalf("failed to create session directory: %v", err)
 		}
@@ -279,7 +279,7 @@ func main() {
 	}
 
 	// Create a directory to dump assets if it doesn't exist
-	assetsPath := filepath.Join(os.Getenv("LEMC_DATA"), "assets")
+	assetsPath := util.AssetsPath()
 	if _, err := os.Stat(assetsPath); os.IsNotExist(err) {
 		err = os.MkdirAll(assetsPath, FILE_MODE)
 		if err != nil {
@@ -332,7 +332,7 @@ func main() {
 	if os.Getenv("LEMC_ENV") == "dev" || os.Getenv("LEMC_ENV") == "development" {
 		ap = filepath.Join("embedded", "assets")
 	} else {
-		ap = filepath.Join(os.Getenv("LEMC_DATA"), "assets")
+		ap = util.AssetsPath()
 	}
 
 	e.GET("/*", echo.WrapHandler(http.StripPrefix("/", http.FileServer(http.Dir(ap)))))
