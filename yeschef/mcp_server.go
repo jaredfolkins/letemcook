@@ -32,6 +32,7 @@ type McpClient struct {
 	Send      chan []byte
 	UserID    int64
 	AccountID int64
+	ApiKey    string
 }
 
 type mcpEnvelope struct {
@@ -116,6 +117,23 @@ func (srv *McpServer) broadcast(b []byte) {
 		default:
 		}
 	}
+}
+
+// FindClient returns the first client associated with the given API key.
+func (srv *McpServer) FindClient(apiKey string) *McpClient {
+	srv.mu.RLock()
+	defer srv.mu.RUnlock()
+	for c := range srv.Clients {
+		if c.ApiKey == apiKey {
+			return c
+		}
+	}
+	return nil
+}
+
+// Enqueue sends a message from a client to the server.
+func (srv *McpServer) Enqueue(c *McpClient, msg *McpMessage) {
+	srv.Inbound <- &mcpEnvelope{Msg: msg, Client: c}
 }
 
 type McpRecipeInfo struct {

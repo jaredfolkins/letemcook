@@ -21,7 +21,8 @@ func Routes(e *echo.Echo) {
 	e.POST("/setup", Ctx(PostSetupHandler))
 	e.GET("/", Ctx(redirLoginHandler))
 	e.GET("/ws", Ctx(Ws))
-	e.GET("/mcp/app/:uuid", Ctx(McpWs))
+	e.GET("/mcp/app/:uuid", Ctx(McpSSE))
+	e.POST("/mcp/app/:uuid", Ctx(McpPost))
 	e.GET("/navtop", Ctx(GetNavtop))
 	e.GET("/heckle", Ctx(GetHeckle))
 
