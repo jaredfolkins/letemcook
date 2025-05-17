@@ -42,9 +42,11 @@ func McpWs(c LemcContext) error {
 
 	server := yeschef.XoxoX.CreateMcpAppInstance(app.ID)
 	client := &yeschef.McpClient{
-		Server: server,
-		Conn:   conn,
-		Send:   make(chan []byte, 64),
+		Server:    server,
+		Conn:      conn,
+		Send:      make(chan []byte, 64),
+		UserID:    perm.UserID,
+		AccountID: perm.AccountID,
 	}
 	server.Provision <- client
 	go client.WritePump()
