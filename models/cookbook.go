@@ -225,29 +225,58 @@ func (c *Cookbook) Create(tx *sqlx.Tx) error {
 }
 
 func (c *Cookbook) Update() error {
-	query := `
-		update 
-			cookbooks 
-		set 
-			account_id = :account_id, 
-			uuid = :uuid, 
-			name = :name,
-			description = :description, 
-			yaml_shared = :yaml_shared, 
-			yaml_individual = :yaml_individual,
-			is_published = :is_published,
-			is_deleted = :is_deleted
-		where 
-		    account_id = :account_id
-		and
-			uuid = :uuid`
-
-	_, err := db.Db().NamedExec(query, c)
+	tx, err := db.Db().Beginx()
 	if err != nil {
 		return err
 	}
 
-	return nil
+	defer func() {
+		if err != nil {
+			_ = tx.Rollback()
+		}
+	}()
+
+	// Fetch existing YAML to detect changes and for history
+	prior := struct {
+		ID             int64  `db:"id"`
+		YamlShared     string `db:"yaml_shared"`
+		YamlIndividual string `db:"yaml_individual"`
+	}{}
+
+	q := `SELECT id, yaml_shared, yaml_individual FROM cookbooks WHERE account_id = ? AND uuid = ?`
+	if err = tx.Get(&prior, q, c.AccountID, c.UUID); err != nil {
+		return err
+	}
+
+	query := `
+                update
+                        cookbooks
+                set
+                        account_id = :account_id,
+                        uuid = :uuid,
+                        name = :name,
+                        description = :description,
+                        yaml_shared = :yaml_shared,
+                        yaml_individual = :yaml_individual,
+                        is_published = :is_published,
+                        is_deleted = :is_deleted
+                where
+                    account_id = :account_id
+                and
+                        uuid = :uuid`
+
+	if _, err = tx.NamedExec(query, c); err != nil {
+		return err
+	}
+
+	if prior.YamlShared != c.YamlShared || prior.YamlIndividual != c.YamlIndividual {
+		if _, err = tx.Exec(`INSERT INTO cookbook_history (cookbook_id, yaml_shared, yaml_individual) VALUES (?, ?, ?)`, prior.ID, prior.YamlShared, prior.YamlIndividual); err != nil {
+			return err
+		}
+	}
+
+	err = tx.Commit()
+	return err
 }
 
 func (c *Cookbook) ByName(name string) error {
