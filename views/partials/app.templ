@@ -27,6 +27,8 @@ templ App(v models.CoreView) {
                 role="tab"
                 class="tab whitespace-nowrap"
                 name="cookbook-tabs"
+                id={ string(fmt.Sprintf("tab-%d", e.PageID)) }
+                data-pageid={ string(fmt.Sprintf("%d", e.PageID)) }
                 aria-label={ string(fmt.Sprintf("%s", e.Name)) } />
 
               <div role="tabpanel" class="tab-content bg-base-100 p-6">
