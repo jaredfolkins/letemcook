@@ -255,3 +255,39 @@ func (c *App) Update(tx *sqlx.Tx) error {
 	log.Printf("Successfully updated App ID %d. Rows affected: %d", c.ID, rowsAffected)
 	return nil
 }
+
+// AppByUUID retrieves an App record by its UUID regardless of account.
+func AppByUUID(uuid string) (*App, error) {
+	app := &App{}
+	query := `
+                SELECT
+                        id, created, updated, account_id, owner_id, cookbook_id, uuid, name, description, yaml_shared, yaml_individual, api_key, is_active, is_deleted, is_assigned_by_default, on_register
+                FROM
+                        apps
+                WHERE
+                        uuid = $1
+        `
+	err := db.Db().Get(app, query, uuid)
+	if err != nil {
+		return nil, err
+	}
+	return app, nil
+}
+
+// AppByAPIKey retrieves an App using its API key.
+func AppByAPIKey(apiKey string) (*App, error) {
+	app := &App{}
+	query := `
+                SELECT
+                        id, created, updated, account_id, owner_id, cookbook_id, uuid, name, description, yaml_shared, yaml_individual, api_key, is_active, is_deleted, is_assigned_by_default, on_register
+                FROM
+                        apps
+                WHERE
+                        api_key = $1
+        `
+	err := db.Db().Get(app, query, apiKey)
+	if err != nil {
+		return nil, err
+	}
+	return app, nil
+}
