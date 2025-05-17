@@ -65,6 +65,7 @@ func Start() {
 	XoxoX = &ChefsKiss{
 		mu:             sync.RWMutex{},
 		apps:           make(map[int64]*CmdServer),
+		mcpApps:        make(map[int64]*McpServer),
 		RunningMan:     NewRunningMan(),
 		NowQueue:       nowJq,
 		NowScheduler:   nowScheduler,
