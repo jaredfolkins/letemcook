@@ -77,6 +77,7 @@ func GetAllUsers(c LemcContext) error {
 	}
 
 	baseView := NewBaseView(c)
+	baseView.ActiveNav = "account"
 	v := models.UsersView{
 		BaseView:    baseView,
 		Users:       users,
@@ -153,6 +154,7 @@ func GetUserHandler(c LemcContext) error {
 
 	baseView := NewBaseView(c)
 	baseView.Title = "User: " + user.Username // Set a specific title
+	baseView.ActiveNav = "account"
 	v := models.UserDetailView{
 		BaseView:    baseView,
 		User:        *user,
@@ -199,6 +201,7 @@ func CreateUserHandler(c LemcContext) error {
 			totalPages = int(math.Ceil(float64(totalUsers) / float64(limit)))
 		}
 		baseView := NewBaseView(c)
+		baseView.ActiveNav = "account"
 		v := models.UsersView{
 			BaseView:    baseView,
 			Users:       users,

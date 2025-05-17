@@ -133,6 +133,7 @@ func NewBaseView(c LemcContext) models.BaseView {
 		ShowCookbooksNav:    showCookbooksNav,
 		ShowAccountNav:      showAccountNav,
 		ShowSystemNav:       showSystemNav, // Set the calculated value
+		ActiveNav:           "",
 	}
 }
 
@@ -176,5 +177,6 @@ func NewBaseViewWithSquidAndAccountName(c LemcContext, squid string, name string
 		ShowCookbooksNav:    showCookbooksNav,
 		ShowAccountNav:      showAccountNav,
 		ShowSystemNav:       showSystemNav, // Set the calculated value
+		ActiveNav:           "",
 	}
 }

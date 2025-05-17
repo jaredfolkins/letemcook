@@ -20,6 +20,7 @@ func GetProfileHandler(c LemcContext) error {
 	// Create the view model
 	baseView := NewBaseView(c)
 	baseView.Title = "My Profile"
+	baseView.ActiveNav = "profile"
 
 	view := models.UserDetailView{
 		BaseView: baseView,

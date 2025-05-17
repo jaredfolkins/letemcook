@@ -60,6 +60,7 @@ func GetCookbooksHandler(c LemcContext) error {
 		Limit:       limit,
 		BaseView:    NewBaseViewWithSquidAndAccountName(c, newSquid, newName),
 	}
+	v.BaseView.ActiveNav = "cookbooks"
 
 	cv := pages.Cookbooks(v)
 	if partial == "true" {

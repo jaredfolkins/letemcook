@@ -72,6 +72,7 @@ func GetAppsHandler(c LemcContext) error {
 		Limit:       limit,
 		BaseView:    NewBaseViewWithSquidAndAccountName(c, newSquid, newName),
 	}
+	v.BaseView.ActiveNav = "apps"
 
 	cv := pages.Apps(v)
 	if partial == "true" {

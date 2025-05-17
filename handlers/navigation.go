@@ -20,7 +20,9 @@ func GetNavtop(c LemcContext) error {
 		nsquid, nname, _ = util.SquidAndNameByAccountID(account.ID)
 	}
 
+	section := c.QueryParam("section")
 	bv := NewBaseViewWithSquidAndAccountName(c, nsquid, nname)
+	bv.ActiveNav = section
 	nt := partials.Navtop(bv)
 	return HTML(c, nt)
 }

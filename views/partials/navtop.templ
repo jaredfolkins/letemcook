@@ -6,6 +6,16 @@ import (
 )
 
 templ Navtop(v models.BaseView) {
+    {{ var activeApps, activeCookbooks, activeAccount, activeSystem string }}
+    if v.ActiveNav == "apps" {
+        {{ activeApps = "active" }}
+    } else if v.ActiveNav == "cookbooks" {
+        {{ activeCookbooks = "active" }}
+    } else if v.ActiveNav == "account" {
+        {{ activeAccount = "active" }}
+    } else if v.ActiveNav == "system" {
+        {{ activeSystem = "active" }}
+    }
     if v.IsSetup {
          {{ return }}
     }
@@ -40,7 +50,7 @@ templ Navtop(v models.BaseView) {
                     hx-swap="innerHTML transition:true"
                     hx-push-url="/lemc/apps"
                     href="/lemc/apps?partial=true"
-                    class="btn btn-primary rounded-none text-lg m-1"
+                    class={ fmt.Sprintf("btn btn-primary rounded-none text-lg m-1 %s", activeApps) }
                 >
                    Apps
                 </a>
@@ -52,14 +62,14 @@ templ Navtop(v models.BaseView) {
                     hx-swap="innerHTML transition:true"
                     hx-push-url="/lemc/cookbooks"
                     href="/lemc/cookbooks?partial=true"
-                    class="btn btn-primary rounded-none text-lg m-1"
+                    class={ fmt.Sprintf("btn btn-primary rounded-none text-lg m-1 %s", activeCookbooks) }
                 >
                    Cookbooks
                 </a>
             }
             if v.ShowAccountNav {
                 <div class="dropdown dropdown-bottom dropdown-end rounded-none">
-                    <div tabindex="0" role="button" class="btn btn-primary text-lg rounded-none m-1">Account</div>
+                    <div tabindex="0" role="button" class={ fmt.Sprintf("btn btn-primary text-lg rounded-none m-1 %s", activeAccount) }>Account</div>
                     <ul tabindex="0" class="dropdown-content menu bg-primary z-[1] w-52 p-2 shadow m-1">
                         <li>
                             <a
@@ -100,7 +110,7 @@ templ Navtop(v models.BaseView) {
             if v.ShowSystemNav {
                 <div class="dropdown dropdown-bottom dropdown-end rounded-none">
                   <!--<div tabindex="0" role="button" class="btn m-1">{ v.UserContext.Username() }</div> -->
-                  <div tabindex="0" role="button" class="btn btn-primary text-lg rounded-none m-1">System</div>
+                  <div tabindex="0" role="button" class={ fmt.Sprintf("btn btn-primary text-lg rounded-none m-1 %s", activeSystem) }>System</div>
                   <ul tabindex="0" class="dropdown-content menu bg-primary z-[1] w-52 p-2 shadow m-1">
                     <li>
                         <a
@@ -185,14 +195,14 @@ templ Navtop(v models.BaseView) {
             </button>
             <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-primary rounded-box w-52">
                  if v.ShowAppsNav {
-                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/apps" href="/lemc/apps?partial=true">Apps</a></li>
+                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/apps" href="/lemc/apps?partial=true" class={ activeApps } >Apps</a></li>
                  }
                  if v.ShowCookbooksNav {
-                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/cookbooks" href="/lemc/cookbooks?partial=true">Cookbooks</a></li>
+                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/cookbooks" href="/lemc/cookbooks?partial=true" class={ activeCookbooks }>Cookbooks</a></li>
                  }
                  if v.ShowAccountNav {
                     <li>
-                        <a>Account</a>
+                        <a class={ activeAccount }>Account</a>
                         <ul class="p-2">
                             <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/account/settings" href="/lemc/account/settings?partial=true">Settings</a></li>
                             <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/account/users" href="/lemc/account/users?partial=true">Users</a></li>
@@ -202,7 +212,7 @@ templ Navtop(v models.BaseView) {
                  }
                  if v.ShowSystemNav {
                      <li>
-                        <a>System</a>
+                        <a class={ activeSystem }>System</a>
                         <ul class="p-2">
                             <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/settings" href="/lemc/system/settings?partial=true">Settings</a></li>
                             <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/accounts" href="/lemc/system/accounts?partial=true">Accounts</a></li>

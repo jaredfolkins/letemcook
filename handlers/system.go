@@ -9,6 +9,7 @@ import (
 
 func getSystemView(c LemcContext) models.SystemView {
 	bv := NewBaseView(c)
+	bv.ActiveNav = "system"
 	return models.SystemView{BaseView: bv}
 }
 

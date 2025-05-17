@@ -24,7 +24,7 @@ templ Navbar(v models.BaseView) {
 
 		<div
         id="navtop"
-        hx-get={ string(fmt.Sprintf("/navtop?squid=%s&account=%s", v.AccountSquid, v.AccountName)) }
+       hx-get={ string(fmt.Sprintf("/navtop?squid=%s&account=%s&section=%s", v.AccountSquid, v.AccountName, v.ActiveNav)) }
         hx-swap="innerHTML"
         hx-trigger="refreshNavtop from:body"
 		class="navbar-end outlined-text">
