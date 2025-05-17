@@ -144,6 +144,7 @@ func PostLoginHandler(c LemcContext) error {
 		Theme:        c.Theme(),       // Get theme from context
 		CacheBuster:  c.CacheBuster(), // Get cache buster from context
 		UserContext:  userCtx,         // Use the manually created UserContext
+		ActiveNav:    "",
 		// TODO: Potentially set IsDev, RegistrationEnabled, nav flags if needed immediately
 	}
 

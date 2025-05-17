@@ -124,6 +124,7 @@ func PostCookbookCreate(c LemcContext) error {
 		Limit:       limit,      // Add Limit
 		BaseView:    NewBaseViewWithSquidAndAccountName(c, newSquid, newName),
 	}
+	v.BaseView.ActiveNav = "cookbooks"
 
 	c.AddSuccessFlash("cookbook-create", "new cookbook created")
 	cv := pages.CookbooksList(v)
