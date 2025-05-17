@@ -10,6 +10,7 @@ import (
 
 	"github.com/gorilla/websocket"
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/util"
 	"gopkg.in/yaml.v3"
 )
 
@@ -85,17 +86,30 @@ type McpServer struct {
 	Provision   chan *McpClient
 	Deprovision chan *McpClient
 	AppUUID     string
+	AppID       int64
 	YAML        string
 }
 
-func NewMcpServer(uuid string, yamlStr string) *McpServer {
+func NewMcpServer(appID int64, uuid string, yamlStr string) *McpServer {
 	return &McpServer{
 		Clients:     make(map[*McpClient]bool),
 		Inbound:     make(chan *mcpEnvelope, 64),
 		Provision:   make(chan *McpClient),
 		Deprovision: make(chan *McpClient),
 		AppUUID:     uuid,
+		AppID:       appID,
 		YAML:        yamlStr,
+	}
+}
+
+func (srv *McpServer) broadcast(b []byte) {
+	srv.mu.RLock()
+	defer srv.mu.RUnlock()
+	for c := range srv.Clients {
+		select {
+		case c.Send <- b:
+		default:
+		}
 	}
 }
 
@@ -103,6 +117,11 @@ type McpRecipeInfo struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	Action      string `json:"action"`
+}
+
+type McpRecipeSummary struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
 }
 
 type McpPageInfo struct {
@@ -123,6 +142,10 @@ func (srv *McpServer) handleMessage(env *mcpEnvelope) {
 	switch env.Msg.Method {
 	case "lemc.pages":
 		srv.handlePages(env)
+	case "lemc.recipes":
+		srv.handleRecipes(env)
+	case "lemc.run":
+		srv.handleRun(env)
 	default:
 		log.Printf("MCP unknown method: %s", env.Msg.Method)
 	}
@@ -150,6 +173,87 @@ func (srv *McpServer) handlePages(env *mcpEnvelope) {
 		pages = append(pages, pi)
 	}
 	resp := jsonrpcResponse{JSONRPC: "2.0", ID: env.Msg.ID, Result: map[string]interface{}{"pages": pages}}
+	b, _ := json.Marshal(resp)
+	env.Client.Send <- b
+}
+
+func (srv *McpServer) handleRecipes(env *mcpEnvelope) {
+	var yd models.YamlDefault
+	if err := yaml.Unmarshal([]byte(srv.YAML), &yd); err != nil {
+		srv.sendError(env, fmt.Sprintf("yaml: %v", err))
+		return
+	}
+	var recipes []McpRecipeSummary
+	for _, p := range yd.Cookbook.Pages {
+		for _, r := range p.Recipes {
+			recipes = append(recipes, McpRecipeSummary{Name: r.Name, Description: r.Description})
+		}
+	}
+	resp := jsonrpcResponse{JSONRPC: "2.0", ID: env.Msg.ID, Result: map[string]interface{}{"recipes": recipes}}
+	b, _ := json.Marshal(resp)
+	env.Client.Send <- b
+}
+
+func (srv *McpServer) handleRun(env *mcpEnvelope) {
+	var params struct {
+		Page   int    `json:"page"`
+		Recipe string `json:"recipe"`
+	}
+	if err := json.Unmarshal(env.Msg.Params, &params); err != nil {
+		srv.sendError(env, fmt.Sprintf("params: %v", err))
+		return
+	}
+	var yd models.YamlDefault
+	if err := yaml.Unmarshal([]byte(srv.YAML), &yd); err != nil {
+		srv.sendError(env, fmt.Sprintf("yaml: %v", err))
+		return
+	}
+	var rec models.Recipe
+	found := false
+	for _, p := range yd.Cookbook.Pages {
+		if p.PageID == params.Page {
+			for _, r := range p.Recipes {
+				if r.Name == params.Recipe {
+					rec = r
+					found = true
+					break
+				}
+			}
+		}
+	}
+	if !found {
+		srv.sendError(env, "recipe not found")
+		return
+	}
+
+	var envVars []string
+	envVars = append(envVars, yd.Cookbook.Environment.Private...)
+	envVars = append(envVars, yd.Cookbook.Environment.Public...)
+	envVars = append(envVars, fmt.Sprintf("LEMC_STEP_ID=%d", 1))
+	envVars = append(envVars, "LEMC_SCOPE=shared")
+	envVars = append(envVars, fmt.Sprintf("LEMC_UUID=%s", srv.AppUUID))
+	envVars = append(envVars, fmt.Sprintf("LEMC_RECIPE_NAME=%s", util.AlphaNumHyphen(rec.Name)))
+	envVars = append(envVars, fmt.Sprintf("LEMC_PAGE_ID=%d", params.Page))
+
+	jr := &JobRecipe{
+		JobType:  JOB_TYPE_APP,
+		UUID:     srv.AppUUID,
+		AppID:    fmt.Sprintf("%d", srv.AppID),
+		PageID:   fmt.Sprintf("%d", params.Page),
+		UserID:   "0",
+		Username: "mcp",
+		Scope:    "shared",
+		Env:      envVars,
+		Recipe:   rec,
+	}
+
+	srv.broadcast([]byte("--MCP JOB STARTED--"))
+	if err := DoNow(jr); err != nil {
+		srv.sendError(env, err.Error())
+		return
+	}
+	srv.broadcast([]byte("--MCP JOB FINISHED--"))
+	resp := jsonrpcResponse{JSONRPC: "2.0", ID: env.Msg.ID, Result: "ok"}
 	b, _ := json.Marshal(resp)
 	env.Client.Send <- b
 }

@@ -3,6 +3,7 @@ package yeschef
 import (
 	"context"
 	"log"
+	"strconv"
 	"strings"
 
 	"github.com/jaredfolkins/letemcook/models"
@@ -31,6 +32,16 @@ func (job *JobRecipe) Execute(ctx context.Context) error {
 	key := LemcJobKey(job, NOW_QUEUE)
 	defer XoxoX.RunningMan.Remove(key)
 	log.Printf("JobRecipe: %v \n", key)
+
+	var srv *McpServer
+	if job.AppID != "" {
+		if id, err := strconv.ParseInt(job.AppID, 10, 64); err == nil {
+			srv = XoxoX.ReadMcpAppInstance(id)
+		}
+	}
+	if srv != nil {
+		srv.broadcast([]byte("--MCP JOB STARTED--"))
+	}
 	/*
 		if err := DeleteCronJobsByPageAndUUID(job.PageID, job.UUID); err != nil {
 			return err
@@ -63,6 +74,9 @@ func (job *JobRecipe) Execute(ctx context.Context) error {
 				return err
 			}
 		}
+	}
+	if srv != nil {
+		srv.broadcast([]byte("--MCP JOB FINISHED--"))
 	}
 	return nil
 }

@@ -7,6 +7,8 @@ import (
 	"log"
 	"time"
 
+	"github.com/google/uuid"
+
 	"github.com/jaredfolkins/letemcook/db"
 	"github.com/jmoiron/sqlx"
 )
@@ -226,27 +228,32 @@ type PermApp struct {
 	CanIndividual bool      `db:"can_individual"`
 	CanAdminister bool      `db:"can_administer"`
 	IsOwner       bool      `db:"is_owner"`
+	ApiKey        string    `db:"api_key"`
 }
 
 func (pc *PermApp) UpsertappPermissions(tx *sqlx.Tx) error {
+	if pc.ApiKey == "" {
+		pc.ApiKey = uuid.New().String()
+	}
 	query := `
-	INSERT INTO permissions_apps 
-		(user_id, account_id, app_id, cookbook_id, can_shared, can_individual, can_administer, is_owner)
-	VALUES 
-		($1, $2, $3, $4, $5, $6, $7, $8)
-	ON CONFLICT (user_id, account_id, app_id) 
-	DO UPDATE SET 
-		can_shared = excluded.can_shared,
-		can_individual = excluded.can_individual,
-		can_administer = excluded.can_administer,
-		is_owner = excluded.is_owner,
-		-- Note: cookbook_id might change if the App is re-linked, but typically shouldn't be updated here.
-		-- If it needs updating, add: cookbook_id = excluded.cookbook_id
-		updated = CURRENT_TIMESTAMP -- Update the timestamp on modification
-	`
+        INSERT INTO permissions_apps
+                (user_id, account_id, app_id, cookbook_id, can_shared, can_individual, can_administer, is_owner, api_key)
+        VALUES
+                ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        ON CONFLICT (user_id, account_id, app_id)
+        DO UPDATE SET
+                can_shared = excluded.can_shared,
+                can_individual = excluded.can_individual,
+                can_administer = excluded.can_administer,
+                is_owner = excluded.is_owner,
+                -- Note: cookbook_id might change if the App is re-linked, but typically shouldn't be updated here.
+                -- If it needs updating, add: cookbook_id = excluded.cookbook_id
+                updated = CURRENT_TIMESTAMP -- Update the timestamp on modification
+        `
 	_, err := tx.Exec(query,
 		pc.UserID, pc.AccountID, pc.AppID, pc.CookbookID,
 		pc.CanShared, pc.CanIndividual, pc.CanAdminister, pc.IsOwner,
+		pc.ApiKey,
 	)
 	if err != nil {
 		log.Printf("🔥 Failed to upsert App permission for user %d, App %d: %v", pc.UserID, pc.AppID, err)
@@ -417,15 +424,16 @@ func GetAllPermissionsForUser(userID int64, accountID int64) (PermissionsBundle,
 // It uses ON CONFLICT DO NOTHING to avoid errors if a permission already exists (e.g., re-registration attempt).
 func AssignAppPermissionOnRegister(tx *sqlx.Tx, userID, accountID, appID, cookbookID int64) error {
 	permQuery := `
-		INSERT INTO permissions_apps 
-			(user_id, account_id, app_id, cookbook_id, can_individual, can_shared, can_administer, is_owner)
-		VALUES 
-			($1, $2, $3, $4, $5, $6, $7, $8)
-		ON CONFLICT (user_id, account_id, app_id) 
-		DO NOTHING
-	`
+                INSERT INTO permissions_apps
+                        (user_id, account_id, app_id, cookbook_id, can_individual, can_shared, can_administer, is_owner, api_key)
+                VALUES
+                        ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                ON CONFLICT (user_id, account_id, app_id)
+                DO NOTHING
+        `
+	apiKey := uuid.New().String()
 	// Assign default permissions: can_individual=true, others=false
-	_, err := tx.Exec(permQuery, userID, accountID, appID, cookbookID, true, false, false, false)
+	_, err := tx.Exec(permQuery, userID, accountID, appID, cookbookID, true, false, false, false, apiKey)
 	if err != nil {
 		// Wrap error for context
 		return fmt.Errorf("failed to assign initial app permission for user %d, app %d, account %d: %w", userID, appID, accountID, err)
@@ -512,9 +520,9 @@ func ToggleAppPermission(userID, accountID, appID int64, permToToggle Permission
 // it returns a zero-value PermApp struct and no error.
 func AppPermissionsByUserAccountAndApp(userID, accountID, appID int64) (*PermApp, error) {
 	appPerms := &PermApp{}
-	permQuery := `SELECT id, user_id, account_id, cookbook_id, app_id, created, updated, can_shared, can_individual, can_administer, is_owner
-	               FROM permissions_apps
-	               WHERE user_id = $1 AND account_id = $2 AND app_id = $3`
+	permQuery := `SELECT id, user_id, account_id, cookbook_id, app_id, created, updated, can_shared, can_individual, can_administer, is_owner, api_key
+                       FROM permissions_apps
+                       WHERE user_id = $1 AND account_id = $2 AND app_id = $3`
 	err := db.Db().Get(appPerms, permQuery, userID, accountID, appID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
