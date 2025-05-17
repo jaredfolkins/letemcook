@@ -81,8 +81,8 @@ func TestappVisibility(t *testing.T) {
 		},
 	}
 
-	const (
-		baseURL              = "http://localhost:8082"
+	var (
+		baseURL              = getBaseURL()
 		loginPath            = "/lemc/login"
 		usernameSelector     = `input[name="username"]`
 		passwordSelector     = `input[name="password"]`
@@ -94,7 +94,7 @@ func TestappVisibility(t *testing.T) {
 		tc := tc // Capture range variable
 		t.Run(tc.testName, func(t *testing.T) {
 
-			ctx, cancel := createNonHeadlessContext(t) // Assumes createNonHeadlessContext is available
+			ctx, cancel := createHeadlessContext(t)
 			defer cancel()
 
 			ctx, cancelTimeout := context.WithTimeout(ctx, 15*time.Second) // Increased timeout
