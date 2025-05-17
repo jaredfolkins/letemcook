@@ -51,6 +51,7 @@ templ Navtop(v models.BaseView) {
                     hx-push-url="/lemc/apps"
                     href="/lemc/apps?partial=true"
                     class={ fmt.Sprintf("btn btn-primary rounded-none text-lg m-1 %s", activeApps) }
+                    hx-on:click="document.body.dataset.activeNav='apps'"
                 >
                    Apps
                 </a>
@@ -63,6 +64,7 @@ templ Navtop(v models.BaseView) {
                     hx-push-url="/lemc/cookbooks"
                     href="/lemc/cookbooks?partial=true"
                     class={ fmt.Sprintf("btn btn-primary rounded-none text-lg m-1 %s", activeCookbooks) }
+                    hx-on:click="document.body.dataset.activeNav='cookbooks'"
                 >
                    Cookbooks
                 </a>
@@ -78,6 +80,7 @@ templ Navtop(v models.BaseView) {
                                 hx-push-url="/lemc/account/settings"
                                 href="/lemc/account/settings?partial=true"
                                 class="btn btn-ghost rounded-none text-lg"
+                                hx-on:click="document.body.dataset.activeNav='account'"
                             >
                                 Settings
                             </a>
@@ -89,6 +92,7 @@ templ Navtop(v models.BaseView) {
                                 hx-push-url="/lemc/account/users"
                                 href="/lemc/account/users?partial=true"
                                 class="btn btn-ghost rounded-none text-lg"
+                                hx-on:click="document.body.dataset.activeNav='account'"
                             >
                             Users
                             </a>
@@ -100,6 +104,7 @@ templ Navtop(v models.BaseView) {
                                 hx-push-url="/lemc/account/jobs"
                                 href="/lemc/account/jobs?partial=true"
                                 class="btn btn-ghost rounded-none text-lg"
+                                hx-on:click="document.body.dataset.activeNav='account'"
                             >
                                 Jobs
                             </a>
@@ -119,6 +124,7 @@ templ Navtop(v models.BaseView) {
                             hx-push-url="/lemc/system/settings"
                             href="/lemc/system/settings?partial=true"
                             class="btn btn-ghost rounded-none text-lg"
+                            hx-on:click="document.body.dataset.activeNav='system'"
                         >
                             Settings
                         </a>
@@ -130,6 +136,7 @@ templ Navtop(v models.BaseView) {
                             hx-push-url="/lemc/system/accounts"
                             href="/lemc/system/accounts?partial=true"
                             class="btn btn-ghost rounded-none text-lg"
+                            hx-on:click="document.body.dataset.activeNav='system'"
                         >
                             Accounts
                         </a>
@@ -141,6 +148,7 @@ templ Navtop(v models.BaseView) {
                             hx-push-url="/lemc/system/images"
                             href="/lemc/system/images?partial=true"
                             class="btn btn-ghost rounded-none text-lg"
+                            hx-on:click="document.body.dataset.activeNav='system'"
                         >
                             Images
                         </a>
@@ -152,6 +160,7 @@ templ Navtop(v models.BaseView) {
                             hx-push-url="/lemc/system/jobs"
                             href="/lemc/system/jobs?partial=true"
                             class="btn btn-ghost rounded-none text-lg"
+                            hx-on:click="document.body.dataset.activeNav='system'"
                         >
                             Jobs
                         </a>
@@ -195,18 +204,18 @@ templ Navtop(v models.BaseView) {
             </button>
             <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-primary rounded-box w-52">
                  if v.ShowAppsNav {
-                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/apps" href="/lemc/apps?partial=true" class={ activeApps } >Apps</a></li>
+                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/apps" href="/lemc/apps?partial=true" class={ activeApps } hx-on:click="document.body.dataset.activeNav='apps'">Apps</a></li>
                  }
                  if v.ShowCookbooksNav {
-                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/cookbooks" href="/lemc/cookbooks?partial=true" class={ activeCookbooks }>Cookbooks</a></li>
+                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/cookbooks" href="/lemc/cookbooks?partial=true" class={ activeCookbooks } hx-on:click="document.body.dataset.activeNav='cookbooks'">Cookbooks</a></li>
                  }
                  if v.ShowAccountNav {
                     <li>
                         <a class={ activeAccount }>Account</a>
                         <ul class="p-2">
-                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/account/settings" href="/lemc/account/settings?partial=true">Settings</a></li>
-                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/account/users" href="/lemc/account/users?partial=true">Users</a></li>
-                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/account/jobs" href="/lemc/account/jobs?partial=true">Jobs</a></li>
+                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/account/settings" href="/lemc/account/settings?partial=true" hx-on:click="document.body.dataset.activeNav='account'">Settings</a></li>
+                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/account/users" href="/lemc/account/users?partial=true" hx-on:click="document.body.dataset.activeNav='account'">Users</a></li>
+                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/account/jobs" href="/lemc/account/jobs?partial=true" hx-on:click="document.body.dataset.activeNav='account'">Jobs</a></li>
                         </ul>
                     </li>
                  }
@@ -214,10 +223,10 @@ templ Navtop(v models.BaseView) {
                      <li>
                         <a class={ activeSystem }>System</a>
                         <ul class="p-2">
-                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/settings" href="/lemc/system/settings?partial=true">Settings</a></li>
-                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/accounts" href="/lemc/system/accounts?partial=true">Accounts</a></li>
-                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/images" href="/lemc/system/images?partial=true">Images</a></li>
-                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/jobs" href="/lemc/system/jobs?partial=true">Jobs</a></li>
+                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/settings" href="/lemc/system/settings?partial=true" hx-on:click="document.body.dataset.activeNav='system'">Settings</a></li>
+                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/accounts" href="/lemc/system/accounts?partial=true" hx-on:click="document.body.dataset.activeNav='system'">Accounts</a></li>
+                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/images" href="/lemc/system/images?partial=true" hx-on:click="document.body.dataset.activeNav='system'">Images</a></li>
+                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/jobs" href="/lemc/system/jobs?partial=true" hx-on:click="document.body.dataset.activeNav='system'">Jobs</a></li>
                         </ul>
                     </li>
                  }
