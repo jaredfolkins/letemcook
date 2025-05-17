@@ -60,10 +60,11 @@ func Apps(userID, accountID int64, page, limit int) ([]App, error) {
 		pc.created AS "userperms.created",
 		pc.updated AS "userperms.updated",
 		pc.can_shared AS "userperms.can_shared",
-		pc.can_individual AS "userperms.can_individual",
-		pc.can_administer AS "userperms.can_administer",
-		pc.is_owner AS "userperms.is_owner"
-	FROM
+                pc.can_individual AS "userperms.can_individual",
+                pc.can_administer AS "userperms.can_administer",
+                pc.is_owner AS "userperms.is_owner",
+                pc.api_key AS "userperms.api_key"
+        FROM
 		Apps c
 	LEFT JOIN
 		permissions_apps pc ON c.id = pc.app_id AND pc.user_id = ?
@@ -156,15 +157,17 @@ func (c *App) Create(tx *sqlx.Tx) error {
 	}
 
 	query = `
-	INSERT INTO permissions_apps
-		(user_id, account_id, app_id, cookbook_id, can_shared, can_individual, can_administer, is_owner)
-	VALUES
-		(?, ?, ?, ?, true, true, true, true)
-	`
+        INSERT INTO permissions_apps
+                (user_id, account_id, app_id, cookbook_id, can_shared, can_individual, can_administer, is_owner, api_key)
+        VALUES
+                (?, ?, ?, ?, true, true, true, true, ?)
+        `
+
+	userApiKey := uuid.New().String()
 
 	log.Println(c.OwnerID, c.AccountID, id, c.CookbookID)
 
-	_, err = tx.Exec(query, c.OwnerID, c.AccountID, id, c.CookbookID)
+	_, err = tx.Exec(query, c.OwnerID, c.AccountID, id, c.CookbookID, userApiKey)
 	if err != nil {
 		log.Println(c)
 		return err
@@ -305,6 +308,25 @@ func AppByAPIKey(apiKey string) (*App, error) {
 		return nil, err
 	}
 	return app, nil
+}
+
+// AppByUUIDAndUserAPIKey fetches an App and user permission by app UUID and the user's API key.
+func AppByUUIDAndUserAPIKey(uuidStr, apiKey string) (*App, *PermApp, error) {
+	app, err := AppByUUID(uuidStr)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	perm := &PermApp{}
+	query := `SELECT id, user_id, account_id, cookbook_id, app_id, created, updated, can_shared, can_individual, can_administer, is_owner, api_key
+                  FROM permissions_apps
+                  WHERE app_id = $1 AND api_key = $2`
+	err = db.Db().Get(perm, query, app.ID, apiKey)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return app, perm, nil
 }
 
 // AppByID retrieves an App record by its ID.

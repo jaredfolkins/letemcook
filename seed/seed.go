@@ -506,13 +506,14 @@ func seedapp(db *sqlx.DB, accountID, ownerID, cookbookID int64, appName, appDesc
 
 func seedappPermissions(db *sqlx.DB, accountID, userID, appID, cookbookID int64, canShared, canIndividual, canAdmin, isOwner bool) error {
 	permQuery := `INSERT INTO permissions_apps
-        (account_id, user_id, app_id, cookbook_id, can_shared, can_individual, can_administer, is_owner)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        (account_id, user_id, app_id, cookbook_id, can_shared, can_individual, can_administer, is_owner, api_key)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(account_id, user_id, app_id) DO UPDATE SET
         can_shared = excluded.can_shared,
         can_individual = excluded.can_individual,
         can_administer = excluded.can_administer,
         is_owner = excluded.is_owner`
-	_, err := db.Exec(permQuery, accountID, userID, appID, cookbookID, canShared, canIndividual, canAdmin, isOwner)
+	apiKey := uuid.New().String()
+	_, err := db.Exec(permQuery, accountID, userID, appID, cookbookID, canShared, canIndividual, canAdmin, isOwner, apiKey)
 	return err
 }
