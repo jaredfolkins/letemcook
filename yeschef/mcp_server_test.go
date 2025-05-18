@@ -3,45 +3,13 @@ package yeschef
 import (
 	"encoding/base64"
 	"encoding/json"
-	"os"
-	"path/filepath"
 	"testing"
 
 	"github.com/jaredfolkins/letemcook/db"
-	"github.com/jaredfolkins/letemcook/embedded"
 	"github.com/jaredfolkins/letemcook/models"
-	"github.com/pressly/goose/v3"
 	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/yaml.v3"
 )
-
-// setupTestDB initializes an isolated SQLite database for testing.
-func setupTestDB(t *testing.T) func() {
-	t.Helper()
-	tmp := t.TempDir()
-	os.Setenv("LEMC_DATA", tmp)
-	os.Setenv("LEMC_ENV", "test")
-	os.Setenv("LEMC_SQUID_ALPHABET", "abcdefghijklmnopqrstuvwxyz0123456789")
-
-	// Ensure the environment-specific directory exists for the SQLite file
-	if err := os.MkdirAll(filepath.Join(tmp, "test"), 0o755); err != nil {
-		t.Fatalf("prepare db dir: %v", err)
-	}
-
-	mfs, err := embedded.GetMigrationsFS()
-	if err != nil {
-		t.Fatalf("migrations fs: %v", err)
-	}
-	goose.SetBaseFS(mfs)
-	if err := goose.SetDialect("sqlite3"); err != nil {
-		t.Fatalf("set dialect: %v", err)
-	}
-	dbc := db.Db()
-	if err := goose.Up(dbc.DB, "."); err != nil {
-		t.Fatalf("migrate: %v", err)
-	}
-	return func() { dbc.Close() }
-}
 
 // createSampleApp seeds minimal data and returns the created app and permission.
 func createSampleApp(t *testing.T, yamlStr string) (*models.App, *models.PermApp) {
@@ -135,7 +103,7 @@ func TestAppByUUIDAndUserAPIKey(t *testing.T) {
 		t.Skip("Skipping integration test in short mode")
 	}
 
-	teardown := setupTestDB(t)
+	teardown := db.SetupTestDB(t)
 	defer teardown()
 
 	yamlStr := sampleYAML()
@@ -158,7 +126,7 @@ func TestMcpServerPagesAndRecipes(t *testing.T) {
 		t.Skip("Skipping integration test in short mode")
 	}
 
-	teardown := setupTestDB(t)
+	teardown := db.SetupTestDB(t)
 	defer teardown()
 
 	yamlStr := sampleYAML()
@@ -210,7 +178,7 @@ func TestMcpServerApps(t *testing.T) {
 		t.Skip("Skipping integration test in short mode")
 	}
 
-	teardown := setupTestDB(t)
+	teardown := db.SetupTestDB(t)
 	defer teardown()
 
 	yamlStr := sampleYAML()
@@ -250,7 +218,7 @@ func TestMcpServerToolsAndResources(t *testing.T) {
 		t.Skip("Skipping integration test in short mode")
 	}
 
-	teardown := setupTestDB(t)
+	teardown := db.SetupTestDB(t)
 	defer teardown()
 
 	yamlStr := sampleYAML()

@@ -7,34 +7,10 @@ import (
 	"testing"
 
 	"github.com/jaredfolkins/letemcook/db"
-	"github.com/jaredfolkins/letemcook/embedded"
 	"github.com/jaredfolkins/letemcook/middleware"
 	"github.com/jaredfolkins/letemcook/util"
 	"github.com/labstack/echo/v4"
-	"github.com/pressly/goose/v3"
 )
-
-func setupTestDB(t *testing.T) func() {
-	t.Helper()
-	tmp := t.TempDir()
-	t.Setenv("LEMC_DATA", tmp)
-	t.Setenv("LEMC_ENV", "test")
-	t.Setenv("LEMC_SQUID_ALPHABET", "abcdefghijklmnopqrstuvwxyz0123456789")
-
-	mfs, err := embedded.GetMigrationsFS()
-	if err != nil {
-		t.Fatalf("migrations fs: %v", err)
-	}
-	goose.SetBaseFS(mfs)
-	if err := goose.SetDialect("sqlite3"); err != nil {
-		t.Fatalf("set dialect: %v", err)
-	}
-	dbc := db.Db()
-	if err := goose.Up(dbc.DB, "."); err != nil {
-		t.Fatalf("migrate: %v", err)
-	}
-	return func() { dbc.Close() }
-}
 
 func newCtx(t *testing.T) middleware.LemcContext {
 	e := echo.New()
@@ -45,7 +21,7 @@ func newCtx(t *testing.T) middleware.LemcContext {
 }
 
 func TestRedirLoginHandler(t *testing.T) {
-	teardown := setupTestDB(t)
+	teardown := db.SetupTestDB(t)
 	defer teardown()
 	ctx := newCtx(t)
 	if err := redirLoginHandler(ctx); err != nil {
@@ -62,7 +38,7 @@ func TestRedirLoginHandler(t *testing.T) {
 }
 
 func TestRedirRegisterHandler(t *testing.T) {
-	teardown := setupTestDB(t)
+	teardown := db.SetupTestDB(t)
 	defer teardown()
 	ctx := newCtx(t)
 	if err := redirRegisterHandler(ctx); err != nil {
