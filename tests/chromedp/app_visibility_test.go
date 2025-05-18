@@ -14,13 +14,13 @@ import (
 const (
 	seedPassword      = "asdfasdfasdf"
 	accAlphaName      = "Account Alpha"
-	accAlphaOwnerUser = "alpha_owner"
-	accAlphaSquid     = "52wJ" // Hardcoded based on seed logic for Account ID 1
+	accAlphaOwnerUser = "alpha-owner"
+	accAlphaSquid     = "xkQN" // Hardcoded based on seed logic for Account ID 1
 	accBravoName      = "Account Bravo"
-	accBravoOwnerUser = "bravo_owner"
-	accBravoSquid     = "vpOd" // Hardcoded based on seed logic for Account ID 2
-	alphaappPrefix    = "Alpha app"
-	bravoappPrefix    = "Bravo app"
+	accBravoOwnerUser = "bravo-owner"
+	accBravoSquid     = "Xijg" // Hardcoded based on seed logic for Account ID 2
+	alphaAppPrefix    = "Alpha App"
+	bravoAppPrefix    = "Bravo App"
 	appsPath          = "/lemc/apps"
 	appListSelector   = "#app-list"           // Assumed selector for the app list container
 	appItemSelector   = ".list-group-item h5" // Assumed selector for app names within the list
@@ -37,46 +37,46 @@ type appVisibilityTestData struct {
 	expectPresence     bool // True if shouldSeeSubstr should be present
 }
 
-func TestappVisibility(t *testing.T) {
+func TestAppVisibility(t *testing.T) {
 	testCases := []appVisibilityTestData{
 		{
-			testName:           "AlphaOwnerSeesAlphaapps",
+			testName:           "AlphaOwnerSeesAlphaApp",
 			username:           accAlphaOwnerUser,
 			password:           seedPassword,
 			accountName:        accAlphaName,
 			squid:              accAlphaSquid,
-			shouldSeeSubstr:    "Description for Alpha app", // Check description
-			shouldNotSeeSubstr: bravoappPrefix,
+			shouldSeeSubstr:    "Description for Alpha App", // Check description
+			shouldNotSeeSubstr: bravoAppPrefix,
 			expectPresence:     true,
 		},
 		{
-			testName:           "AlphaUser1ShouldNotSeeapps", // Renamed based on current observed behavior
+			testName:           "AlphaUser1ShouldNotSeeApps", // Renamed based on current observed behavior
 			username:           "alpha_user_1",               // Seeded regular user
 			password:           seedPassword,
 			accountName:        accAlphaName,
 			squid:              accAlphaSquid,
-			shouldSeeSubstr:    alphaappPrefix, // Regular user currently sees "no apps"
-			shouldNotSeeSubstr: bravoappPrefix, // Should also not see other account's apps
+			shouldSeeSubstr:    alphaAppPrefix, // Regular user currently sees "no apps"
+			shouldNotSeeSubstr: bravoAppPrefix, // Should also not see other account's apps
 			expectPresence:     false,          // Assert *absence* of shouldSeeSubstr based on current behavior
 		},
 		{
-			testName:           "BravoOwnerSeesBravoapps",
+			testName:           "BravoOwnerSeesBravoApp",
 			username:           accBravoOwnerUser,
 			password:           seedPassword,
 			accountName:        accBravoName,
 			squid:              accBravoSquid,
-			shouldSeeSubstr:    "Description for Bravo app", // Check description
-			shouldNotSeeSubstr: alphaappPrefix,
+			shouldSeeSubstr:    "Description for Bravo App", // Check description
+			shouldNotSeeSubstr: alphaAppPrefix,
 			expectPresence:     true,
 		},
 		{
-			testName:           "BravoUser1ShouldNotSeeapps", // Renamed based on current observed behavior
+			testName:           "BravoUser1ShouldNotSeeApps", // Renamed based on current observed behavior
 			username:           "bravo_user_1",               // Seeded regular user
 			password:           seedPassword,
 			accountName:        accBravoName,
 			squid:              accBravoSquid,
-			shouldSeeSubstr:    bravoappPrefix, // Regular user currently sees "no apps"
-			shouldNotSeeSubstr: alphaappPrefix, // Should also not see other account's apps
+			shouldSeeSubstr:    bravoAppPrefix, // Regular user currently sees "no apps"
+			shouldNotSeeSubstr: alphaAppPrefix, // Should also not see other account's apps
 			expectPresence:     false,          // Assert *absence* of shouldSeeSubstr based on current behavior
 		},
 	}
