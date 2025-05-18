@@ -125,6 +125,10 @@ func sampleYAML() string {
 }
 
 func TestAppByUUIDAndUserAPIKey(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping integration test in short mode")
+	}
+
 	teardown := setupTestDB(t)
 	defer teardown()
 
@@ -144,6 +148,10 @@ func TestAppByUUIDAndUserAPIKey(t *testing.T) {
 }
 
 func TestMcpServerPagesAndRecipes(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping integration test in short mode")
+	}
+
 	teardown := setupTestDB(t)
 	defer teardown()
 
@@ -192,6 +200,10 @@ func TestMcpServerPagesAndRecipes(t *testing.T) {
 }
 
 func TestMcpServerApps(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping integration test in short mode")
+	}
+
 	teardown := setupTestDB(t)
 	defer teardown()
 
@@ -228,6 +240,10 @@ func TestMcpServerApps(t *testing.T) {
 }
 
 func TestMcpServerToolsAndResources(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping integration test in short mode")
+	}
+
 	teardown := setupTestDB(t)
 	defer teardown()
 
