@@ -60,6 +60,10 @@ func createHeadlessContext(t *testing.T) (context.Context, context.CancelFunc) {
 }
 
 func TestActualLoginFailure(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping integration test in short mode")
+	}
+
 	ctx, cancel := createHeadlessContext(t)
 	defer cancel()
 
@@ -120,6 +124,10 @@ type loginTestData struct {
 }
 
 func TestSuccessfulLogins(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping integration test in short mode")
+	}
+
 	testCases := []loginTestData{
 		{
 			testName:    "AlphaOwnerLogin",

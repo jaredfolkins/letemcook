@@ -8,6 +8,10 @@ import (
 )
 
 func TestMain(m *testing.M) {
+	if testing.Short() {
+		os.Exit(m.Run())
+	}
+
 	shutdown, err := testutil.StartTestServer()
 	if err != nil {
 		panic(err)
