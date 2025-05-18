@@ -11,7 +11,7 @@ type BaseView struct {
 	AccountSquid        string
 	AccountName         string
 	UserContext         *UserContext
-	IsDev               bool
+	Env                 string
 	RegistrationEnabled bool
 	ShowAppsNav         bool
 	ShowCookbooksNav    bool

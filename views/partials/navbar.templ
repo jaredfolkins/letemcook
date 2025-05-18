@@ -8,11 +8,17 @@ import (
 
 templ Navbar(v models.BaseView) {
 	<div class="fixed top-0 z-10 w-full">
-    if v.IsDev {
+
+    if v.Env == "development" {
         <div class="ribbon ribbon-top-right bg-red-500 text-white font-bold text-xs px-2 py-1 flex items-center justify-center">
             <span>development</span>
         </div>
+    } else if v.Env == "test" {
+        <div class="ribbon ribbon-top-right bg-orange-500 text-white font-bold text-xs px-2 py-1 flex items-center justify-center">
+            <span>test</span>
+        </div>
     }
+
 	<nav class="navbar drop-shadow-xl bg-primary text-primary-content bg-lemc-navbar">
 		<div class="navbar-start">
 		        <div class="flex items-center">

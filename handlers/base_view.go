@@ -3,7 +3,6 @@ package handlers
 import (
 	"log"
 	"os"
-	"strings"
 
 	"github.com/jaredfolkins/letemcook/models"
 )
@@ -99,7 +98,6 @@ func canShowSystemNav(userCtx *models.UserContext) bool {
 
 func NewBaseView(c LemcContext) models.BaseView {
 	lemcEnv := os.Getenv("LEMC_ENV")
-	isDev := strings.ToLower(lemcEnv) == "development"
 
 	// Default registrationEnabled to false
 	registrationEnabled := false
@@ -127,7 +125,7 @@ func NewBaseView(c LemcContext) models.BaseView {
 		Theme:               c.Theme(),
 		CacheBuster:         c.CacheBuster(),
 		UserContext:         userCtx,
-		IsDev:               isDev,
+		Env:                 lemcEnv,
 		RegistrationEnabled: registrationEnabled,
 		ShowAppsNav:         showAppsNav,
 		ShowCookbooksNav:    showCookbooksNav,
@@ -139,7 +137,6 @@ func NewBaseView(c LemcContext) models.BaseView {
 
 func NewBaseViewWithSquidAndAccountName(c LemcContext, squid string, name string) models.BaseView {
 	lemcEnv := os.Getenv("LEMC_ENV")
-	isDev := strings.ToLower(lemcEnv) == "development"
 
 	// Default registrationEnabled to false
 	registrationEnabled := false
@@ -171,7 +168,7 @@ func NewBaseViewWithSquidAndAccountName(c LemcContext, squid string, name string
 		Theme:               c.Theme(),
 		CacheBuster:         c.CacheBuster(),
 		UserContext:         userCtx,
-		IsDev:               isDev,
+		Env:                 lemcEnv,
 		RegistrationEnabled: registrationEnabled,
 		ShowAppsNav:         showAppsNav,
 		ShowCookbooksNav:    showCookbooksNav,
