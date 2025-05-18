@@ -1,243 +1,242 @@
 package partials
 
 import (
-    "fmt"
-    "github.com/jaredfolkins/letemcook/models"
+	"fmt"
+	"github.com/jaredfolkins/letemcook/models"
 )
 
 templ Navtop(v models.BaseView) {
-    {{ var activeApps, activeCookbooks, activeAccount, activeSystem string }}
-    if v.ActiveNav == "apps" {
-        {{ activeApps = "active" }}
-    } else if v.ActiveNav == "cookbooks" {
-        {{ activeCookbooks = "active" }}
-    } else if v.ActiveNav == "account" {
-        {{ activeAccount = "active" }}
-    } else if v.ActiveNav == "system" {
-        {{ activeSystem = "active" }}
-    }
-    if v.IsSetup {
-         {{ return }}
-    }
-
-    if !v.UserContext.IsAuthenticated() {
-    if v.RegistrationEnabled {
-    <a
-        hx-target="#app"
-        hx-swap="innerHTML transition:true"
-        hx-push-url={ string(fmt.Sprintf("/lemc/register?squid=%s&account=%s", v.AccountSquid, v.AccountName)) }
-        href={ templ.URL(fmt.Sprintf("/lemc/register?squid=%s&account=%s&partial=true", v.AccountSquid, v.AccountName)) }
-        class="btn btn-primary rounded-none text-lg m-1"
-    >
-        Register
-    </a>
-    }
-    <a
-        hx-target="#app"
-        hx-swap="innerHTML transition:true"
-        hx-push-url={ string(fmt.Sprintf("/lemc/login?squid=%s&account=%s", v.AccountSquid, v.AccountName)) }
-        href={ templ.URL(fmt.Sprintf("/lemc/login?squid=%s&account=%s&partial=true", v.AccountSquid, v.AccountName)) }
-        class="btn btn-primary rounded-none text-lg m-1"
-    >
-        Login
-    </a>
-    } else {
-        // --- Full navigation for medium screens and up ---
-        <div class="hidden navbreak:flex items-center">
-            if v.ShowAppsNav {
-                <a
-                    hx-target="#app"
-                    hx-swap="innerHTML transition:true"
-                    hx-push-url="/lemc/apps"
-                    href="/lemc/apps?partial=true"
-                    class={ fmt.Sprintf("btn btn-primary rounded-none text-lg m-1 %s", activeApps) }
-                    hx-on:click="document.body.dataset.activeNav='apps'"
-                >
-                   Apps
-                </a>
-            }
-
-            if v.ShowCookbooksNav {
-                <a
-                    hx-target="#app"
-                    hx-swap="innerHTML transition:true"
-                    hx-push-url="/lemc/cookbooks"
-                    href="/lemc/cookbooks?partial=true"
-                    class={ fmt.Sprintf("btn btn-primary rounded-none text-lg m-1 %s", activeCookbooks) }
-                    hx-on:click="document.body.dataset.activeNav='cookbooks'"
-                >
-                   Cookbooks
-                </a>
-            }
-            if v.ShowAccountNav {
-                <div class="dropdown dropdown-bottom dropdown-end rounded-none">
-                    <div tabindex="0" role="button" class={ fmt.Sprintf("btn btn-primary text-lg rounded-none m-1 %s", activeAccount) }>Account</div>
-                    <ul tabindex="0" class="dropdown-content menu bg-primary z-[1] w-52 p-2 shadow m-1">
-                        <li>
-                            <a
-                                hx-target="#app"
-                                hx-swap="innerHTML transition:true"
-                                hx-push-url="/lemc/account/settings"
-                                href="/lemc/account/settings?partial=true"
-                                class="btn btn-ghost rounded-none text-lg"
-                                hx-on:click="document.body.dataset.activeNav='account'"
-                            >
-                                Settings
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                hx-target="#app"
-                                hx-swap="innerHTML transition:true"
-                                hx-push-url="/lemc/account/users"
-                                href="/lemc/account/users?partial=true"
-                                class="btn btn-ghost rounded-none text-lg"
-                                hx-on:click="document.body.dataset.activeNav='account'"
-                            >
-                            Users
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                hx-target="#app"
-                                hx-swap="innerHTML transition:true"
-                                hx-push-url="/lemc/account/jobs"
-                                href="/lemc/account/jobs?partial=true"
-                                class="btn btn-ghost rounded-none text-lg"
-                                hx-on:click="document.body.dataset.activeNav='account'"
-                            >
-                                Jobs
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            }
-            if v.ShowSystemNav {
-                <div class="dropdown dropdown-bottom dropdown-end rounded-none">
-                  <!--<div tabindex="0" role="button" class="btn m-1">{ v.UserContext.Username() }</div> -->
-                  <div tabindex="0" role="button" class={ fmt.Sprintf("btn btn-primary text-lg rounded-none m-1 %s", activeSystem) }>System</div>
-                  <ul tabindex="0" class="dropdown-content menu bg-primary z-[1] w-52 p-2 shadow m-1">
-                    <li>
-                        <a
-                            hx-target="#app"
-                            hx-swap="innerHTML transition:true"
-                            hx-push-url="/lemc/system/settings"
-                            href="/lemc/system/settings?partial=true"
-                            class="btn btn-ghost rounded-none text-lg"
-                            hx-on:click="document.body.dataset.activeNav='system'"
-                        >
-                            Settings
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            hx-target="#app"
-                            hx-swap="innerHTML transition:true"
-                            hx-push-url="/lemc/system/accounts"
-                            href="/lemc/system/accounts?partial=true"
-                            class="btn btn-ghost rounded-none text-lg"
-                            hx-on:click="document.body.dataset.activeNav='system'"
-                        >
-                            Accounts
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            hx-target="#app"
-                            hx-swap="innerHTML transition:true"
-                            hx-push-url="/lemc/system/images"
-                            href="/lemc/system/images?partial=true"
-                            class="btn btn-ghost rounded-none text-lg"
-                            hx-on:click="document.body.dataset.activeNav='system'"
-                        >
-                            Images
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            hx-target="#app"
-                            hx-swap="innerHTML transition:true"
-                            hx-push-url="/lemc/system/jobs"
-                            href="/lemc/system/jobs?partial=true"
-                            class="btn btn-ghost rounded-none text-lg"
-                            hx-on:click="document.body.dataset.activeNav='system'"
-                        >
-                            Jobs
-                        </a>
-                    </li>
-                  </ul>
-                </div>
-            }
-            <div class="dropdown dropdown-bottom dropdown-end rounded-none">
-              <!--<div tabindex="0" role="button" class="btn m-1">{ v.UserContext.Username() }</div> -->
-              <div tabindex="0" role="button" class="btn btn-primary text-lg rounded-none m-1">{ v.UserContext.Username() }</div>
-              <ul tabindex="0" class="dropdown-content menu bg-primary z-[1] w-52 p-2 shadow m-1">
-                <li>
-                    <a
-                        hx-target="#app"
-                        hx-swap="innerHTML transition:true"
-                        hx-push-url="/lemc/profile"
-                        href="/lemc/profile?partial=true"
-                        class="btn btn-ghost rounded-none text-lg">
-                        Profile
-                    </a>
-                </li>
-                <li>
-                    <a
-                        hx-confirm="Are you sure you'd like to logout?"
-                        hx-swap="innerHTML transition:true"
-                        hx-post="/lemc/logout"
-                        hx-target="#app"
-                        hx-push-url={ string(fmt.Sprintf("/lemc/login?squid=%s&account=%s", v.AccountSquid, v.AccountName)) }
-                        class="btn btn-ghost rounded-none text-lg">
-                        Logout
-                    </a>
-                </li>
-              </ul>
-            </div>
-        </div>
-
-        // --- Hamburger Menu for small screens ---
-        <div class="flex navbreak:hidden dropdown dropdown-end">
-            <button tabindex="0" class="btn btn-ghost rounded-none">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
-            </button>
-            <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-primary rounded-box w-52">
-                 if v.ShowAppsNav {
-                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/apps" href="/lemc/apps?partial=true" class={ activeApps } hx-on:click="document.body.dataset.activeNav='apps'">Apps</a></li>
-                 }
-                 if v.ShowCookbooksNav {
-                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/cookbooks" href="/lemc/cookbooks?partial=true" class={ activeCookbooks } hx-on:click="document.body.dataset.activeNav='cookbooks'">Cookbooks</a></li>
-                 }
-                 if v.ShowAccountNav {
-                    <li>
-                        <a class={ activeAccount }>Account</a>
-                        <ul class="p-2">
-                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/account/settings" href="/lemc/account/settings?partial=true" hx-on:click="document.body.dataset.activeNav='account'">Settings</a></li>
-                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/account/users" href="/lemc/account/users?partial=true" hx-on:click="document.body.dataset.activeNav='account'">Users</a></li>
-                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/account/jobs" href="/lemc/account/jobs?partial=true" hx-on:click="document.body.dataset.activeNav='account'">Jobs</a></li>
-                        </ul>
-                    </li>
-                 }
-                 if v.ShowSystemNav {
-                     <li>
-                        <a class={ activeSystem }>System</a>
-                        <ul class="p-2">
-                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/settings" href="/lemc/system/settings?partial=true" hx-on:click="document.body.dataset.activeNav='system'">Settings</a></li>
-                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/accounts" href="/lemc/system/accounts?partial=true" hx-on:click="document.body.dataset.activeNav='system'">Accounts</a></li>
-                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/images" href="/lemc/system/images?partial=true" hx-on:click="document.body.dataset.activeNav='system'">Images</a></li>
-                            <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/jobs" href="/lemc/system/jobs?partial=true" hx-on:click="document.body.dataset.activeNav='system'">Jobs</a></li>
-                        </ul>
-                    </li>
-                 }
-                 <li>
-                     <a>{ v.UserContext.Username() }</a>
-                     <ul class="p-2">
-                        <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/profile" href="/lemc/profile?partial=true">Profile</a></li>
-                        <li><a hx-confirm="Are you sure you'd like to logout?" hx-swap="innerHTML transition:true" hx-post="/lemc/logout" hx-target="#app" hx-push-url={ string(fmt.Sprintf("/lemc/login?squid=%s&account=%s", v.AccountSquid, v.AccountName)) }>Logout</a></li>
-                     </ul>
-                 </li>
-            </ul>
-        </div>
-     }
+	{{ var activeApps, activeCookbooks, activeAccount, activeSystem string }}
+	if v.ActiveNav == "apps" {
+		{{ activeApps = "active" }}
+	} else if v.ActiveNav == "cookbooks" {
+		{{ activeCookbooks = "active" }}
+	} else if v.ActiveNav == "account" {
+		{{ activeAccount = "active" }}
+	} else if v.ActiveNav == "system" {
+		{{ activeSystem = "active" }}
+	}
+	if v.IsSetup {
+		{{ return }}
+	}
+	if !v.UserContext.IsAuthenticated() {
+		if v.RegistrationEnabled {
+			<a
+				hx-target="#app"
+				hx-swap="innerHTML transition:true"
+				hx-push-url={ string(fmt.Sprintf("/lemc/register?squid=%s&account=%s", v.AccountSquid, v.AccountName)) }
+				href={ templ.URL(fmt.Sprintf("/lemc/register?squid=%s&account=%s&partial=true", v.AccountSquid, v.AccountName)) }
+				class="btn btn-primary rounded-none text-lg m-1"
+			>
+				Register
+			</a>
+		}
+		<a
+			hx-target="#app"
+			hx-swap="innerHTML transition:true"
+			hx-push-url={ string(fmt.Sprintf("/lemc/login?squid=%s&account=%s", v.AccountSquid, v.AccountName)) }
+			href={ templ.URL(fmt.Sprintf("/lemc/login?squid=%s&account=%s&partial=true", v.AccountSquid, v.AccountName)) }
+			class="btn btn-primary rounded-none text-lg m-1"
+		>
+			Login
+		</a>
+	} else {
+		// --- Full navigation for medium screens and up ---
+		<div class="hidden navbreak:flex items-center">
+			if v.ShowAppsNav {
+				<a
+					hx-target="#app"
+					hx-swap="innerHTML transition:true"
+					hx-push-url="/lemc/apps"
+					href="/lemc/apps?partial=true"
+					class={ fmt.Sprintf("btn btn-primary rounded-none text-lg m-1 %s", activeApps) }
+					hx-on:click="document.body.dataset.activeNav='apps'; htmx.trigger('#navtop', 'refreshNavtop')"
+				>
+					Apps
+				</a>
+			}
+			if v.ShowCookbooksNav {
+				<a
+					hx-target="#app"
+					hx-swap="innerHTML transition:true"
+					hx-push-url="/lemc/cookbooks"
+					href="/lemc/cookbooks?partial=true"
+					class={ fmt.Sprintf("btn btn-primary rounded-none text-lg m-1 %s", activeCookbooks) }
+					hx-on:click="document.body.dataset.activeNav='cookbooks'; htmx.trigger('#navtop', 'refreshNavtop')"
+				>
+					Cookbooks
+				</a>
+			}
+			if v.ShowAccountNav {
+				<div class="dropdown dropdown-bottom dropdown-end rounded-none">
+					<div tabindex="0" role="button" class={ fmt.Sprintf("btn btn-primary text-lg rounded-none m-1 %s", activeAccount) }>Account</div>
+					<ul tabindex="0" class="dropdown-content menu bg-primary z-[1] w-52 p-2 shadow m-1">
+						<li>
+							<a
+								hx-target="#app"
+								hx-swap="innerHTML transition:true"
+								hx-push-url="/lemc/account/settings"
+								href="/lemc/account/settings?partial=true"
+								class="btn btn-ghost rounded-none text-lg"
+								hx-on:click="document.body.dataset.activeNav='account'; htmx.trigger('#navtop', 'refreshNavtop')"
+							>
+								Settings
+							</a>
+						</li>
+						<li>
+							<a
+								hx-target="#app"
+								hx-swap="innerHTML transition:true"
+								hx-push-url="/lemc/account/users"
+								href="/lemc/account/users?partial=true"
+								class="btn btn-ghost rounded-none text-lg"
+								hx-on:click="document.body.dataset.activeNav='account'; htmx.trigger('#navtop', 'refreshNavtop')"
+							>
+								Users
+							</a>
+						</li>
+						<li>
+							<a
+								hx-target="#app"
+								hx-swap="innerHTML transition:true"
+								hx-push-url="/lemc/account/jobs"
+								href="/lemc/account/jobs?partial=true"
+								class="btn btn-ghost rounded-none text-lg"
+								hx-on:click="document.body.dataset.activeNav='account'; htmx.trigger('#navtop', 'refreshNavtop')"
+							>
+								Jobs
+							</a>
+						</li>
+					</ul>
+				</div>
+			}
+			if v.ShowSystemNav {
+				<div class="dropdown dropdown-bottom dropdown-end rounded-none">
+					<!--<div tabindex="0" role="button" class="btn m-1">{ v.UserContext.Username() }</div> -->
+					<div tabindex="0" role="button" class={ fmt.Sprintf("btn btn-primary text-lg rounded-none m-1 %s", activeSystem) }>System</div>
+					<ul tabindex="0" class="dropdown-content menu bg-primary z-[1] w-52 p-2 shadow m-1">
+						<li>
+							<a
+								hx-target="#app"
+								hx-swap="innerHTML transition:true"
+								hx-push-url="/lemc/system/settings"
+								href="/lemc/system/settings?partial=true"
+								class="btn btn-ghost rounded-none text-lg"
+								hx-on:click="document.body.dataset.activeNav='system'; htmx.trigger('#navtop', 'refreshNavtop')"
+							>
+								Settings
+							</a>
+						</li>
+						<li>
+							<a
+								hx-target="#app"
+								hx-swap="innerHTML transition:true"
+								hx-push-url="/lemc/system/accounts"
+								href="/lemc/system/accounts?partial=true"
+								class="btn btn-ghost rounded-none text-lg"
+								hx-on:click="document.body.dataset.activeNav='system'; htmx.trigger('#navtop', 'refreshNavtop')"
+							>
+								Accounts
+							</a>
+						</li>
+						<li>
+							<a
+								hx-target="#app"
+								hx-swap="innerHTML transition:true"
+								hx-push-url="/lemc/system/images"
+								href="/lemc/system/images?partial=true"
+								class="btn btn-ghost rounded-none text-lg"
+								hx-on:click="document.body.dataset.activeNav='system'; htmx.trigger('#navtop', 'refreshNavtop')"
+							>
+								Images
+							</a>
+						</li>
+						<li>
+							<a
+								hx-target="#app"
+								hx-swap="innerHTML transition:true"
+								hx-push-url="/lemc/system/jobs"
+								href="/lemc/system/jobs?partial=true"
+								class="btn btn-ghost rounded-none text-lg"
+								hx-on:click="document.body.dataset.activeNav='system'; htmx.trigger('#navtop', 'refreshNavtop')"
+							>
+								Jobs
+							</a>
+						</li>
+					</ul>
+				</div>
+			}
+			<div class="dropdown dropdown-bottom dropdown-end rounded-none">
+				<!--<div tabindex="0" role="button" class="btn m-1">{ v.UserContext.Username() }</div> -->
+				<div tabindex="0" role="button" class="btn btn-primary text-lg rounded-none m-1">{ v.UserContext.Username() }</div>
+				<ul tabindex="0" class="dropdown-content menu bg-primary z-[1] w-52 p-2 shadow m-1">
+					<li>
+						<a
+							hx-target="#app"
+							hx-swap="innerHTML transition:true"
+							hx-push-url="/lemc/profile"
+							href="/lemc/profile?partial=true"
+							class="btn btn-ghost rounded-none text-lg"
+						>
+							Profile
+						</a>
+					</li>
+					<li>
+						<a
+							hx-confirm="Are you sure you'd like to logout?"
+							hx-swap="innerHTML transition:true"
+							hx-post="/lemc/logout"
+							hx-target="#app"
+							hx-push-url={ string(fmt.Sprintf("/lemc/login?squid=%s&account=%s", v.AccountSquid, v.AccountName)) }
+							class="btn btn-ghost rounded-none text-lg"
+						>
+							Logout
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		// --- Hamburger Menu for small screens ---
+		<div class="flex navbreak:hidden dropdown dropdown-end">
+			<button tabindex="0" class="btn btn-ghost rounded-none">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+			</button>
+			<ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-primary rounded-box w-52">
+				if v.ShowAppsNav {
+					<li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/apps" href="/lemc/apps?partial=true" class={ activeApps } hx-on:click="document.body.dataset.activeNav='apps'; htmx.trigger('#navtop', 'refreshNavtop')">Apps</a></li>
+				}
+				if v.ShowCookbooksNav {
+					<li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/cookbooks" href="/lemc/cookbooks?partial=true" class={ activeCookbooks } hx-on:click="document.body.dataset.activeNav='cookbooks'; htmx.trigger('#navtop', 'refreshNavtop')">Cookbooks</a></li>
+				}
+				if v.ShowAccountNav {
+					<li>
+						<a class={ activeAccount }>Account</a>
+						<ul class="p-2">
+							<li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/account/settings" href="/lemc/account/settings?partial=true" hx-on:click="document.body.dataset.activeNav='account'; htmx.trigger('#navtop', 'refreshNavtop')">Settings</a></li>
+							<li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/account/users" href="/lemc/account/users?partial=true" hx-on:click="document.body.dataset.activeNav='account'; htmx.trigger('#navtop', 'refreshNavtop')">Users</a></li>
+							<li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/account/jobs" href="/lemc/account/jobs?partial=true" hx-on:click="document.body.dataset.activeNav='account'; htmx.trigger('#navtop', 'refreshNavtop')">Jobs</a></li>
+						</ul>
+					</li>
+				}
+				if v.ShowSystemNav {
+					<li>
+						<a class={ activeSystem }>System</a>
+						<ul class="p-2">
+							<li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/settings" href="/lemc/system/settings?partial=true" hx-on:click="document.body.dataset.activeNav='system'; htmx.trigger('#navtop', 'refreshNavtop')">Settings</a></li>
+							<li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/accounts" href="/lemc/system/accounts?partial=true" hx-on:click="document.body.dataset.activeNav='system'; htmx.trigger('#navtop', 'refreshNavtop')">Accounts</a></li>
+							<li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/images" href="/lemc/system/images?partial=true" hx-on:click="document.body.dataset.activeNav='system'; htmx.trigger('#navtop', 'refreshNavtop')">Images</a></li>
+							<li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/jobs" href="/lemc/system/jobs?partial=true" hx-on:click="document.body.dataset.activeNav='system'; htmx.trigger('#navtop', 'refreshNavtop')">Jobs</a></li>
+						</ul>
+					</li>
+				}
+				<li>
+					<a>{ v.UserContext.Username() }</a>
+					<ul class="p-2">
+						<li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/profile" href="/lemc/profile?partial=true">Profile</a></li>
+						<li><a hx-confirm="Are you sure you'd like to logout?" hx-swap="innerHTML transition:true" hx-post="/lemc/logout" hx-target="#app" hx-push-url={ string(fmt.Sprintf("/lemc/login?squid=%s&account=%s", v.AccountSquid, v.AccountName)) }>Logout</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	}
 }
