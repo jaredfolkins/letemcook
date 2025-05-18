@@ -149,7 +149,7 @@ func init() {
 		}
 
 		f.WriteString(fmt.Sprintf("LEMC_DATA=%s\n", filepath.Join(dir, DATA_FOLDER)))
-		f.WriteString(fmt.Sprintf("LEMC_ENV=%s\n", LEMC_ENV))
+		f.WriteString(fmt.Sprintf("LEMC_ENV=%s\n", envValue))
 		f.WriteString(fmt.Sprintf("LEMC_FQDN=%s\n", LEMC_FQDN))
 		f.WriteString(fmt.Sprintf("LEMC_DEFAULT_THEME=%s\n", util.DefaultTheme))
 		f.WriteString(fmt.Sprintf("LEMC_GLOBAL_API_KEY=%s\n", api_key))
