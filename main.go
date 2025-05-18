@@ -366,10 +366,22 @@ func main() {
 			panic(err)
 		}
 
-		err = goose.Up(dbConn.DB, ".", goose.WithNoVersioning())
+		// Check if seed data already exists by querying for a known record
+		var count int
+		err = dbConn.QueryRow("SELECT COUNT(*) FROM users WHERE username = 'alpha-owner'").Scan(&count)
 		if err != nil {
-			panic(fmt.Sprintf("goose seed up failed: %v", err))
+			log.Printf("Error checking for existing seed data: %v", err)
 		}
+
+		if count == 0 {
+			err = goose.Up(dbConn.DB, ".", goose.WithNoVersioning())
+			if err != nil {
+				if !strings.Contains(err.Error(), "UNIQUE constraint failed") {
+					panic(fmt.Sprintf("goose seed up failed: %v", err))
+				}
+			}
+		}
+
 	}
 
 	handlers.Routes(e)

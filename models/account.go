@@ -32,13 +32,11 @@ func AccountBySquid(squid string) (*Account, error) {
 		})
 
 	if err != nil {
-		log.Printf("Error initializing sqids: %v", err)
 		return nil, fmt.Errorf("could not initialize squid generator: %w", err)
 	}
 
 	id := s.Decode(squid)
 	if len(id) != 1 {
-		log.Printf("Invalid squid format received: %s", squid)
 		return nil, fmt.Errorf("invalid squid format")
 	}
 
@@ -46,10 +44,8 @@ func AccountBySquid(squid string) (*Account, error) {
 	err = db.Db().Get(account, query, id[0])
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			log.Printf("No account found for squid %s (decoded ID: %d)", squid, id[0])
 			return nil, err // Return sql.ErrNoRows specifically if needed upstream
 		}
-		log.Printf("Error fetching account by squid %s (ID: %d): %v", squid, id[0], err)
 		return nil, fmt.Errorf("database error fetching account by squid: %w", err)
 	}
 
