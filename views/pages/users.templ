@@ -29,7 +29,7 @@ templ UsersPage(v models.UsersView) {
 							hx-target="#user-list-container"
 							hx-swap="innerHTML"
 							hx-headers="js:{'X-TimeZone': Intl.DateTimeFormat().resolvedOptions().timeZone}"
-							hx-post="/lemc/user/create"
+                                                       hx-post="/lemc/account/user/create"
 							class="drop-shadow-xl flex flex-col gap-4 p-12 bg-base-100 rounded-none"
 						>
 							<label class="flex flex-col justify-start gap-2 rounded-none">
@@ -131,7 +131,7 @@ templ UsersPartial(v models.UsersView) {
 						<tr>
 							<td>{ fmt.Sprintf("%d", user.ID) }</td>
 							<td>
-								<a href={ templ.URL(fmt.Sprintf("/lemc/user/%d", user.ID)) } class="rounded-none text-lg btn">
+                                                               <a href={ templ.URL(fmt.Sprintf("/lemc/account/user/%d", user.ID)) } class="rounded-none text-lg btn">
 									{ user.Username }
 								</a>
 							</td>
