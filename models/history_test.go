@@ -12,7 +12,7 @@ import (
 
 var historyTestDB *sqlx.DB
 
-func TestMain(m *testing.M) {
+func setupHistoryTests(m *testing.M) int {
 	tmpDir, err := os.MkdirTemp("", "lemc_historytest")
 	if err != nil {
 		panic(err)
@@ -38,7 +38,7 @@ func TestMain(m *testing.M) {
 
 	historyTestDB.Close()
 	os.RemoveAll(tmpDir)
-	os.Exit(code)
+	return code
 }
 
 func TestTotalHistory(t *testing.T) {

@@ -9,8 +9,7 @@ import (
 //go:embed assets/themes/banilla/public/*
 //go:embed assets/heckle/public/*
 //go:embed migrations/*.sql
-//go:embed migrations/*.go
-//go:embed seed/*.go
+//go:embed seeds/*.sql
 var embedAssets embed.FS
 
 const AssetsRoot = "assets"

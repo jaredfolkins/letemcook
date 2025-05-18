@@ -229,7 +229,7 @@ func init() {
 func main() {
 	var appLogWriter io.Writer = os.Stdout
 	var httpLogWriter io.Writer = os.Stdout
-	env := os.Getenv(LEMC_ENV)
+	env := strings.ToLower(os.Getenv(LEMC_ENV))
 	if env == LEMC_ENV {
 		appFile, err := os.OpenFile(APP_LOG_FILE, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 		if err != nil {
@@ -360,7 +360,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to get seed filesystem: %v", err)
 	}
-	env := strings.ToLower(os.Getenv("LEMC_ENV"))
+
 	if env == "development" || env == "dev" || env == "test" {
 		goose.SetBaseFS(seedFS)
 		if err := goose.Up(dbConn.DB, ".", goose.WithNoVersioning()); err != nil {
