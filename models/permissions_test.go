@@ -21,7 +21,7 @@ var (
 	testAppUUID      string
 )
 
-func setupPermissionTests(m *testing.M) int {
+func setupPermissionTests(m *testing.M) {
 	tmpDir, err := os.MkdirTemp("", "lemc_testdb")
 	if err != nil {
 		panic(err)
