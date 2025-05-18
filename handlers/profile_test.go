@@ -15,7 +15,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func setupTestDB(t *testing.T) func() {
+func setupProfileTestDB(t *testing.T) func() {
 	t.Helper()
 	tmp := t.TempDir()
 	t.Setenv("LEMC_DATA", tmp)
@@ -74,7 +74,7 @@ func newContext(t *testing.T, method, target string, user *models.User) LemcCont
 }
 
 func TestGetProfileHandler(t *testing.T) {
-	teardown := setupTestDB(t)
+	teardown := setupProfileTestDB(t)
 	defer teardown()
 	_, user := createUser(t)
 	ctx := newContext(t, http.MethodGet, "/lemc/profile?partial=true", user)
@@ -99,7 +99,7 @@ func TestPostChangePasswordHandlerMismatch(t *testing.T) {
 }
 
 func TestPostToggleHeckleHandler(t *testing.T) {
-	teardown := setupTestDB(t)
+	teardown := setupProfileTestDB(t)
 	defer teardown()
 	_, user := createUser(t)
 	e := echo.New()

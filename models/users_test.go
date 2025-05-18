@@ -12,7 +12,7 @@ func TestUserDetailViewTitle(t *testing.T) {
 
 func TestGetUserIDsForSharedCookbook(t *testing.T) {
 	// Without a database configured this just ensures the function can be called.
-	if _, err := GetUserIDsForSharedCookbook("missing", 0, 0, 1); err == nil {
+	if _, err := GetUserIDsForSharedCookbook("missing"); err == nil {
 		t.Log("expected error or empty result when db is not initialized")
 	}
 }

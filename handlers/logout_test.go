@@ -7,6 +7,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gorilla/sessions"
 	"github.com/jaredfolkins/letemcook/db"
 	"github.com/jaredfolkins/letemcook/embedded"
 	"github.com/jaredfolkins/letemcook/middleware"
@@ -18,7 +19,7 @@ import (
 )
 
 // setupTestDB replicates the helper from yeschef tests to create an isolated DB.
-func setupTestDB(t *testing.T) func() {
+func setupLogoutTestDB(t *testing.T) func() {
 	t.Helper()
 	tmp := t.TempDir()
 	t.Setenv("LEMC_DATA", tmp)
@@ -41,7 +42,7 @@ func setupTestDB(t *testing.T) func() {
 }
 
 func TestPostLogoutHandler(t *testing.T) {
-	teardown := setupTestDB(t)
+	teardown := setupLogoutTestDB(t)
 	defer teardown()
 
 	e := echo.New()
