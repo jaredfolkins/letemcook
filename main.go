@@ -19,7 +19,6 @@ import (
 	"github.com/jaredfolkins/letemcook/embedded"
 	"github.com/jaredfolkins/letemcook/handlers"
 	"github.com/jaredfolkins/letemcook/logger"
-	"github.com/jaredfolkins/letemcook/seed"
 	"github.com/jaredfolkins/letemcook/util"
 	"github.com/jaredfolkins/letemcook/yeschef"
 	"github.com/joho/godotenv"
@@ -357,7 +356,17 @@ func main() {
 		panic(fmt.Sprintf("goose up failed: %v", err))
 	}
 
-	seed.SeedDatabaseIfDev(db.Db())
+	seedFS, err := embedded.GetSeedFS()
+	if err != nil {
+		log.Fatalf("failed to get seed filesystem: %v", err)
+	}
+	env := strings.ToLower(os.Getenv("LEMC_ENV"))
+	if env == "development" || env == "dev" || env == "test" {
+		goose.SetBaseFS(seedFS)
+		if err := goose.Up(dbConn.DB, ".", goose.WithNoVersioning()); err != nil {
+			panic(fmt.Sprintf("goose seed up failed: %v", err))
+		}
+	}
 
 	handlers.Routes(e)
 
