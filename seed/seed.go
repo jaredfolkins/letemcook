@@ -53,77 +53,71 @@ type SeedUser struct {
 	appPermSpecs   []appPermissionSpec
 }
 
-func SeedDatabaseIfDev(db *sqlx.DB) {
-	lemcEnv := os.Getenv("LEMC_ENV")
-	envLower := strings.ToLower(lemcEnv)
-	notProd := envLower == "development" || envLower == "dev" || envLower == "test"
+func SeedDatabase(db *sqlx.DB) {
+	log.Println("🌱 Seeding database...")
+	totalUsers := accAlphaUsers + accBravoUsers
+	totalCookbooks := accAlphaCookbooks + accBravoCookbooks
+	totalapps := accAlphaapps + accBravoapps
+	log.Printf("   Target: 2 accounts, %d users, %d cookbooks, %d apps", totalUsers, totalCookbooks, totalapps)
 
-	if notProd {
-		log.Println("🌱 Development environment detected. Seeding database...")
-		totalUsers := accAlphaUsers + accBravoUsers
-		totalCookbooks := accAlphaCookbooks + accBravoCookbooks
-		totalapps := accAlphaapps + accBravoapps
-		log.Printf("   Target: 2 accounts, %d users, %d cookbooks, %d apps", totalUsers, totalCookbooks, totalapps)
-
-		accAlphaID, err := seedAccount(db, accAlphaName)
-		if err != nil {
-			log.Printf("🔥 Error seeding account '%s': %v. Halting seed.", accAlphaName, err)
-			return
-		}
-		if accAlphaID == 0 {
-			accAlphaID, err = getAccountIDByName(db, accAlphaName)
-			if err != nil {
-				log.Printf("🔥 Error fetching existing account ID for '%s': %v. Halting seed.", accAlphaName, err)
-				return
-			}
-		}
-		log.Printf("--- Seeding for Account Alpha (ID: %d) ---", accAlphaID)
-		alphaStaticUsers := []SeedUser{
-			{UsernameSuffix: "-viewer", EmailSuffix: "-viewer", IsAccountAdmin: false, appPermSpecs: []appPermissionSpec{
-				{appIndex: 0, CanShared: true, CanIndividual: true, CanAdmin: false, IsOwner: false}, // View only on app 0
-			}},
-			{UsernameSuffix: "-editor", EmailSuffix: "-editor", IsAccountAdmin: false, appPermSpecs: []appPermissionSpec{
-				{appIndex: 1, CanShared: true, CanIndividual: true, CanAdmin: true, IsOwner: false}, // Admin on app 2
-			}},
-			{UsernameSuffix: "-limited", EmailSuffix: "-limited", IsAccountAdmin: false, appPermSpecs: []appPermissionSpec{
-				{appIndex: 0, CanShared: false, CanIndividual: true, CanAdmin: false, IsOwner: false}, // Individual only on app 0
-			}},
-		}
-		seedDataForAccount(db, accAlphaID, accAlphaOwnerUser, accAlphaOwnerEmail, accAlphaAdmin2User, accAlphaAdmin2Email, "alpha", alphaStaticUsers, accAlphaCookbooks, accAlphaapps, true)
-
-		accBravoID, err := seedAccount(db, accBravoName)
-		if err != nil {
-			log.Printf("🔥 Error seeding account '%s': %v. Halting seed.", accBravoName, err)
-			return
-		}
-		if accBravoID == 0 {
-			accBravoID, err = getAccountIDByName(db, accBravoName)
-			if err != nil {
-				log.Printf("🔥 Error fetching existing account ID for '%s': %v. Halting seed.", accBravoName, err)
-				return
-			}
-		}
-		log.Printf("--- Seeding for Account Bravo (ID: %d) ---", accBravoID)
-		bravoStaticUsers := []SeedUser{
-			{UsernameSuffix: "-main", EmailSuffix: "-main", IsAccountAdmin: false, appPermSpecs: []appPermissionSpec{
-				{appIndex: 0, CanShared: true, CanIndividual: true, CanAdmin: true, IsOwner: false},  // Admin on app 0
-				{appIndex: 1, CanShared: true, CanIndividual: true, CanAdmin: false, IsOwner: false}, // View on app 1
-			}},
-			{UsernameSuffix: "-extra", EmailSuffix: "-extra", IsAccountAdmin: false, appPermSpecs: []appPermissionSpec{
-				{appIndex: 2, CanShared: true, CanIndividual: false, CanAdmin: false, IsOwner: false}, // Shared only on app 2
-			}},
-		}
-		seedDataForAccount(db, accBravoID, accBravoOwnerUser, accBravoOwnerEmail, accBravoAdmin2User, accBravoAdmin2Email, "bravo", bravoStaticUsers, accBravoCookbooks, accBravoapps, false)
-
-		log.Println("🌱 Database seeding complete.")
-
-		log.Println("--- Seeded Admin User Credentials ---")
-		log.Printf("  App Admin / Acc Alpha Owner: username='%s' password='%s'", accAlphaOwnerUser, seedPassword)
-		log.Printf("  Acc Alpha Admin 2:         username='%s' password='%s'", accAlphaAdmin2User, seedPassword)
-		log.Printf("  Acc Bravo Owner:           username='%s' password='%s'", accBravoOwnerUser, seedPassword)
-		log.Printf("  Acc Bravo Admin 2:         username='%s' password='%s'", accBravoAdmin2User, seedPassword)
-		log.Println("-------------------------------------")
+	accAlphaID, err := seedAccount(db, accAlphaName)
+	if err != nil {
+		log.Printf("🔥 Error seeding account '%s': %v. Halting seed.", accAlphaName, err)
+		return
 	}
+	if accAlphaID == 0 {
+		accAlphaID, err = getAccountIDByName(db, accAlphaName)
+		if err != nil {
+			log.Printf("🔥 Error fetching existing account ID for '%s': %v. Halting seed.", accAlphaName, err)
+			return
+		}
+	}
+	log.Printf("--- Seeding for Account Alpha (ID: %d) ---", accAlphaID)
+	alphaStaticUsers := []SeedUser{
+		{UsernameSuffix: "-viewer", EmailSuffix: "-viewer", IsAccountAdmin: false, appPermSpecs: []appPermissionSpec{
+			{appIndex: 0, CanShared: true, CanIndividual: true, CanAdmin: false, IsOwner: false}, // View only on app 0
+		}},
+		{UsernameSuffix: "-editor", EmailSuffix: "-editor", IsAccountAdmin: false, appPermSpecs: []appPermissionSpec{
+			{appIndex: 1, CanShared: true, CanIndividual: true, CanAdmin: true, IsOwner: false}, // Admin on app 2
+		}},
+		{UsernameSuffix: "-limited", EmailSuffix: "-limited", IsAccountAdmin: false, appPermSpecs: []appPermissionSpec{
+			{appIndex: 0, CanShared: false, CanIndividual: true, CanAdmin: false, IsOwner: false}, // Individual only on app 0
+		}},
+	}
+	seedDataForAccount(db, accAlphaID, accAlphaOwnerUser, accAlphaOwnerEmail, accAlphaAdmin2User, accAlphaAdmin2Email, "alpha", alphaStaticUsers, accAlphaCookbooks, accAlphaapps, true)
+
+	accBravoID, err := seedAccount(db, accBravoName)
+	if err != nil {
+		log.Printf("🔥 Error seeding account '%s': %v. Halting seed.", accBravoName, err)
+		return
+	}
+	if accBravoID == 0 {
+		accBravoID, err = getAccountIDByName(db, accBravoName)
+		if err != nil {
+			log.Printf("🔥 Error fetching existing account ID for '%s': %v. Halting seed.", accBravoName, err)
+			return
+		}
+	}
+	log.Printf("--- Seeding for Account Bravo (ID: %d) ---", accBravoID)
+	bravoStaticUsers := []SeedUser{
+		{UsernameSuffix: "-main", EmailSuffix: "-main", IsAccountAdmin: false, appPermSpecs: []appPermissionSpec{
+			{appIndex: 0, CanShared: true, CanIndividual: true, CanAdmin: true, IsOwner: false},  // Admin on app 0
+			{appIndex: 1, CanShared: true, CanIndividual: true, CanAdmin: false, IsOwner: false}, // View on app 1
+		}},
+		{UsernameSuffix: "-extra", EmailSuffix: "-extra", IsAccountAdmin: false, appPermSpecs: []appPermissionSpec{
+			{appIndex: 2, CanShared: true, CanIndividual: false, CanAdmin: false, IsOwner: false}, // Shared only on app 2
+		}},
+	}
+	seedDataForAccount(db, accBravoID, accBravoOwnerUser, accBravoOwnerEmail, accBravoAdmin2User, accBravoAdmin2Email, "bravo", bravoStaticUsers, accBravoCookbooks, accBravoapps, false)
+
+	log.Println("🌱 Database seeding complete.")
+
+	log.Println("--- Seeded Admin User Credentials ---")
+	log.Printf("  App Admin / Acc Alpha Owner: username='%s' password='%s'", accAlphaOwnerUser, seedPassword)
+	log.Printf("  Acc Alpha Admin 2:         username='%s' password='%s'", accAlphaAdmin2User, seedPassword)
+	log.Printf("  Acc Bravo Owner:           username='%s' password='%s'", accBravoOwnerUser, seedPassword)
+	log.Printf("  Acc Bravo Admin 2:         username='%s' password='%s'", accBravoAdmin2User, seedPassword)
+	log.Println("-------------------------------------")
 }
 
 func seedDataForAccount(db *sqlx.DB, accountID int64, ownerUser, ownerEmail, admin2User, admin2Email, prefix string, staticUsers []SeedUser, numCookbooks, numapps int, designateOwnerAsAppAdmin bool) {
