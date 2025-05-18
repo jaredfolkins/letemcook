@@ -126,14 +126,14 @@ func TestSuccessfulLogins(t *testing.T) {
 			username:    validUsername, // "alpha_owner"
 			password:    validPassword, // "asdfasdfasdf"
 			accountName: "Account Alpha",
-			squid:       "52wJ",
+			squid:       "xkQN",
 		},
 		{
 			testName:    "BravoOwnerLogin",
 			username:    "bravo_owner",
 			password:    validPassword, // Assuming same password "asdfasdfasdf"
 			accountName: "Account Bravo",
-			squid:       "vpOd",
+			squid:       "Xijg",
 		},
 	}
 
