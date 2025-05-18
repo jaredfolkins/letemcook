@@ -4694,7 +4694,8 @@ footer {
 
 /* Add subtle underline to active navigation links */
 
-.navbar a.active {
+.navbar a.active,
+.navbar .active {
   text-decoration: underline;
   text-underline-offset: 2px;
 }
