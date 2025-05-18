@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/jaredfolkins/letemcook/db"
@@ -21,6 +22,11 @@ func setupTestDB(t *testing.T) func() {
 	os.Setenv("LEMC_DATA", tmp)
 	os.Setenv("LEMC_ENV", "test")
 	os.Setenv("LEMC_SQUID_ALPHABET", "abcdefghijklmnopqrstuvwxyz0123456789")
+
+	// Ensure the environment-specific directory exists for the SQLite file
+	if err := os.MkdirAll(filepath.Join(tmp, "test"), 0o755); err != nil {
+		t.Fatalf("prepare db dir: %v", err)
+	}
 
 	mfs, err := embedded.GetMigrationsFS()
 	if err != nil {

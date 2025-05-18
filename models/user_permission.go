@@ -28,7 +28,7 @@ func UpdateUserAccountPermission(db *sql.DB, userID, accountID int64, permission
 		// Log and return an error if the permission name is not recognized.
 		errMsg := fmt.Sprintf("invalid permission name: %s", permissionName)
 		slog.Error(errMsg)
-		return fmt.Errorf(errMsg)
+		return fmt.Errorf("%s", errMsg)
 	}
 
 	// Convert boolean to integer for SQLite (assuming 1 for true, 0 for false)
