@@ -14,7 +14,7 @@ var embedAssets embed.FS
 
 const AssetsRoot = "assets"
 const MigrationsRoot = "migrations"
-const SeedRoot = "seed"
+const SeedRoot = "seeds"
 
 // GetAssetsFS returns a sub-filesystem rooted at the AssetsRoot directory
 // within the embedded assets.

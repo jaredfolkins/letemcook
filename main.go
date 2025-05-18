@@ -229,7 +229,9 @@ func init() {
 func main() {
 	var appLogWriter io.Writer = os.Stdout
 	var httpLogWriter io.Writer = os.Stdout
-	env := strings.ToLower(os.Getenv(LEMC_ENV))
+
+	env := strings.ToLower(os.Getenv("LEMC_ENV"))
+
 	if env == LEMC_ENV {
 		appFile, err := os.OpenFile(APP_LOG_FILE, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 		if err != nil {
@@ -334,6 +336,11 @@ func main() {
 
 	e.HTTPErrorHandler = handlers.CustomHTTPErrorHandler
 
+	dbConn := db.Db()
+	if dbConn == nil || dbConn.DB == nil {
+		log.Fatal("Database connection is nil")
+	}
+
 	migrationsFS, err := embedded.GetMigrationsFS()
 	if err != nil {
 		log.Fatalf("failed to get migrations filesystem: %v", err)
@@ -344,26 +351,23 @@ func main() {
 		panic(err)
 	}
 
-	dbConn := db.Db()
-	if dbConn == nil {
-		log.Fatal("Database connection is nil")
-	}
-	if dbConn.DB == nil {
-		log.Fatal("Database DB field is nil")
-	}
-
 	if err := goose.Up(dbConn.DB, "."); err != nil {
 		panic(fmt.Sprintf("goose up failed: %v", err))
 	}
 
-	seedFS, err := embedded.GetSeedFS()
-	if err != nil {
-		log.Fatalf("failed to get seed filesystem: %v", err)
-	}
-
 	if env == "development" || env == "dev" || env == "test" {
+		seedFS, err := embedded.GetSeedFS()
+		if err != nil {
+			log.Fatalf("failed to get seed filesystem: %v", err)
+		}
+
 		goose.SetBaseFS(seedFS)
-		if err := goose.Up(dbConn.DB, ".", goose.WithNoVersioning()); err != nil {
+		if err := goose.SetDialect("sqlite3"); err != nil {
+			panic(err)
+		}
+
+		err = goose.Up(dbConn.DB, ".", goose.WithNoVersioning())
+		if err != nil {
 			panic(fmt.Sprintf("goose seed up failed: %v", err))
 		}
 	}
