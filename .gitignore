@@ -10,3 +10,4 @@ tmp/*
 *_templ.go
 patch.sh
 coverage.out
+git-*.sh
