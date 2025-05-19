@@ -14,6 +14,7 @@ import (
 	"github.com/docker/docker/api/types/image"
 	"github.com/docker/docker/client"
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/tests/testutil"
 	"github.com/jaredfolkins/letemcook/util"
 	"github.com/joho/godotenv"
 	"github.com/reugn/go-quartz/quartz"
@@ -132,12 +133,9 @@ func setupRaceTest(t *testing.T) (string, func()) {
 	var err error
 
 	if _, err = os.Stat(queuesPath); os.IsNotExist(err) {
-		tmpDir, err = os.MkdirTemp("", "job-queue-test")
-		if err != nil {
-			t.Fatalf("Failed to create temp dir: %v", err)
-		}
-		t.Setenv("LEMC_DATA", tmpDir)
-		t.Setenv("LEMC_ENV", "test")
+		tmpDir = testutil.DataRoot()
+		os.Setenv("LEMC_ENV", "test")
+		os.Setenv("LEMC_DATA", tmpDir)
 		queuesPath = util.QueuesPath()
 		t.Logf("Created temp directory for queues: %s", queuesPath)
 		setupTestDirectories(t, queuesPath)
