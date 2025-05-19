@@ -14,6 +14,7 @@ import (
 
 	"github.com/jaredfolkins/letemcook/middleware"
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/tests/testutil"
 	"github.com/labstack/echo/v4"
 )
 
@@ -40,9 +41,8 @@ func writeJob(t *testing.T, dir, name string, info persistedJobInfo) {
 }
 
 func TestGetJobsRecursiveFiltering(t *testing.T) {
-	tmp := t.TempDir()
-	t.Setenv("LEMC_DATA", tmp)
-	t.Setenv("LEMC_ENV", "test")
+	os.Setenv("LEMC_ENV", "test")
+	os.Setenv("LEMC_DATA", testutil.DataRoot())
 
 	nowDir := filepath.Join(util.QueuesPath(), "now")
 	nestedDir := filepath.Join(nowDir, "nested")
@@ -79,9 +79,8 @@ func TestGetJobsRecursiveFiltering(t *testing.T) {
 }
 
 func TestGetJobsHandlerRendersJobs(t *testing.T) {
-	tmp := t.TempDir()
-	t.Setenv("LEMC_DATA", tmp)
-	t.Setenv("LEMC_ENV", "test")
+	os.Setenv("LEMC_ENV", "test")
+	os.Setenv("LEMC_DATA", testutil.DataRoot())
 
 	nowDir := filepath.Join(util.QueuesPath(), "now")
 	if err := os.MkdirAll(nowDir, 0o755); err != nil {

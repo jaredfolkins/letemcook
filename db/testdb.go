@@ -8,21 +8,25 @@ import (
 	"testing"
 
 	"github.com/jaredfolkins/letemcook/embedded"
+	"github.com/jaredfolkins/letemcook/tests/testutil"
 	"github.com/pressly/goose/v3"
 )
 
 // SetupTestDB initializes an isolated SQLite database for testing and returns a teardown function.
 func SetupTestDB(t *testing.T) func() {
 	t.Helper()
-	tmp := t.TempDir()
-	t.Setenv("LEMC_DATA", tmp)
-	t.Setenv("LEMC_ENV", "test")
-	t.Setenv("LEMC_SQUID_ALPHABET", "abcdefghijklmnopqrstuvwxyz0123456789")
+	os.Setenv("LEMC_ENV", "test")
+	os.Setenv("LEMC_SQUID_ALPHABET", "abcdefghijklmnopqrstuvwxyz0123456789")
 
-	// Ensure the environment-specific directory exists for the SQLite file.
-	if err := os.MkdirAll(filepath.Join(tmp, "test"), 0o755); err != nil {
+	dataRoot := testutil.DataRoot()
+	os.Setenv("LEMC_DATA", dataRoot)
+
+	envDir := filepath.Join(dataRoot, "test")
+	if err := os.MkdirAll(envDir, 0o755); err != nil {
 		t.Fatalf("prepare db dir: %v", err)
 	}
+
+	os.Remove(filepath.Join(envDir, "lemc_test.sqlite3"))
 
 	mfs, err := embedded.GetMigrationsFS()
 	if err != nil {
