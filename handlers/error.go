@@ -38,7 +38,7 @@ func CustomHTTPErrorHandler(err error, c echo.Context) {
 
 	c.Response().WriteHeader(code)
 	if errorPage != nil {
-		HTML(c, errorPage(models.BaseView{ActiveNav: ""}))
+		HTML(c, errorPage(models.BaseView{ActiveNav: "", ActiveSubNav: ""}))
 	} else {
 		c.Logger().Errorf("Error page handler is nil for code %d", code)
 		_ = c.String(code, http.StatusText(code))

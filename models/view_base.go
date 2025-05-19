@@ -18,6 +18,7 @@ type BaseView struct {
 	ShowAccountNav      bool
 	ShowSystemNav       bool
 	ActiveNav           string
+	ActiveSubNav        string
 }
 
 type HomeView struct {
