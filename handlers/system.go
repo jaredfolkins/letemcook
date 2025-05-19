@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/views/pages"
 )
 
@@ -15,6 +16,7 @@ func getSystemView(c LemcContext) models.SystemView {
 
 func GetSystemSettingsHandler(c LemcContext) error {
 	v := getSystemView(c)
+	v.BaseView.ActiveSubNav = paths.SystemSettings
 	cmp := pages.SystemSettings(v)
 	if strings.ToLower(c.QueryParam("partial")) == "true" {
 		return HTML(c, cmp)
@@ -24,6 +26,7 @@ func GetSystemSettingsHandler(c LemcContext) error {
 
 func GetSystemAccountsHandler(c LemcContext) error {
 	v := getSystemView(c)
+	v.BaseView.ActiveSubNav = paths.SystemAccounts
 	cmp := pages.SystemAccounts(v)
 	if strings.ToLower(c.QueryParam("partial")) == "true" {
 		return HTML(c, cmp)
@@ -33,6 +36,7 @@ func GetSystemAccountsHandler(c LemcContext) error {
 
 func GetSystemImagesHandler(c LemcContext) error {
 	v := getSystemView(c)
+	v.BaseView.ActiveSubNav = paths.SystemImages
 	cmp := pages.SystemImages(v)
 	if strings.ToLower(c.QueryParam("partial")) == "true" {
 		return HTML(c, cmp)
@@ -42,6 +46,7 @@ func GetSystemImagesHandler(c LemcContext) error {
 
 func GetSystemJobsHandler(c LemcContext) error {
 	v := getSystemView(c)
+	v.BaseView.ActiveSubNav = paths.SystemJobs
 	cmp := pages.SystemJobs(v)
 	if strings.ToLower(c.QueryParam("partial")) == "true" {
 		return HTML(c, cmp)
