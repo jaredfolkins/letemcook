@@ -4,32 +4,8 @@ import (
 	"testing"
 
 	"github.com/jaredfolkins/letemcook/db"
-	"github.com/jaredfolkins/letemcook/embedded"
-	"github.com/pressly/goose/v3"
 	"golang.org/x/crypto/bcrypt"
 )
-
-func setupTestDB(t *testing.T) func() {
-	t.Helper()
-	tmp := t.TempDir()
-	t.Setenv("LEMC_DATA", tmp)
-	t.Setenv("LEMC_ENV", "test")
-	t.Setenv("LEMC_SQUID_ALPHABET", "abcdefghijklmnopqrstuvwxyz0123456789")
-
-	mfs, err := embedded.GetMigrationsFS()
-	if err != nil {
-		t.Fatalf("migrations fs: %v", err)
-	}
-	goose.SetBaseFS(mfs)
-	if err := goose.SetDialect("sqlite3"); err != nil {
-		t.Fatalf("set dialect: %v", err)
-	}
-	dbc := db.Db()
-	if err := goose.Up(dbc.DB, "."); err != nil {
-		t.Fatalf("migrate: %v", err)
-	}
-	return func() { dbc.Close() }
-}
 
 func createAccountAndUsers(t *testing.T) (*Account, *User, *User) {
 	dbc := db.Db()
@@ -89,7 +65,7 @@ func createCookbookAndApp(t *testing.T, acc *Account, owner *User) (*Cookbook, *
 }
 
 func TestSearchFunctions(t *testing.T) {
-	teardown := setupTestDB(t)
+	teardown := db.SetupTestDB(t)
 	defer teardown()
 
 	acc, u1, u2 := createAccountAndUsers(t)

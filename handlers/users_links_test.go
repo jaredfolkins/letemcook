@@ -7,13 +7,14 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/jaredfolkins/letemcook/db"
 	"github.com/jaredfolkins/letemcook/middleware"
 	"github.com/jaredfolkins/letemcook/models"
 	"github.com/labstack/echo/v4"
 )
 
 func TestUsersPageLinks(t *testing.T) {
-	teardown := setupTestDB(t)
+	teardown := db.SetupTestDB(t)
 	defer teardown()
 	_, user := createUser(t)
 
