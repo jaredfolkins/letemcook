@@ -146,6 +146,7 @@ func PostLoginHandler(c LemcContext) error {
 		CacheBuster:  c.CacheBuster(), // Get cache buster from context
 		UserContext:  userCtx,         // Use the manually created UserContext
 		ActiveNav:    "",
+		ActiveSubNav: "",
 		// TODO: Potentially set IsDev, RegistrationEnabled, nav flags if needed immediately
 	}
 
