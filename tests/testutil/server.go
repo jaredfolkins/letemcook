@@ -3,6 +3,7 @@ package testutil
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -42,8 +43,12 @@ func StartTestServer() (func(), error) {
 		return nil, fmt.Errorf("start server: %w", err)
 	}
 
-	// allow server to start
-	time.Sleep(10 * time.Second)
+	if err := waitForServerReady(os.Getenv("LEMC_PORT_TEST"), 10*time.Second); err != nil {
+		cancel()
+		_ = cmd.Process.Kill()
+		cmd.Wait()
+		return nil, err
+	}
 
 	shutdown := func() {
 		cancel()
@@ -52,4 +57,19 @@ func StartTestServer() (func(), error) {
 	}
 
 	return shutdown, nil
+}
+
+// waitForServerReady polls the server until it responds or the timeout is reached.
+func waitForServerReady(port string, timeout time.Duration) error {
+	baseURL := "http://localhost:" + port
+	deadline := time.Now().Add(timeout)
+	for time.Now().Before(deadline) {
+		resp, err := http.Get(baseURL + "/")
+		if err == nil {
+			resp.Body.Close()
+			return nil
+		}
+		time.Sleep(100 * time.Millisecond)
+	}
+	return fmt.Errorf("server not ready after %v", timeout)
 }
