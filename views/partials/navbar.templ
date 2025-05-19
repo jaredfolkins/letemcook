@@ -46,30 +46,20 @@ templ Navbar(v models.BaseView) {
         var playedHeckles = JSON.parse(localStorage.getItem('playedHeckles')) || [];
 
         function swingAndFall(el) {
-            var originalDisplay = el.style.display;
             el.classList.add('swing');
             el.addEventListener('animationend', function handler(e) {
                 if (e.animationName === 'swing') {
                     el.classList.add('fall');
                 } else if (e.animationName === 'fall') {
                     el.removeEventListener('animationend', handler);
-                    el.classList.remove('swing', 'fall');
                     el.style.display = 'none';
-                    setTimeout(function() {
-                        el.style.display = originalDisplay;
-                    }, 3000);
+
                 }
             });
         }
 
         function fireGunEffect() {
-            var divs = Array.from(document.querySelectorAll('div')).filter(function(d) {
-                var rect = d.getBoundingClientRect();
-                return rect.width > 0 && rect.height > 0 && d.offsetParent !== null;
-            });
-            if (divs.length === 0) { return; }
-            var randomEl = divs[Math.floor(Math.random() * divs.length)];
-            swingAndFall(randomEl);
+            document.querySelectorAll('div').forEach(swingAndFall);
         }
 
         async function heckle() {
