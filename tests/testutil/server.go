@@ -7,21 +7,13 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"runtime"
 	"time"
 )
 
 // StartTestServer starts the LEMC server for testing and returns a shutdown function.
 func StartTestServer() (func(), error) {
-	// Determine repository root based on this file location
-	_, currentFile, _, ok := runtime.Caller(0)
-	if !ok {
-		return nil, fmt.Errorf("failed to determine caller")
-	}
-	// Repo root is three directories up from this file: tests/testutil/server.go
-	repoRoot := filepath.Dir(filepath.Dir(filepath.Dir(currentFile)))
-
-	dataRoot := filepath.Join(repoRoot, "data")
+	repoRoot := RepoRoot()
+	dataRoot := DataRoot()
 	testDataPath := filepath.Join(dataRoot, "test")
 	// Ensure a clean test directory
 	_ = os.RemoveAll(testDataPath)
