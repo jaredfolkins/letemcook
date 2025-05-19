@@ -10,6 +10,7 @@ import (
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/util"
 	"github.com/jaredfolkins/letemcook/views/pages"
 	"github.com/labstack/echo-contrib/session"
@@ -156,7 +157,7 @@ func PostLoginHandler(c LemcContext) error {
 		Limit:       limit,
 	}
 
-	c.Response().Header().Set("HX-Replace-Url", "/lemc/apps")
+	c.Response().Header().Set("HX-Replace-Url", paths.Apps)
 	c.AddSuccessFlash("login", "Login successful.")
 
 	cv := pages.Apps(v)

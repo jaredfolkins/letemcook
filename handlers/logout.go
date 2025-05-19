@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/util"
 	"github.com/jaredfolkins/letemcook/views/pages"
 	"github.com/labstack/echo-contrib/session"
@@ -41,7 +42,7 @@ func PostLogoutHandler(c LemcContext) error {
 		BaseView: NewBaseViewWithSquidAndAccountName(c, newSquid, newName),
 	}
 
-	c.Response().Header().Set("HX-Replace-Url", fmt.Sprintf("/lemc/login?squid=%s&account=%s", newSquid, newName))
+	c.Response().Header().Set("HX-Replace-Url", fmt.Sprintf("%s?squid=%s&account=%s", paths.Login, newSquid, newName))
 	loginPage := pages.Login(loginView)
 	return HTML(c, loginPage)
 }

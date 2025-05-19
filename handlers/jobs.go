@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/util"
 	"github.com/jaredfolkins/letemcook/views/pages"
 	"github.com/labstack/echo/v4"
@@ -112,7 +113,7 @@ func getJobs(page, limit int, c LemcContext) ([]models.JobInfo, int, error) { //
 func GetJobs(c LemcContext) error { // Changed context type to LemcContext
 	userCtx := c.UserContext()                       // Use context method
 	if userCtx == nil || userCtx.LoggedInAs == nil { // Changed User to LoggedInAs
-		return c.Redirect(http.StatusFound, "/lemc/login")
+		return c.Redirect(http.StatusFound, paths.Login)
 	}
 
 	pageParam := c.QueryParam("page")

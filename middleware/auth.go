@@ -11,6 +11,7 @@ import (
 
 	"github.com/jaredfolkins/letemcook/db"
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/util"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
@@ -40,7 +41,7 @@ func Before(next echo.HandlerFunc) echo.HandlerFunc {
 				log.Printf("Error getting squid/name for default account ID 1: %v. Redirecting to setup.", err)
 				return c.Redirect(http.StatusFound, "/setup") // Redirect to setup if default account lookup fails
 			}
-			loginURL := fmt.Sprintf("/lemc/login?squid=%s&account=%s", squid, name)
+			loginURL := fmt.Sprintf("%s?squid=%s&account=%s", paths.Login, squid, name)
 			log.Printf("Redirecting to default login: %s", loginURL)
 			return c.Redirect(http.StatusFound, loginURL)
 		}
@@ -166,7 +167,7 @@ func RedirIfAuthd(next echo.HandlerFunc) echo.HandlerFunc {
 			cc = ctxImpl
 		}
 		if cc.UserContext().LoggedInAs != nil {
-			return cc.Redirect(http.StatusTemporaryRedirect, "/lemc/apps")
+			return cc.Redirect(http.StatusTemporaryRedirect, paths.Apps)
 		}
 		return next(c)
 	}
