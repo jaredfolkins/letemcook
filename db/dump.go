@@ -33,9 +33,7 @@ func DumpDatabaseState(db *sqlx.DB) (map[string]interface{}, error) {
 			dataDump[table.Name] = nil                                                    // Indicate error for this table
 			continue
 		}
-		defer rowsQuery.Close()
-
-		for rowsQuery.Next() {
+               for rowsQuery.Next() {
 			row := make(map[string]interface{})
 			if err := rowsQuery.MapScan(row); err != nil {
 				log.Printf("Warning: Failed to scan row from table %s for dump: %v", table.Name, err) // Log warning
@@ -49,11 +47,15 @@ func DumpDatabaseState(db *sqlx.DB) (map[string]interface{}, error) {
 			rows = append(rows, row)
 		}
 
-		if err := rowsQuery.Err(); err != nil {
-			log.Printf("Warning: Error during row iteration for table %s: %v", table.Name, err)
-		}
+               if err := rowsQuery.Err(); err != nil {
+                       log.Printf("Warning: Error during row iteration for table %s: %v", table.Name, err)
+               }
 
-		dataDump[table.Name] = rows
+               if err := rowsQuery.Close(); err != nil {
+                       log.Printf("Warning: failed to close query for table %s: %v", table.Name, err)
+               }
+
+               dataDump[table.Name] = rows
 	}
 
 	dump["schema"] = schemaDump
