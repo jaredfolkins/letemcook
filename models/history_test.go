@@ -14,7 +14,7 @@ import (
 
 var historyTestDB *sqlx.DB
 
-func setupHistoryTests(m *testing.M) int {
+func TestMain(m *testing.M) {
 	dataRoot := testutil.DataRoot()
 	os.Setenv("LEMC_ENV", "test")
 	os.Setenv("LEMC_DATA", dataRoot)
@@ -35,10 +35,26 @@ func setupHistoryTests(m *testing.M) int {
 		panic(err)
 	}
 
+	// Insert prerequisite data for foreign key constraints
+	if _, err := historyTestDB.Exec("INSERT INTO accounts (id, squid, name) VALUES (1, 'testsquid', 'test-account')"); err != nil {
+		panic("insert account: " + err.Error())
+	}
+	if _, err := historyTestDB.Exec("INSERT INTO users (id, username, email, hash) VALUES (1, 'testuser', 'user@example.com', 'hash')"); err != nil {
+		panic("insert user: " + err.Error())
+	}
+	// Note: is_published and is_deleted default to false. api_key is NOT NULL.
+	if _, err := historyTestDB.Exec("INSERT INTO cookbooks (id, account_id, owner_id, uuid, name, description, yaml_shared, yaml_individual, api_key) VALUES (1, 1, 1, 'cookbook-uuid1', 'test-cookbook', '', '', '', 'testapikey1')"); err != nil {
+		panic("insert cookbook: " + err.Error())
+	}
+	// Note: is_active and is_deleted default to false. api_key is NOT NULL.
+	if _, err := historyTestDB.Exec("INSERT INTO apps (id, account_id, owner_id, cookbook_id, uuid, name, description, yaml_shared, yaml_individual, api_key) VALUES (2, 1, 1, 1, 'app-uuid2', 'test-app', '', '', '', 'testapikey2')"); err != nil {
+		panic("insert app: " + err.Error())
+	}
+
 	code := m.Run()
 
 	historyTestDB.Close()
-	return code
+	os.Exit(code)
 }
 
 func TestTotalHistory(t *testing.T) {
