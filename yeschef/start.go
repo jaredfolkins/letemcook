@@ -62,6 +62,18 @@ func Start() {
 	everyJq := NewQuartzQueue(EVERY_QUEUE)
 	everyScheduler := NewQuartzScheduler(everyJq)
 
+	// Recover any jobs that were persisted to disk before a crash or
+	// shutdown. Errors are logged but do not stop startup.
+	if err := nowJq.Recover(nowScheduler); err != nil {
+		log.Printf("recover now queue: %v", err)
+	}
+	if err := inJq.Recover(inScheduler); err != nil {
+		log.Printf("recover in queue: %v", err)
+	}
+	if err := everyJq.Recover(everyScheduler); err != nil {
+		log.Printf("recover every queue: %v", err)
+	}
+
 	XoxoX = &ChefsKiss{
 		mu:             sync.RWMutex{},
 		apps:           make(map[int64]*CmdServer),

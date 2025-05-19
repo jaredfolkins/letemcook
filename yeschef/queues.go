@@ -60,6 +60,56 @@ type jobQueue struct {
 	Name string
 }
 
+// Recover scans the queue directory for previously persisted jobs and
+// schedules them with the provided scheduler. This allows the system to
+// restore jobs after an unexpected shutdown or crash.
+func (jq *jobQueue) Recover(s *quartz.StdScheduler) error {
+	jq.mu.Lock()
+	defer jq.mu.Unlock()
+
+	files, err := os.ReadDir(jq.Path)
+	if err != nil {
+		return err
+	}
+
+	for _, file := range files {
+		if file.IsDir() {
+			continue
+		}
+
+		path := filepath.Join(jq.Path, file.Name())
+		data, err := os.ReadFile(path)
+		if err != nil {
+			logger.Errorf("Recover read job: %v", err)
+			continue
+		}
+
+		var job quartz.ScheduledJob
+		switch jq.Name {
+		case NOW_QUEUE:
+			job, err = unmarshalRecipeJob(data)
+		case IN_QUEUE:
+			job, err = unmarshalInStepJob(data)
+		case EVERY_QUEUE:
+			job, err = unmarshalEveryStepJob(data)
+		}
+		if err != nil {
+			logger.Errorf("Recover unmarshal job: %v", err)
+			continue
+		}
+
+		if err := os.Remove(path); err != nil {
+			logger.Errorf("Recover remove job file: %v", err)
+		}
+
+		if err := s.ScheduleJob(job.JobDetail(), job.Trigger()); err != nil {
+			logger.Errorf("Recover schedule job: %v", err)
+		}
+	}
+
+	return nil
+}
+
 var _ quartz.JobQueue = (*jobQueue)(nil)
 
 func NewQuartzQueue(name string) *jobQueue {
