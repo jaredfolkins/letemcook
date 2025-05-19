@@ -1,6 +1,7 @@
 package main_test
 
 import (
+	"flag"
 	"os"
 	"testing"
 
@@ -8,6 +9,7 @@ import (
 )
 
 func TestMain(m *testing.M) {
+	flag.Parse()
 	if testing.Short() {
 		os.Exit(m.Run())
 	}
