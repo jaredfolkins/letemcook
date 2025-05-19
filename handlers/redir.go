@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/util"
 )
 
@@ -13,7 +14,7 @@ func redirLoginHandler(c LemcContext) error {
 		return c.Redirect(http.StatusTemporaryRedirect, "/setup")
 	}
 
-	redir := fmt.Sprintf("/lemc/login?squid=%s&account=%s", id, name)
+	redir := fmt.Sprintf("%s?squid=%s&account=%s", paths.Login, id, name)
 	return c.Redirect(http.StatusTemporaryRedirect, redir)
 }
 
@@ -22,6 +23,6 @@ func redirRegisterHandler(c LemcContext) error {
 	if err != nil {
 		return err
 	}
-	redir := fmt.Sprintf("/lemc/register?squid=%s&account=%s", id, name)
+	redir := fmt.Sprintf("%s?squid=%s&account=%s", paths.Register, id, name)
 	return c.Redirect(http.StatusTemporaryRedirect, redir)
 }

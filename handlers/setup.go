@@ -11,6 +11,7 @@ import (
 	"github.com/go-ozzo/ozzo-validation/v4/is"
 	"github.com/jaredfolkins/letemcook/db"
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/util"
 	"github.com/jaredfolkins/letemcook/views/pages"
 	"golang.org/x/crypto/bcrypt"
@@ -115,7 +116,7 @@ func PostSetupHandler(c LemcContext) error {
 		return c.String(http.StatusNotFound, "Can't create Squid")
 	}
 
-	c.Response().Header().Set("HX-Replace-Url", fmt.Sprintf("/lemc/login?squid=%s&account=%s", newSquid, newName))
+	c.Response().Header().Set("HX-Replace-Url", fmt.Sprintf("%s?squid=%s&account=%s", paths.Login, newSquid, newName))
 	lv := models.LoginView{BaseView: NewBaseViewWithSquidAndAccountName(c, newSquid, newName)}
 	c.AddSuccessFlash("setup", "You're all setup and ready to cook!")
 	loginView := pages.Login(lv)

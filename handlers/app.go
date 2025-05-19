@@ -13,6 +13,7 @@ import (
 
 	"github.com/jaredfolkins/letemcook/db"
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/util"
 	"github.com/jaredfolkins/letemcook/views/pages"
 	"gopkg.in/yaml.v3"
@@ -380,7 +381,7 @@ func PostAppCreate(c LemcContext) error {
 	c.AddSuccessFlash("apps-create", "new app created") // Fixed typo
 	cv := pages.AppsList(v)
 
-	pushedURL := fmt.Sprintf("/lemc/apps?page=1&limit=%d", limit) // Use the same limit
+	pushedURL := fmt.Sprintf("%s?page=1&limit=%d", paths.Apps, limit) // Use the same limit
 	c.Response().Header().Set("HX-Trigger", "closeNewappModal")
 	c.Response().Header().Set("HX-Push-Url", pushedURL)
 

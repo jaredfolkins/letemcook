@@ -13,6 +13,7 @@ import (
 	"github.com/a-h/templ"
 	"github.com/jaredfolkins/letemcook/db"
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/util"
 	"github.com/jaredfolkins/letemcook/views/pages"
 )
@@ -125,7 +126,7 @@ func PostAccountSettingsHandler(c LemcContext) error {
 	if err != nil && err != sql.ErrNoRows {                                             // Use sql.ErrNoRows
 		log.Printf("Error fetching settings before update for account %d: %v", accountID, err)
 		c.AddErrorFlash("settings-update", "Failed to load existing settings before update.")
-		return c.Redirect(http.StatusSeeOther, "/lemc/account/settings") // Redirect back
+		return c.Redirect(http.StatusSeeOther, paths.AccountSettings) // Redirect back
 	}
 
 	if currentSettings == nil {
@@ -142,7 +143,7 @@ func PostAccountSettingsHandler(c LemcContext) error {
 	if err != nil {
 		log.Printf("Error upserting account settings for account %d: %v", accountID, err)
 		c.AddErrorFlash("settings-update", "Failed to save settings.")
-		return c.Redirect(http.StatusSeeOther, "/lemc/account/settings") // Redirect back
+		return c.Redirect(http.StatusSeeOther, paths.AccountSettings) // Redirect back
 	}
 
 	log.Printf("Successfully updated settings for account %d", accountID)
