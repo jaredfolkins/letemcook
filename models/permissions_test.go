@@ -2,10 +2,12 @@ package models
 
 import (
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/jaredfolkins/letemcook/db"
 	"github.com/jaredfolkins/letemcook/embedded"
+	"github.com/jaredfolkins/letemcook/tests/testutil"
 	"github.com/jmoiron/sqlx"
 	"github.com/pressly/goose/v3"
 	"golang.org/x/crypto/bcrypt"
@@ -22,12 +24,11 @@ var (
 )
 
 func setupPermissionTests(m *testing.M) {
-	tmpDir, err := os.MkdirTemp("", "lemc_testdb")
-	if err != nil {
-		panic(err)
-	}
+	dataRoot := testutil.DataRoot()
 	os.Setenv("LEMC_ENV", "test")
-	os.Setenv("LEMC_DATA", tmpDir)
+	os.Setenv("LEMC_DATA", dataRoot)
+	envDir := filepath.Join(dataRoot, "test")
+	os.Remove(filepath.Join(envDir, "lemc_test.sqlite3"))
 
 	migrationsFS, err := embedded.GetMigrationsFS()
 	if err != nil {
@@ -49,7 +50,6 @@ func setupPermissionTests(m *testing.M) {
 	code := m.Run()
 
 	testDB.Close()
-	os.RemoveAll(tmpDir)
 	os.Exit(code)
 }
 

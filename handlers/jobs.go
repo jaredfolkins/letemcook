@@ -137,6 +137,7 @@ func GetJobs(c LemcContext) error { // Changed context type to LemcContext
 	baseView := NewBaseView(c) // Use the helper to create BaseView
 	baseView.Title = "Jobs"
 	baseView.ActiveNav = "account"
+	baseView.ActiveSubNav = paths.AccountJobs
 
 	viewData := models.JobsView{
 		BaseView:    baseView, // Assign the prepared BaseView

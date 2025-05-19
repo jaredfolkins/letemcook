@@ -103,6 +103,7 @@ func partialAccountSettingsHandler(c LemcContext) (models.AccountSettingsView, t
 
 	baseView := NewBaseViewWithSquidAndAccountName(c, user.Account.Squid, user.Account.Name)
 	baseView.ActiveNav = "account"
+	baseView.ActiveSubNav = paths.AccountSettings
 	viewData := models.AccountSettingsView{
 		BaseView:        baseView,
 		Settings:        settings,
