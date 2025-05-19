@@ -2,10 +2,12 @@ package models
 
 import (
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/jaredfolkins/letemcook/db"
 	"github.com/jaredfolkins/letemcook/embedded"
+	"github.com/jaredfolkins/letemcook/tests/testutil"
 	"github.com/jmoiron/sqlx"
 	"github.com/pressly/goose/v3"
 )
@@ -13,12 +15,11 @@ import (
 var historyTestDB *sqlx.DB
 
 func setupHistoryTests(m *testing.M) int {
-	tmpDir, err := os.MkdirTemp("", "lemc_historytest")
-	if err != nil {
-		panic(err)
-	}
+	dataRoot := testutil.DataRoot()
 	os.Setenv("LEMC_ENV", "test")
-	os.Setenv("LEMC_DATA", tmpDir)
+	os.Setenv("LEMC_DATA", dataRoot)
+	envDir := filepath.Join(dataRoot, "test")
+	os.Remove(filepath.Join(envDir, "lemc_test.sqlite3"))
 
 	migrationsFS, err := embedded.GetMigrationsFS()
 	if err != nil {
@@ -37,7 +38,6 @@ func setupHistoryTests(m *testing.M) int {
 	code := m.Run()
 
 	historyTestDB.Close()
-	os.RemoveAll(tmpDir)
 	return code
 }
 
