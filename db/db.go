@@ -1,14 +1,14 @@
 package db
 
 import (
-        "log"
-        "os"
-        "path/filepath"
-        "time"
+	"log"
+	"os"
+	"path/filepath"
+	"time"
 
-        "github.com/jmoiron/sqlx"
+	"github.com/jmoiron/sqlx"
 
-        _ "github.com/mattn/go-sqlite3"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 var db *sqlx.DB
@@ -25,7 +25,17 @@ func Db() *sqlx.DB {
 		return db
 	}
 
-	db, err = sqlx.Open("sqlite3", dbName())
+	name := dbName()
+	// Ensure the directory for the SQLite database exists. Without this
+	// `sqlx.Open` will succeed but the first query will fail with
+	// "unable to open database file" if the parent directory does not
+	// exist.
+	if err = os.MkdirAll(filepath.Dir(name), 0o755); err != nil {
+		log.Fatalf("\U0001F525 failed to prepare database directory: %s", err)
+		return nil
+	}
+
+	db, err = sqlx.Open("sqlite3", name)
 	if err != nil {
 		log.Fatalf("🔥 failed to connect to the database: %s", err)
 		return nil
@@ -47,27 +57,27 @@ func Db() *sqlx.DB {
 }
 
 func dbName() string {
-        env := os.Getenv("LEMC_ENV")
-        path := dataPath()
-        switch env {
-        case "dev", "development":
-                return filepath.Join(path, devDb)
-        case "test":
-                return filepath.Join(path, testDb)
-        }
-        return filepath.Join(path, prodDb)
+	env := os.Getenv("LEMC_ENV")
+	path := dataPath()
+	switch env {
+	case "dev", "development":
+		return filepath.Join(path, devDb)
+	case "test":
+		return filepath.Join(path, testDb)
+	}
+	return filepath.Join(path, prodDb)
 }
 
 // dataPath replicates util.DataPath locally to avoid an import cycle.
 // It builds the environment specific data directory location.
 func dataPath() string {
-        base := os.Getenv("LEMC_DATA")
-        if base == "" {
-                base = "./data"
-        }
-        env := os.Getenv("LEMC_ENV")
-        if env == "" {
-                env = "development"
-        }
-        return filepath.Join(base, env)
+	base := os.Getenv("LEMC_DATA")
+	if base == "" {
+		base = "./data"
+	}
+	env := os.Getenv("LEMC_ENV")
+	if env == "" {
+		env = "development"
+	}
+	return filepath.Join(base, env)
 }
