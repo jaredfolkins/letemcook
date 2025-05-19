@@ -14,6 +14,7 @@ import (
 
 	"github.com/jaredfolkins/letemcook/db"
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/util"
 	"github.com/jaredfolkins/letemcook/views/pages"
 	"github.com/jaredfolkins/letemcook/views/partials"
@@ -131,7 +132,7 @@ func PostCookbookCreate(c LemcContext) error {
 
 	c.Response().Header().Set("HX-Trigger", "closeNewCookbookModal")
 
-	pushedURL := fmt.Sprintf("/lemc/cookbooks?page=1&limit=%d", limit)
+	pushedURL := fmt.Sprintf("%s?page=1&limit=%d", paths.Cookbooks, limit)
 	c.Response().Header().Set("HX-Push-Url", pushedURL)
 
 	return HTML(c, cv)

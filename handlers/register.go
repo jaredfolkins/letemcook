@@ -8,6 +8,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/jaredfolkins/letemcook/db"
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/util"
 	"github.com/jaredfolkins/letemcook/views/pages"
 	"golang.org/x/crypto/bcrypt"
@@ -34,7 +35,7 @@ func RegisterHandler(c LemcContext) error {
 	// Check if registration is enabled
 	if !bv.RegistrationEnabled {
 		c.AddErrorFlash("registration_disabled", "User registration is currently disabled for this account.")
-		loginRedirectURL := fmt.Sprintf("/lemc/login?squid=%s&account=%s", newsquid, name)
+		loginRedirectURL := fmt.Sprintf("%s?squid=%s&account=%s", paths.Login, newsquid, name)
 		// Redirect immediately, no need to prepare RegisterView
 		return c.Redirect(http.StatusSeeOther, loginRedirectURL)
 	}
@@ -152,7 +153,7 @@ func PostRegisterHandler(c LemcContext) error {
 		log.Printf("Error fetching newly created user %s for account %d after successful registration: %v", user.Username, account.ID, err)
 	}
 
-	c.Response().Header().Set("HX-Replace-Url", fmt.Sprintf("/lemc/login?squid=%s&account=%s", newSquid, newName))
+	c.Response().Header().Set("HX-Replace-Url", fmt.Sprintf("%s?squid=%s&account=%s", paths.Login, newSquid, newName))
 	lv := models.LoginView{BaseView: NewBaseViewWithSquidAndAccountName(c, newSquid, newName)}
 	c.AddSuccessFlash("register", "Your account has been created")
 	loginView := pages.Login(lv)

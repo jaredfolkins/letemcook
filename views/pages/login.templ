@@ -1,9 +1,10 @@
 package pages
 
 import (
-	"fmt"
-	"github.com/jaredfolkins/letemcook/models"
-	"github.com/jaredfolkins/letemcook/views/layout"
+        "fmt"
+        "github.com/jaredfolkins/letemcook/models"
+       "github.com/jaredfolkins/letemcook/paths"
+        "github.com/jaredfolkins/letemcook/views/layout"
 )
 
 templ Login(v models.LoginView) {
@@ -13,7 +14,7 @@ templ Login(v models.LoginView) {
 				Login
 			</h1>
 			<form
-				hx-post={ string(fmt.Sprintf("/lemc/login?squid=%s&account=%s", v.BaseView.AccountSquid, v.BaseView.AccountName)) }
+                               hx-post={ string(fmt.Sprintf("%s?squid=%s&account=%s", paths.Login, v.BaseView.AccountSquid, v.BaseView.AccountName)) }
 				hx-target="#app"
 				hx-swap="innerHTML"
 				class="drop-shadow-xl flex flex-col gap-4 p-12 rounded-none"

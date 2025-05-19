@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/util"
 	"github.com/jaredfolkins/letemcook/views/partials"
 	"github.com/jaredfolkins/letemcook/yeschef"
@@ -164,7 +165,7 @@ func PutCookbookJob(c LemcContext) error {
 		}
 		recipientUserIDs = []int64{originatingUserID}
 		isShared = false
-		http_file_download = fmt.Sprintf("/lemc/locker/uuid/%s/page/%d/scope/%s/filename/", cb.UUID, pagei, SCOPE_YAML_TYPE_INDIVIDUAL)
+		http_file_download = fmt.Sprintf(paths.LockerDownloadPattern, cb.UUID, pagei, SCOPE_YAML_TYPE_INDIVIDUAL)
 	case SCOPE_YAML_TYPE_SHARED:
 		scope = SCOPE_YAML_TYPE_SHARED
 		err = yaml.Unmarshal([]byte(cb.YamlShared), &yaml_default)
@@ -180,7 +181,7 @@ func PutCookbookJob(c LemcContext) error {
 			return c.NoContent(http.StatusInternalServerError)
 		}
 		recipientUserIDs = ids
-		http_file_download = fmt.Sprintf("/lemc/locker/uuid/%s/page/%d/scope/%s/filename/", cb.UUID, pagei, SCOPE_YAML_TYPE_SHARED)
+		http_file_download = fmt.Sprintf(paths.LockerDownloadPattern, cb.UUID, pagei, SCOPE_YAML_TYPE_SHARED)
 	default:
 		c.AddErrorFlash("error", "view_type not found")
 		return c.NoContent(http.StatusConflict)
@@ -335,7 +336,7 @@ func PutAppJob(c LemcContext) error {
 		recipientUserIDs = []int64{originatingUserID}
 		isShared = false
 
-		http_file_download = fmt.Sprintf("/lemc/locker/uuid/%s/page/%d/scope/%s/filename/", CookbookPretendingToBeApp.UUID, pagei, SCOPE_YAML_TYPE_INDIVIDUAL)
+		http_file_download = fmt.Sprintf(paths.LockerDownloadPattern, CookbookPretendingToBeApp.UUID, pagei, SCOPE_YAML_TYPE_INDIVIDUAL)
 	case SCOPE_YAML_TYPE_SHARED:
 		scope = SCOPE_YAML_TYPE_SHARED
 		err = yaml.Unmarshal([]byte(CookbookPretendingToBeApp.YamlShared), &yaml_default)
@@ -351,7 +352,7 @@ func PutAppJob(c LemcContext) error {
 			return c.NoContent(http.StatusInternalServerError)
 		}
 		recipientUserIDs = ids
-		http_file_download = fmt.Sprintf("/lemc/locker/uuid/%s/page/%d/scope/%s/filename/", CookbookPretendingToBeApp.UUID, pagei, SCOPE_YAML_TYPE_SHARED)
+		http_file_download = fmt.Sprintf(paths.LockerDownloadPattern, CookbookPretendingToBeApp.UUID, pagei, SCOPE_YAML_TYPE_SHARED)
 	default:
 		c.AddErrorFlash("error", "view_type not found")
 		return c.NoContent(http.StatusConflict)

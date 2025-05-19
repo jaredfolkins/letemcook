@@ -22,6 +22,7 @@ import (
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/docker/client"
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/util"
 )
 
@@ -258,26 +259,26 @@ func NewHostConfig(cf *util.ContainerFiles, is_admin bool) *container.HostConfig
 	mounts = append(mounts, mount.Mount{
 		Type:   mount.TypeBind,
 		Source: cf.BindPerUserPublicDir,
-		Target: filepath.Join("/", "lemc", util.PUBLIC),
+		Target: filepath.Join("/", paths.LEMCDir, util.PUBLIC),
 	})
 
 	mounts = append(mounts, mount.Mount{
 		Type:   mount.TypeBind,
 		Source: cf.BindPerUserPrivateDir,
-		Target: filepath.Join("/", "lemc", util.PRIVATE),
+		Target: filepath.Join("/", paths.LEMCDir, util.PRIVATE),
 	})
 
 	mounts = append(mounts, mount.Mount{
 		Type:   mount.TypeBind,
 		Source: cf.BindGlobalDir,
-		Target: filepath.Join("/", "lemc", util.GLOBAL_DIR),
+		Target: filepath.Join("/", paths.LEMCDir, util.GLOBAL_DIR),
 	})
 
 	if is_admin {
 		mounts = append(mounts, mount.Mount{
 			Type:   mount.TypeBind,
 			Source: cf.BindSharedDir,
-			Target: "/lemc/shared",
+			Target: paths.SharedMount,
 		})
 	}
 

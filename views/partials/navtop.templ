@@ -1,8 +1,9 @@
 package partials
 
 import (
-	"fmt"
-	"github.com/jaredfolkins/letemcook/models"
+       "fmt"
+       "github.com/jaredfolkins/letemcook/models"
+       "github.com/jaredfolkins/letemcook/paths"
 )
 
 templ Navtop(v models.BaseView) {
@@ -24,8 +25,8 @@ templ Navtop(v models.BaseView) {
 			<a
 				hx-target="#app"
 				hx-swap="innerHTML transition:true"
-				hx-push-url={ string(fmt.Sprintf("/lemc/register?squid=%s&account=%s", v.AccountSquid, v.AccountName)) }
-				href={ templ.URL(fmt.Sprintf("/lemc/register?squid=%s&account=%s&partial=true", v.AccountSquid, v.AccountName)) }
+                               hx-push-url={ string(fmt.Sprintf("%s?squid=%s&account=%s", paths.Register, v.AccountSquid, v.AccountName)) }
+                               href={ templ.URL(fmt.Sprintf("%s?squid=%s&account=%s&partial=true", paths.Register, v.AccountSquid, v.AccountName)) }
 				class="btn btn-primary rounded-none text-lg m-1"
 			>
 				Register
@@ -34,8 +35,8 @@ templ Navtop(v models.BaseView) {
 		<a
 			hx-target="#app"
 			hx-swap="innerHTML transition:true"
-			hx-push-url={ string(fmt.Sprintf("/lemc/login?squid=%s&account=%s", v.AccountSquid, v.AccountName)) }
-			href={ templ.URL(fmt.Sprintf("/lemc/login?squid=%s&account=%s&partial=true", v.AccountSquid, v.AccountName)) }
+                       hx-push-url={ string(fmt.Sprintf("%s?squid=%s&account=%s", paths.Login, v.AccountSquid, v.AccountName)) }
+                       href={ templ.URL(fmt.Sprintf("%s?squid=%s&account=%s&partial=true", paths.Login, v.AccountSquid, v.AccountName)) }
 			class="btn btn-primary rounded-none text-lg m-1"
 		>
 			Login
@@ -47,8 +48,8 @@ templ Navtop(v models.BaseView) {
 				<a
 					hx-target="#app"
 					hx-swap="innerHTML transition:true"
-					hx-push-url="/lemc/apps"
-					href="/lemc/apps?partial=true"
+                                        hx-push-url={ paths.Apps }
+                                        href={ templ.URL(paths.Apps + "?partial=true") }
 					class={ fmt.Sprintf("btn btn-primary rounded-none text-lg m-1 %s", activeApps) }
                                 hx-on:click="document.body.dataset.activeNav='apps'; htmx.trigger('body', 'refreshNavtop')"
 				>
@@ -59,8 +60,8 @@ templ Navtop(v models.BaseView) {
 				<a
 					hx-target="#app"
 					hx-swap="innerHTML transition:true"
-					hx-push-url="/lemc/cookbooks"
-					href="/lemc/cookbooks?partial=true"
+                                        hx-push-url={ paths.Cookbooks }
+                                        href={ templ.URL(paths.Cookbooks + "?partial=true") }
 					class={ fmt.Sprintf("btn btn-primary rounded-none text-lg m-1 %s", activeCookbooks) }
 					hx-on:click="document.body.dataset.activeNav='cookbooks'; htmx.trigger('body', 'refreshNavtop')"
 				>
@@ -75,8 +76,8 @@ templ Navtop(v models.BaseView) {
 							<a
 								hx-target="#app"
 								hx-swap="innerHTML transition:true"
-								hx-push-url="/lemc/account/settings"
-								href="/lemc/account/settings?partial=true"
+                                                             hx-push-url={ paths.AccountSettings }
+                                                             href={ templ.URL(paths.AccountSettings + "?partial=true") }
 								class="btn btn-ghost rounded-none text-lg"
 								hx-on:click="document.body.dataset.activeNav='account'; htmx.trigger('body', 'refreshNavtop')"
 							>
@@ -87,8 +88,8 @@ templ Navtop(v models.BaseView) {
 							<a
 								hx-target="#app"
 								hx-swap="innerHTML transition:true"
-								hx-push-url="/lemc/account/users"
-								href="/lemc/account/users?partial=true"
+                                                             hx-push-url={ paths.AccountUsers }
+                                                             href={ templ.URL(paths.AccountUsers + "?partial=true") }
 								class="btn btn-ghost rounded-none text-lg"
 								hx-on:click="document.body.dataset.activeNav='account'; htmx.trigger('body', 'refreshNavtop')"
 							>
@@ -99,8 +100,8 @@ templ Navtop(v models.BaseView) {
 							<a
 								hx-target="#app"
 								hx-swap="innerHTML transition:true"
-								hx-push-url="/lemc/account/jobs"
-								href="/lemc/account/jobs?partial=true"
+                                                            hx-push-url={ paths.AccountJobs }
+                                                            href={ templ.URL(paths.AccountJobs + "?partial=true") }
 								class="btn btn-ghost rounded-none text-lg"
 								hx-on:click="document.body.dataset.activeNav='account'; htmx.trigger('body', 'refreshNavtop')"
 							>
@@ -119,7 +120,7 @@ templ Navtop(v models.BaseView) {
 							<a
 								hx-target="#app"
 								hx-swap="innerHTML transition:true"
-								hx-push-url="/lemc/system/settings"
+                                                            hx-push-url={ paths.SystemSettings }
 								href="/lemc/system/settings?partial=true"
 								class="btn btn-ghost rounded-none text-lg"
 								hx-on:click="document.body.dataset.activeNav='system'; htmx.trigger('body', 'refreshNavtop')"
@@ -131,8 +132,8 @@ templ Navtop(v models.BaseView) {
 							<a
 								hx-target="#app"
 								hx-swap="innerHTML transition:true"
-								hx-push-url="/lemc/system/accounts"
-								href="/lemc/system/accounts?partial=true"
+                                                            hx-push-url={ paths.SystemAccounts }
+                                                            href={ templ.URL(paths.SystemAccounts + "?partial=true") }
 								class="btn btn-ghost rounded-none text-lg"
 								hx-on:click="document.body.dataset.activeNav='system'; htmx.trigger('body', 'refreshNavtop')"
 							>
@@ -143,8 +144,8 @@ templ Navtop(v models.BaseView) {
 							<a
 								hx-target="#app"
 								hx-swap="innerHTML transition:true"
-								hx-push-url="/lemc/system/images"
-								href="/lemc/system/images?partial=true"
+                                                            hx-push-url={ paths.SystemImages }
+                                                            href={ templ.URL(paths.SystemImages + "?partial=true") }
 								class="btn btn-ghost rounded-none text-lg"
 								hx-on:click="document.body.dataset.activeNav='system'; htmx.trigger('body', 'refreshNavtop')"
 							>
@@ -155,8 +156,8 @@ templ Navtop(v models.BaseView) {
 							<a
 								hx-target="#app"
 								hx-swap="innerHTML transition:true"
-								hx-push-url="/lemc/system/jobs"
-								href="/lemc/system/jobs?partial=true"
+                                                            hx-push-url={ paths.SystemJobs }
+                                                            href={ templ.URL(paths.SystemJobs + "?partial=true") }
 								class="btn btn-ghost rounded-none text-lg"
 								hx-on:click="document.body.dataset.activeNav='system'; htmx.trigger('body', 'refreshNavtop')"
 							>
@@ -174,8 +175,8 @@ templ Navtop(v models.BaseView) {
 						<a
 							hx-target="#app"
 							hx-swap="innerHTML transition:true"
-							hx-push-url="/lemc/profile"
-							href="/lemc/profile?partial=true"
+                                                       hx-push-url={ paths.Profile }
+                                                       href={ templ.URL(paths.Profile + "?partial=true") }
 							class="btn btn-ghost rounded-none text-lg"
 						>
 							Profile
@@ -185,9 +186,9 @@ templ Navtop(v models.BaseView) {
 						<a
 							hx-confirm="Are you sure you'd like to logout?"
 							hx-swap="innerHTML transition:true"
-							hx-post="/lemc/logout"
+                                                       hx-post={ paths.Logout }
 							hx-target="#app"
-							hx-push-url={ string(fmt.Sprintf("/lemc/login?squid=%s&account=%s", v.AccountSquid, v.AccountName)) }
+                                                       hx-push-url={ string(fmt.Sprintf("%s?squid=%s&account=%s", paths.Login, v.AccountSquid, v.AccountName)) }
 							class="btn btn-ghost rounded-none text-lg"
 						>
 							Logout
@@ -203,18 +204,18 @@ templ Navtop(v models.BaseView) {
 			</button>
 			<ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-primary rounded-box w-52">
 				if v.ShowAppsNav {
-					<li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/apps" href="/lemc/apps?partial=true" class={ activeApps } hx-on:click="document.body.dataset.activeNav='apps'; htmx.trigger('body', 'refreshNavtop')">Apps</a></li>
+                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.Apps } href={ templ.URL(paths.Apps + "?partial=true") } class={ activeApps } hx-on:click="document.body.dataset.activeNav='apps'; htmx.trigger('body', 'refreshNavtop')">Apps</a></li>
 				}
 				if v.ShowCookbooksNav {
-					<li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/cookbooks" href="/lemc/cookbooks?partial=true" class={ activeCookbooks } hx-on:click="document.body.dataset.activeNav='cookbooks'; htmx.trigger('body', 'refreshNavtop')">Cookbooks</a></li>
+                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.Cookbooks } href={ templ.URL(paths.Cookbooks + "?partial=true") } class={ activeCookbooks } hx-on:click="document.body.dataset.activeNav='cookbooks'; htmx.trigger('body', 'refreshNavtop')">Cookbooks</a></li>
 				}
 				if v.ShowAccountNav {
 					<li>
 						<a class={ activeAccount }>Account</a>
 						<ul class="p-2">
-							<li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/account/settings" href="/lemc/account/settings?partial=true" hx-on:click="document.body.dataset.activeNav='account'; htmx.trigger('body', 'refreshNavtop')">Settings</a></li>
-							<li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/account/users" href="/lemc/account/users?partial=true" hx-on:click="document.body.dataset.activeNav='account'; htmx.trigger('body', 'refreshNavtop')">Users</a></li>
-							<li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/account/jobs" href="/lemc/account/jobs?partial=true" hx-on:click="document.body.dataset.activeNav='account'; htmx.trigger('body', 'refreshNavtop')">Jobs</a></li>
+                                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.AccountSettings } href={ templ.URL(paths.AccountSettings + "?partial=true") } hx-on:click="document.body.dataset.activeNav='account'; htmx.trigger('body', 'refreshNavtop')">Settings</a></li>
+                                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.AccountUsers } href={ templ.URL(paths.AccountUsers + "?partial=true") } hx-on:click="document.body.dataset.activeNav='account'; htmx.trigger('body', 'refreshNavtop')">Users</a></li>
+                                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.AccountJobs } href={ templ.URL(paths.AccountJobs + "?partial=true") } hx-on:click="document.body.dataset.activeNav='account'; htmx.trigger('body', 'refreshNavtop')">Jobs</a></li>
 						</ul>
 					</li>
 				}
@@ -222,18 +223,18 @@ templ Navtop(v models.BaseView) {
 					<li>
 						<a class={ activeSystem }>System</a>
 						<ul class="p-2">
-							<li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/settings" href="/lemc/system/settings?partial=true" hx-on:click="document.body.dataset.activeNav='system'; htmx.trigger('body', 'refreshNavtop')">Settings</a></li>
-							<li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/accounts" href="/lemc/system/accounts?partial=true" hx-on:click="document.body.dataset.activeNav='system'; htmx.trigger('body', 'refreshNavtop')">Accounts</a></li>
-							<li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/images" href="/lemc/system/images?partial=true" hx-on:click="document.body.dataset.activeNav='system'; htmx.trigger('body', 'refreshNavtop')">Images</a></li>
-							<li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/system/jobs" href="/lemc/system/jobs?partial=true" hx-on:click="document.body.dataset.activeNav='system'; htmx.trigger('body', 'refreshNavtop')">Jobs</a></li>
+                                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.SystemSettings } href={ templ.URL(paths.SystemSettings + "?partial=true") } hx-on:click="document.body.dataset.activeNav='system'; htmx.trigger('body', 'refreshNavtop')">Settings</a></li>
+                                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.SystemAccounts } href={ templ.URL(paths.SystemAccounts + "?partial=true") } hx-on:click="document.body.dataset.activeNav='system'; htmx.trigger('body', 'refreshNavtop')">Accounts</a></li>
+                                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.SystemImages } href={ templ.URL(paths.SystemImages + "?partial=true") } hx-on:click="document.body.dataset.activeNav='system'; htmx.trigger('body', 'refreshNavtop')">Images</a></li>
+                                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.SystemJobs } href={ templ.URL(paths.SystemJobs + "?partial=true") } hx-on:click="document.body.dataset.activeNav='system'; htmx.trigger('body', 'refreshNavtop')">Jobs</a></li>
 						</ul>
 					</li>
 				}
 				<li>
 					<a>{ v.UserContext.Username() }</a>
 					<ul class="p-2">
-						<li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url="/lemc/profile" href="/lemc/profile?partial=true">Profile</a></li>
-						<li><a hx-confirm="Are you sure you'd like to logout?" hx-swap="innerHTML transition:true" hx-post="/lemc/logout" hx-target="#app" hx-push-url={ string(fmt.Sprintf("/lemc/login?squid=%s&account=%s", v.AccountSquid, v.AccountName)) }>Logout</a></li>
+                                               <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.Profile } href={ templ.URL(paths.Profile + "?partial=true") }>Profile</a></li>
+                                                <li><a hx-confirm="Are you sure you'd like to logout?" hx-swap="innerHTML transition:true" hx-post={ paths.Logout } hx-target="#app" hx-push-url={ string(fmt.Sprintf("%s?squid=%s&account=%s", paths.Login, v.AccountSquid, v.AccountName)) }>Logout</a></li>
 					</ul>
 				</li>
 			</ul>
