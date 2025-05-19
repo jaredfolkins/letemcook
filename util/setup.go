@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
-	"math/rand"
+	mathrand "math/rand"
 	"os"
 	"path/filepath"
 	"strings"
@@ -28,9 +28,9 @@ func GenerateHash() (string, error) {
 
 // GenerateAlphabet returns a shuffled alphanumeric alphabet used for squid ids.
 func GenerateAlphabet() string {
-	rand.Seed(time.Now().UnixNano())
+	r := mathrand.New(mathrand.NewSource(time.Now().UnixNano()))
 	alpha := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
-	rand.Shuffle(len(alpha), func(i, j int) { alpha[i], alpha[j] = alpha[j], alpha[i] })
+	r.Shuffle(len(alpha), func(i, j int) { alpha[i], alpha[j] = alpha[j], alpha[i] })
 	return string(alpha)
 }
 

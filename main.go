@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"io/fs"
 	"log"
 	"log/slog"
@@ -21,8 +20,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/pressly/goose/v3"
-
-	"path/filepath"
 )
 
 const (
