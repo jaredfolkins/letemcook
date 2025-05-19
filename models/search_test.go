@@ -1,3 +1,5 @@
+//go:build test
+
 package models
 
 import (
@@ -8,6 +10,9 @@ import (
 )
 
 func createAccountAndUsers(t *testing.T) (*Account, *User, *User) {
+	teardown := db.SetupTestDB(t)
+	defer teardown()
+
 	dbc := db.Db()
 	tx, err := dbc.Beginx()
 	if err != nil {
