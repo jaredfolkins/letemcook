@@ -1,3 +1,5 @@
+//go:build test
+
 package handlers
 
 import (
@@ -16,6 +18,7 @@ import (
 func TestUsersPageLinks(t *testing.T) {
 	teardown := db.SetupTestDB(t)
 	defer teardown()
+
 	_, user := createUser(t)
 
 	e := echo.New()

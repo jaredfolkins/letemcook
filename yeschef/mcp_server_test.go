@@ -1,3 +1,5 @@
+//go:build test
+
 package yeschef
 
 import (
@@ -13,6 +15,9 @@ import (
 
 // createSampleApp seeds minimal data and returns the created app and permission.
 func createSampleApp(t *testing.T, yamlStr string) (*models.App, *models.PermApp) {
+	teardown := db.SetupTestDB(t)
+	defer teardown()
+
 	dbc := db.Db()
 	tx, err := dbc.Beginx()
 	if err != nil {
