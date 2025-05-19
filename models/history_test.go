@@ -19,6 +19,7 @@ func TestMain(m *testing.M) {
 	os.Setenv("LEMC_ENV", "test")
 	os.Setenv("LEMC_DATA", dataRoot)
 	envDir := filepath.Join(dataRoot, "test")
+	_ = os.MkdirAll(envDir, 0o755)
 	os.Remove(filepath.Join(envDir, "lemc_test.sqlite3"))
 
 	migrationsFS, err := embedded.GetMigrationsFS()
@@ -31,6 +32,7 @@ func TestMain(m *testing.M) {
 	}
 
 	historyTestDB = db.Db()
+	testDB = historyTestDB
 	if err := goose.Up(historyTestDB.DB, "."); err != nil {
 		panic(err)
 	}
@@ -49,6 +51,10 @@ func TestMain(m *testing.M) {
 	// Note: is_active and is_deleted default to false. api_key is NOT NULL.
 	if _, err := historyTestDB.Exec("INSERT INTO apps (id, account_id, owner_id, cookbook_id, uuid, name, description, yaml_shared, yaml_individual, api_key) VALUES (2, 1, 1, 1, 'app-uuid2', 'test-app', '', '', '', 'testapikey2')"); err != nil {
 		panic("insert app: " + err.Error())
+	}
+
+	if err := seedPermissionTestData(); err != nil {
+		panic(err)
 	}
 
 	code := m.Run()

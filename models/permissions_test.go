@@ -23,36 +23,6 @@ var (
 	testAppUUID      string
 )
 
-func setupPermissionTests(m *testing.M) {
-	dataRoot := testutil.DataRoot()
-	os.Setenv("LEMC_ENV", "test")
-	os.Setenv("LEMC_DATA", dataRoot)
-	envDir := filepath.Join(dataRoot, "test")
-	os.Remove(filepath.Join(envDir, "lemc_test.sqlite3"))
-
-	migrationsFS, err := embedded.GetMigrationsFS()
-	if err != nil {
-		panic(err)
-	}
-	goose.SetBaseFS(migrationsFS)
-	if err := goose.SetDialect("sqlite3"); err != nil {
-		panic(err)
-	}
-	testDB = db.Db()
-	if err := goose.Up(testDB.DB, "."); err != nil {
-		panic(err)
-	}
-
-	if err := seedPermissionTestData(); err != nil {
-		panic(err)
-	}
-
-	code := m.Run()
-
-	testDB.Close()
-	os.Exit(code)
-}
-
 func seedPermissionTestData() error {
 	res, err := testDB.Exec("INSERT INTO accounts (squid, name) VALUES (?, ?)", "acc", "Test Account")
 	if err != nil {
