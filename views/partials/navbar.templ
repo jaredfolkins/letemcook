@@ -7,7 +7,7 @@ import (
 
 templ Navbar(v models.BaseView) {
 	<div class="fixed top-0 z-10 w-full">
-		if v.Env == "development" {
+	if v.Env == "development" {
 			<div class="ribbon ribbon-top-right bg-red-500 text-white font-bold text-xs px-2 py-1 flex items-center justify-center">
 				<span>development</span>
 			</div>
@@ -45,21 +45,31 @@ templ Navbar(v models.BaseView) {
         var allHeckles = [];
         var playedHeckles = JSON.parse(localStorage.getItem('playedHeckles')) || [];
 
-        function swingAndFall(el) {
+       function swingAndFall(el) {
+            var originalDisplay = el.style.display;
             el.classList.add('swing');
             el.addEventListener('animationend', function handler(e) {
                 if (e.animationName === 'swing') {
                     el.classList.add('fall');
                 } else if (e.animationName === 'fall') {
                     el.removeEventListener('animationend', handler);
+                    el.classList.remove('swing', 'fall');
                     el.style.display = 'none';
-
+                    setTimeout(function() {
+                        el.style.display = originalDisplay;
+                    }, 3000);
                 }
             });
         }
 
         function fireGunEffect() {
-            document.querySelectorAll('div').forEach(swingAndFall);
+            var divs = Array.from(document.querySelectorAll('div')).filter(function(d) {
+                var rect = d.getBoundingClientRect();
+                return rect.width > 0 && rect.height > 0 && d.offsetParent !== null;
+            });
+            if (divs.length === 0) { return; }
+            var randomEl = divs[Math.floor(Math.random() * divs.length)];
+            swingAndFall(randomEl);
         }
 
         async function heckle() {
