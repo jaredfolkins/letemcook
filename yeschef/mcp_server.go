@@ -13,6 +13,7 @@ import (
 
 	"github.com/gorilla/websocket"
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/util"
 	"gopkg.in/yaml.v3"
 )
@@ -253,7 +254,7 @@ func (srv *McpServer) handlePages(env *mcpEnvelope) {
 			}
 		}
 		for _, r := range p.Recipes {
-			action := fmt.Sprintf("/lemc/app/job/shared/uuid/%s/page/%d/recipe/%s", srv.AppUUID, p.PageID, r.Name)
+			action := fmt.Sprintf(paths.McpSharedJobPattern, srv.AppUUID, p.PageID, r.Name)
 			pi.Recipes = append(pi.Recipes, McpRecipeInfo{Name: r.Name, Description: r.Description, Action: action})
 		}
 		pages = append(pages, pi)
