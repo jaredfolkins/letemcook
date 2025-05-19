@@ -97,7 +97,7 @@ templ Navtop(v models.BaseView) {
                                                              hx-push-url={ paths.AccountSettings }
                                                              href={ templ.URL(paths.AccountSettings + "?partial=true") }
                                                                 class={ fmt.Sprintf("btn btn-ghost rounded-none text-lg %s", activeAccountSettings) }
-                                                                hx-on:click={ fmt.Sprintf("document.body.dataset.activeNav='account'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.AccountSettings) }
+                                                                hx-on:click={ templ.ComponentScript(fmt.Sprintf("document.body.dataset.activeNav='account'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.AccountSettings)) }
 							>
 								Settings
 							</a>
@@ -109,7 +109,7 @@ templ Navtop(v models.BaseView) {
                                                              hx-push-url={ paths.AccountUsers }
                                                              href={ templ.URL(paths.AccountUsers + "?partial=true") }
                                                                 class={ fmt.Sprintf("btn btn-ghost rounded-none text-lg %s", activeAccountUsers) }
-                                                                hx-on:click={ fmt.Sprintf("document.body.dataset.activeNav='account'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.AccountUsers) }
+                                                                hx-on:click={ templ.ComponentScript(fmt.Sprintf("document.body.dataset.activeNav='account'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.AccountUsers)) }
 							>
 								Users
 							</a>
@@ -121,7 +121,7 @@ templ Navtop(v models.BaseView) {
                                                             hx-push-url={ paths.AccountJobs }
                                                             href={ templ.URL(paths.AccountJobs + "?partial=true") }
                                                                 class={ fmt.Sprintf("btn btn-ghost rounded-none text-lg %s", activeAccountJobs) }
-                                                                hx-on:click={ fmt.Sprintf("document.body.dataset.activeNav='account'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.AccountJobs) }
+                                                                hx-on:click={ templ.ComponentScript(fmt.Sprintf("document.body.dataset.activeNav='account'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.AccountJobs)) }
 							>
 								Jobs
 							</a>
@@ -141,7 +141,7 @@ templ Navtop(v models.BaseView) {
                                                             hx-push-url={ paths.SystemSettings }
 								href="/lemc/system/settings?partial=true"
                                                                 class={ fmt.Sprintf("btn btn-ghost rounded-none text-lg %s", activeSystemSettings) }
-                                                                hx-on:click={ fmt.Sprintf("document.body.dataset.activeNav='system'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.SystemSettings) }
+                                                                hx-on:click={ templ.ComponentScript(fmt.Sprintf("document.body.dataset.activeNav='system'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.SystemSettings)) }
 							>
 								Settings
 							</a>
@@ -153,7 +153,7 @@ templ Navtop(v models.BaseView) {
                                                             hx-push-url={ paths.SystemAccounts }
                                                             href={ templ.URL(paths.SystemAccounts + "?partial=true") }
                                                                 class={ fmt.Sprintf("btn btn-ghost rounded-none text-lg %s", activeSystemAccounts) }
-                                                                hx-on:click={ fmt.Sprintf("document.body.dataset.activeNav='system'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.SystemAccounts) }
+                                                                hx-on:click={ templ.ComponentScript(fmt.Sprintf("document.body.dataset.activeNav='system'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.SystemAccounts)) }
 							>
 								Accounts
 							</a>
@@ -165,7 +165,7 @@ templ Navtop(v models.BaseView) {
                                                             hx-push-url={ paths.SystemImages }
                                                             href={ templ.URL(paths.SystemImages + "?partial=true") }
                                                                 class={ fmt.Sprintf("btn btn-ghost rounded-none text-lg %s", activeSystemImages) }
-                                                                hx-on:click={ fmt.Sprintf("document.body.dataset.activeNav='system'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.SystemImages) }
+                                                                hx-on:click={ templ.ComponentScript(fmt.Sprintf("document.body.dataset.activeNav='system'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.SystemImages)) }
 							>
 								Images
 							</a>
@@ -177,7 +177,7 @@ templ Navtop(v models.BaseView) {
                                                             hx-push-url={ paths.SystemJobs }
                                                             href={ templ.URL(paths.SystemJobs + "?partial=true") }
                                                                 class={ fmt.Sprintf("btn btn-ghost rounded-none text-lg %s", activeSystemJobs) }
-                                                                hx-on:click={ fmt.Sprintf("document.body.dataset.activeNav='system'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.SystemJobs) }
+                                                                hx-on:click={ templ.ComponentScript(fmt.Sprintf("document.body.dataset.activeNav='system'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.SystemJobs)) }
 							>
 								Jobs
 							</a>
@@ -231,9 +231,9 @@ templ Navtop(v models.BaseView) {
 					<li>
 						<a class={ activeAccount }>Account</a>
 						<ul class="p-2">
-                                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.AccountSettings } href={ templ.URL(paths.AccountSettings + "?partial=true") } class={ activeAccountSettings } hx-on:click={ fmt.Sprintf("document.body.dataset.activeNav='account'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.AccountSettings) }>Settings</a></li>
-                                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.AccountUsers } href={ templ.URL(paths.AccountUsers + "?partial=true") } class={ activeAccountUsers } hx-on:click={ fmt.Sprintf("document.body.dataset.activeNav='account'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.AccountUsers) }>Users</a></li>
-                                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.AccountJobs } href={ templ.URL(paths.AccountJobs + "?partial=true") } class={ activeAccountJobs } hx-on:click={ fmt.Sprintf("document.body.dataset.activeNav='account'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.AccountJobs) }>Jobs</a></li>
+                                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.AccountSettings } href={ templ.URL(paths.AccountSettings + "?partial=true") } class={ activeAccountSettings } hx-on:click={ templ.ComponentScript(fmt.Sprintf("document.body.dataset.activeNav='account'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.AccountSettings)) }>Settings</a></li>
+                                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.AccountUsers } href={ templ.URL(paths.AccountUsers + "?partial=true") } class={ activeAccountUsers } hx-on:click={ templ.ComponentScript(fmt.Sprintf("document.body.dataset.activeNav='account'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.AccountUsers)) }>Users</a></li>
+                                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.AccountJobs } href={ templ.URL(paths.AccountJobs + "?partial=true") } class={ activeAccountJobs } hx-on:click={ templ.ComponentScript(fmt.Sprintf("document.body.dataset.activeNav='account'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.AccountJobs)) }>Jobs</a></li>
 						</ul>
 					</li>
 				}
@@ -241,10 +241,10 @@ templ Navtop(v models.BaseView) {
 					<li>
 						<a class={ activeSystem }>System</a>
 						<ul class="p-2">
-                                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.SystemSettings } href={ templ.URL(paths.SystemSettings + "?partial=true") } class={ activeSystemSettings } hx-on:click={ fmt.Sprintf("document.body.dataset.activeNav='system'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.SystemSettings) }>Settings</a></li>
-                                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.SystemAccounts } href={ templ.URL(paths.SystemAccounts + "?partial=true") } class={ activeSystemAccounts } hx-on:click={ fmt.Sprintf("document.body.dataset.activeNav='system'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.SystemAccounts) }>Accounts</a></li>
-                                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.SystemImages } href={ templ.URL(paths.SystemImages + "?partial=true") } class={ activeSystemImages } hx-on:click={ fmt.Sprintf("document.body.dataset.activeNav='system'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.SystemImages) }>Images</a></li>
-                                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.SystemJobs } href={ templ.URL(paths.SystemJobs + "?partial=true") } class={ activeSystemJobs } hx-on:click={ fmt.Sprintf("document.body.dataset.activeNav='system'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.SystemJobs) }>Jobs</a></li>
+                                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.SystemSettings } href={ templ.URL(paths.SystemSettings + "?partial=true") } class={ activeSystemSettings } hx-on:click={ templ.ComponentScript(fmt.Sprintf("document.body.dataset.activeNav='system'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.SystemSettings)) }>Settings</a></li>
+                                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.SystemAccounts } href={ templ.URL(paths.SystemAccounts + "?partial=true") } class={ activeSystemAccounts } hx-on:click={ templ.ComponentScript(fmt.Sprintf("document.body.dataset.activeNav='system'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.SystemAccounts)) }>Accounts</a></li>
+                                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.SystemImages } href={ templ.URL(paths.SystemImages + "?partial=true") } class={ activeSystemImages } hx-on:click={ templ.ComponentScript(fmt.Sprintf("document.body.dataset.activeNav='system'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.SystemImages)) }>Images</a></li>
+                                                    <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.SystemJobs } href={ templ.URL(paths.SystemJobs + "?partial=true") } class={ activeSystemJobs } hx-on:click={ templ.ComponentScript(fmt.Sprintf("document.body.dataset.activeNav='system'; document.body.dataset.activeSubNav='%s'; htmx.trigger('body', 'refreshNavtop')", paths.SystemJobs)) }>Jobs</a></li>
 						</ul>
 					</li>
 				}
