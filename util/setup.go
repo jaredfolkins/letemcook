@@ -36,28 +36,16 @@ func GenerateAlphabet() string {
 
 // SetupEnvironment initializes directories and the .env file.
 func SetupEnvironment() error {
-	dir, err := os.Getwd()
-	if err != nil {
+	envValue := EnvName()
+	dataRoot := DataRoot()
+
+	if err := os.MkdirAll(dataRoot, FileMode); err != nil {
 		return err
 	}
 
-	envValue := os.Getenv("LEMC_ENV")
-	if envValue == "" {
-		envValue = "production"
-	}
-
-	dataRoot := filepath.Join(dir, "data")
-	if _, err := os.Stat(dataRoot); os.IsNotExist(err) {
-		if err := os.Mkdir(dataRoot, FileMode); err != nil {
-			return err
-		}
-	}
-
 	data := filepath.Join(dataRoot, envValue)
-	if _, err := os.Stat(data); os.IsNotExist(err) {
-		if err := os.MkdirAll(data, FileMode); err != nil {
-			return err
-		}
+	if err := os.MkdirAll(data, FileMode); err != nil {
+		return err
 	}
 
 	envFile := filepath.Join(data, ".env")
@@ -77,7 +65,7 @@ func SetupEnvironment() error {
 			return err
 		}
 
-		f.WriteString(fmt.Sprintf("LEMC_DATA=%s\n", filepath.Join(dir, "data")))
+		f.WriteString(fmt.Sprintf("LEMC_DATA=%s\n", dataRoot))
 		f.WriteString(fmt.Sprintf("LEMC_ENV=%s\n", envValue))
 		f.WriteString("LEMC_FQDN=localhost\n")
 		f.WriteString(fmt.Sprintf("LEMC_DEFAULT_THEME=%s\n", DefaultTheme))

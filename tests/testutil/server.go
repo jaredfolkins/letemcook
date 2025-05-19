@@ -20,15 +20,18 @@ func StartTestServer() (func(), error) {
 	}
 	// Repo root is three directories up from this file: tests/testutil/server.go
 	repoRoot := filepath.Dir(filepath.Dir(filepath.Dir(currentFile)))
-	testDataPath := filepath.Join(repoRoot, "data", "test")
-	// Start with a clean test data directory
-	os.RemoveAll(testDataPath)
+
+	tempRoot, err := os.MkdirTemp("", "lemc_testdata_")
+	if err != nil {
+		return nil, fmt.Errorf("create temp root: %w", err)
+	}
+	testDataPath := filepath.Join(tempRoot, "test")
 	if err := os.MkdirAll(testDataPath, 0755); err != nil {
 		return nil, fmt.Errorf("prepare test data dir: %w", err)
 	}
 
 	os.Setenv("LEMC_ENV", "test")
-	os.Setenv("LEMC_DATA", filepath.Join(repoRoot, "data"))
+	os.Setenv("LEMC_DATA", tempRoot)
 	if os.Getenv("LEMC_PORT_TEST") == "" {
 		os.Setenv("LEMC_PORT_TEST", "15362")
 	}
@@ -54,6 +57,7 @@ func StartTestServer() (func(), error) {
 		cancel()
 		_ = cmd.Process.Kill()
 		cmd.Wait()
+		os.RemoveAll(tempRoot)
 	}
 
 	return shutdown, nil
