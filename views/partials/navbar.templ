@@ -53,6 +53,7 @@ templ Navbar(v models.BaseView) {
                 } else if (e.animationName === 'fall') {
                     el.removeEventListener('animationend', handler);
                     el.style.display = 'none';
+
                 }
             });
         }
