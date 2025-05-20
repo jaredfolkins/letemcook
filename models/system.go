@@ -11,6 +11,8 @@ import (
 
 	"github.com/docker/docker/client"
 	"github.com/docker/docker/errdefs"
+	"golang.org/x/sync/errgroup"
+
 	"github.com/jaredfolkins/letemcook/util"
 )
 
@@ -77,29 +79,41 @@ func CollectImageInfos() ([]ImageInfo, error) {
 		return nil, err
 	}
 
-	infos := make([]ImageInfo, 0, len(names))
+	infos := make([]ImageInfo, len(names))
 
-	for _, name := range names {
-		info := ImageInfo{Name: name}
-		normalized, _, _, err := util.NormalizeImageName(name)
-		if err == nil {
-			inspect, _, ierr := cli.ImageInspectWithRaw(context.Background(), normalized)
-			if ierr == nil {
-				info.Exists = true
-				if !inspect.Metadata.LastTagTime.IsZero() {
-					info.LastUpdated = inspect.Metadata.LastTagTime
-				} else if t, perr := time.Parse(time.RFC3339Nano, inspect.Created); perr == nil {
-					info.LastUpdated = t
-				}
-				localDigest := strings.TrimPrefix(inspect.ID, "sha256:")
-				if remoteDigest, derr := getRemoteDigest(cli, normalized); derr == nil && remoteDigest != "" {
-					if !strings.HasPrefix(localDigest, remoteDigest) {
-						info.NewerAvailable = true
+	var g errgroup.Group
+	g.SetLimit(4)
+
+	for i, name := range names {
+		i := i
+		name := name
+		g.Go(func() error {
+			info := ImageInfo{Name: name}
+			normalized, _, _, err := util.NormalizeImageName(name)
+			if err == nil {
+				inspect, _, ierr := cli.ImageInspectWithRaw(context.Background(), normalized)
+				if ierr == nil {
+					info.Exists = true
+					if !inspect.Metadata.LastTagTime.IsZero() {
+						info.LastUpdated = inspect.Metadata.LastTagTime
+					} else if t, perr := time.Parse(time.RFC3339Nano, inspect.Created); perr == nil {
+						info.LastUpdated = t
+					}
+					localDigest := strings.TrimPrefix(inspect.ID, "sha256:")
+					if remoteDigest, derr := getRemoteDigest(cli, normalized); derr == nil && remoteDigest != "" {
+						if !strings.HasPrefix(localDigest, remoteDigest) {
+							info.NewerAvailable = true
+						}
 					}
 				}
 			}
-		}
-		infos = append(infos, info)
+			infos[i] = info
+			return nil
+		})
+	}
+
+	if err := g.Wait(); err != nil {
+		return nil, err
 	}
 
 	sort.Slice(infos, func(i, j int) bool { return infos[i].Name < infos[j].Name })
