@@ -6,14 +6,14 @@ import (
 )
 
 templ AccountSettings(v models.AccountSettingsView) {
-	<div id="cookbooknav" class="cookbooknav-attrs flex flex-col justify-end md:flex-row mx-12 mb-2">
+        <div id="cookbooknav" class="cookbooknav-attrs flex flex-col justify-end md:flex-row mx-12 mb-2 destructible">
 		<div class="flex-1 flex items-center justify-start">
 			<h1 class="text-2xl font-bold">Account Settings</h1>
 		</div>
 		<div class="flex flex-row gap-12 justify-end">
 		</div>
 	</div>
-	<div id="cookbooks-list" class="bg-base-100 p-9 edges gap-12 mx-12 my-4">
+        <div id="cookbooks-list" class="bg-base-100 p-9 edges gap-12 mx-12 my-4 destructible">
 		@AccountSettingsPartial(v)
 	</div>
 }
