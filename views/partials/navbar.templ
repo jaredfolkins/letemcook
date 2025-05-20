@@ -46,8 +46,26 @@ templ Navbar(v models.BaseView) {
         var playedHeckles = JSON.parse(localStorage.getItem('playedHeckles')) || [];
         var fadeTimers = new WeakMap();
 
+       function createPlaceholder(el) {
+            var rect = el.getBoundingClientRect();
+            var placeholder = document.createElement('div');
+            placeholder.className = 'destructible-placeholder';
+            placeholder.style.display = getComputedStyle(el).display;
+            placeholder.style.width = rect.width + 'px';
+            placeholder.style.height = rect.height + 'px';
+            placeholder.style.visibility = 'hidden';
+            el.parentNode.insertBefore(placeholder, el);
+            return placeholder;
+        }
+
+       function removeBulletHoles(el) {
+            var holes = el.querySelectorAll('.bullet-hole');
+            holes.forEach(function(h) { h.remove(); });
+        }
+
        function swingAndFall(el) {
             var originalDisplay = el.style.display;
+            var placeholder = createPlaceholder(el);
             el.classList.add('swing');
             el.addEventListener('animationend', function handler(e) {
                 if (e.animationName === 'swing') {
@@ -58,6 +76,8 @@ templ Navbar(v models.BaseView) {
                     el.style.display = 'none';
                     setTimeout(function() {
                         el.style.display = originalDisplay;
+                        if (placeholder) { placeholder.remove(); }
+                        removeBulletHoles(el);
                     }, 3000);
                 }
             });
@@ -66,9 +86,9 @@ templ Navbar(v models.BaseView) {
         function computeMaxLife(el) {
             var rect = el.getBoundingClientRect();
             var area = rect.width * rect.height;
-            var maxLife = Math.floor(1000 / Math.sqrt(area));
+            var maxLife = Math.floor(2000 / Math.sqrt(area));
             if (maxLife < 1) { maxLife = 1; }
-            if (maxLife > 20) { maxLife = 20; }
+            if (maxLife > 40) { maxLife = 40; }
             return maxLife;
         }
 
@@ -114,7 +134,19 @@ templ Navbar(v models.BaseView) {
             fadeTimers.set(el, timer);
         }
 
-        function shootDiv(el) {
+        function addBulletHole(el, x, y) {
+            if (getComputedStyle(el).position === 'static') {
+                el.style.position = 'relative';
+            }
+            var hole = document.createElement('div');
+            hole.className = 'bullet-hole';
+            hole.style.left = x + 'px';
+            hole.style.top = y + 'px';
+            el.appendChild(hole);
+        }
+
+        function shootDiv(el, x, y) {
+            addBulletHole(el, x, y);
             if (!el.dataset.maxLife) {
                 createLifeBar(el, computeMaxLife(el));
             }
@@ -254,7 +286,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
                 if (target && target.classList && target.classList.contains('destructible') &&
                     !target.classList.contains('life-container') && !target.classList.contains('life-bar')) {
-                    shootDiv(target);
+                    var rect = target.getBoundingClientRect();
+                    var x = event.clientX - rect.left;
+                    var y = event.clientY - rect.top;
+                    shootDiv(target, x, y);
                 }
                 if (Math.random() <= 0.3) {
                     playSound();
@@ -302,6 +337,20 @@ document.addEventListener("DOMContentLoaded", function() {
             width: 100%;
             background: red;
             transition: width 0.2s;
+        }
+        .bullet-hole {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+        }
+
+        .destructible-placeholder {
+            display: inline-block;
+            visibility: hidden;
         }
     </style>
 }
