@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"os"
 	"strings"
 	"time"
 
@@ -353,6 +354,18 @@ func getRemoteImageDigest(cli *client.Client, spec ImageSpec) (string, error) {
 	}
 
 	return string(distInspect.Descriptor.Digest), nil
+}
+
+// PullImage creates a Docker client and pulls the specified image if needed.
+func PullImage(spec ImageSpec) error {
+	cli, err := client.NewClientWithOpts(
+		client.WithHost(os.Getenv("LEMC_DOCKER_HOST")),
+		client.WithAPIVersionNegotiation(),
+	)
+	if err != nil {
+		return err
+	}
+	return handleImagePull(cli, spec)
 }
 
 // Deprecated functions commented out
