@@ -15,7 +15,7 @@ templ ProfilePage(v models.UserDetailView) {
 
 	<div class="flex flex-col md:flex-row gap-6 mx-12 mt-6">
 		<!-- User Information Card -->
-		<section class="card rounded-none bg-base-100 flex-1 edges">
+            <section class="card rounded-none bg-base-100 flex-1 edges destructible">
 			<div class="card-body">
 				<h2 class="card-title border-b border-b-slate-600 pb-[4px]">Account Information</h2>
 				<div class="p-4 space-y-4">
@@ -40,7 +40,7 @@ templ ProfilePage(v models.UserDetailView) {
 		</section>
 
 		<!-- Password Change Card -->
-		<section class="card rounded-none bg-base-100 flex-1 edges">
+            <section class="card rounded-none bg-base-100 flex-1 edges destructible">
 			<div class="card-body">
 				<h2 class="card-title border-b border-b-slate-600 pb-[4px]">Change Password</h2>
 				<form
@@ -96,7 +96,7 @@ templ ProfilePage(v models.UserDetailView) {
 
 // UserSettingsSection component for user settings that can be updated independently
 templ UserSettingsSection(v models.UserDetailView) {
-	<section id="user-settings-section" class="card rounded-none bg-base-100 w-full edges">
+   <section id="user-settings-section" class="card rounded-none bg-base-100 w-full edges destructible">
 		<div class="card-body">
 			<h2 class="card-title border-b border-b-slate-600 pb-[4px]">User Settings</h2>
 			<div class="p-4 space-y-4">
