@@ -349,3 +349,16 @@ func AppByID(id int64) (*App, error) {
 	}
 	return app, nil
 }
+
+func AllApps() ([]App, error) {
+	apps := []App{}
+	query := `SELECT id, created, updated, account_id, owner_id, cookbook_id, uuid, name, description, yaml_shared, yaml_individual, api_key, is_mcp_enabled, is_active, is_deleted, is_assigned_by_default, on_register FROM apps WHERE is_deleted = false`
+	err := db.Db().Select(&apps, query)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return []App{}, nil
+		}
+		return nil, err
+	}
+	return apps, nil
+}
