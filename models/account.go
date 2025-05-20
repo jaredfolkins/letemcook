@@ -117,3 +117,24 @@ func AccountCreate(name string, tx *sqlx.Tx) (*Account, error) {
 
 	return account, nil
 }
+
+func CountAccounts() (int, error) {
+	var count int
+	query := `SELECT COUNT(*) FROM accounts WHERE is_deleted = false`
+	err := db.Db().Get(&count, query)
+	return count, err
+}
+
+func Accounts(page, limit int) ([]Account, error) {
+	offset := (page - 1) * limit
+	var accounts []Account
+	query := `SELECT id, name, squid, created, updated, is_deleted FROM accounts WHERE is_deleted = false ORDER BY id LIMIT ? OFFSET ?`
+	err := db.Db().Select(&accounts, query, limit, offset)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return []Account{}, nil
+		}
+		return nil, err
+	}
+	return accounts, nil
+}

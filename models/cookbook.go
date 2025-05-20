@@ -430,3 +430,16 @@ func (pc *PermCookbook) CookbookPermissions(user_id, account_id, cookbook_id int
 
 	return nil
 }
+
+func AllCookbooks() ([]Cookbook, error) {
+	cbs := []Cookbook{}
+	query := `SELECT id, created, updated, account_id, owner_id, uuid, name, description, yaml_shared, yaml_individual, api_key, is_published, is_deleted FROM cookbooks WHERE is_deleted = false`
+	err := db.Db().Select(&cbs, query)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return []Cookbook{}, nil
+		}
+		return nil, err
+	}
+	return cbs, nil
+}
