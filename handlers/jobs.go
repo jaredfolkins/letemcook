@@ -157,3 +157,62 @@ func GetJobs(c LemcContext) error { // Changed context type to LemcContext
 		return HTML(c, pages.JobsIndex(viewData, jobsPage)) // Use HTML helper
 	}
 }
+
+func getAllJobs(page, limit int) ([]models.JobInfo, int, error) {
+	jobDataDir := util.QueuesPath()
+	loadedJobs := []persistedJobInfo{}
+	err := filepath.WalkDir(jobDataDir, func(path string, d os.DirEntry, err error) error {
+		if err != nil {
+			log.Printf("Error accessing path '%s': %v", path, err)
+			return nil
+		}
+		if d.IsDir() {
+			return nil
+		}
+		if filepath.Ext(d.Name()) != ".json" {
+			return nil
+		}
+		fileData, rErr := os.ReadFile(path)
+		if rErr != nil {
+			log.Printf("Error reading job file '%s': %v", path, rErr)
+			return nil
+		}
+		var jobData persistedJobInfo
+		if uErr := json.Unmarshal(fileData, &jobData); uErr != nil {
+			log.Printf("Error unmarshalling job file '%s': %v", path, uErr)
+			return nil
+		}
+		loadedJobs = append(loadedJobs, jobData)
+		return nil
+	})
+	if err != nil {
+		if os.IsNotExist(err) {
+			return []models.JobInfo{}, 0, nil
+		}
+		return nil, 0, fmt.Errorf("failed to read job data directory: %w", err)
+	}
+	jobs := make([]models.JobInfo, len(loadedJobs))
+	for i, jd := range loadedJobs {
+		jobs[i] = models.JobInfo{
+			ID:         jd.ID,
+			RecipeName: jd.RecipeName,
+			Username:   jd.Username,
+			Type:       jd.JobType,
+			Status:     jd.Status,
+			CreatedAt:  jd.CreatedAt,
+		}
+		if jd.ScheduledAt != nil {
+			jobs[i].ScheduledAt = *jd.ScheduledAt
+		}
+	}
+	total := len(jobs)
+	start := (page - 1) * limit
+	end := start + limit
+	if start >= total {
+		return []models.JobInfo{}, total, nil
+	}
+	if end > total {
+		end = total
+	}
+	return jobs[start:end], total, nil
+}
