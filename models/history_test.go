@@ -41,7 +41,7 @@ func TestMain(m *testing.M) {
 	if _, err := historyTestDB.Exec("INSERT INTO accounts (id, squid, name) VALUES (1, 'testsquid', 'test-account')"); err != nil {
 		panic("insert account: " + err.Error())
 	}
-	if _, err := historyTestDB.Exec("INSERT INTO users (id, username, email, hash) VALUES (1, 'testuser', 'user@example.com', 'hash')"); err != nil {
+	if _, err := historyTestDB.Exec("INSERT INTO users (id, username, email, hash) VALUES (1, 'testuser', 'historyuser@example.com', 'hash')"); err != nil {
 		panic("insert user: " + err.Error())
 	}
 	// Note: is_published and is_deleted default to false. api_key is NOT NULL.
