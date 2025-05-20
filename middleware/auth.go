@@ -115,7 +115,7 @@ func BeforeNav(next echo.HandlerFunc) echo.HandlerFunc {
 		if !ok {
 			cc = NewCustomContext(c)
 		}
-		cc.Response().Header().Set("HX-Trigger", "refreshNavtop")
+               cc.Response().Header().Set("HX-Trigger-After-Swap", "refreshNavtop")
 		return next(cc)
 	}
 }
