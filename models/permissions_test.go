@@ -1,15 +1,9 @@
 package models
 
 import (
-	"os"
-	"path/filepath"
 	"testing"
 
-	"github.com/jaredfolkins/letemcook/db"
-	"github.com/jaredfolkins/letemcook/embedded"
-	"github.com/jaredfolkins/letemcook/tests/testutil"
 	"github.com/jmoiron/sqlx"
-	"github.com/pressly/goose/v3"
 	"golang.org/x/crypto/bcrypt"
 )
 
