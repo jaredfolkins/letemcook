@@ -44,6 +44,7 @@ templ Navbar(v models.BaseView) {
         var isPlaying = false;
         var allHeckles = [];
         var playedHeckles = JSON.parse(localStorage.getItem('playedHeckles')) || [];
+        var fadeTimers = new WeakMap();
 
        function swingAndFall(el) {
             var originalDisplay = el.style.display;
@@ -60,6 +61,80 @@ templ Navbar(v models.BaseView) {
                     }, 3000);
                 }
             });
+        }
+
+        function computeMaxLife(el) {
+            var rect = el.getBoundingClientRect();
+            var area = rect.width * rect.height;
+            var maxLife = Math.floor(1000 / Math.sqrt(area));
+            if (maxLife < 1) { maxLife = 1; }
+            if (maxLife > 20) { maxLife = 20; }
+            return maxLife;
+        }
+
+        function createLifeBar(el, maxLife) {
+            if (getComputedStyle(el).position === 'static') {
+                el.style.position = 'relative';
+            }
+            var container = document.createElement('div');
+            container.className = 'life-container';
+            container.style.opacity = '1';
+            var bar = document.createElement('div');
+            bar.className = 'life-bar';
+            container.appendChild(bar);
+            el.appendChild(container);
+            el.dataset.maxLife = maxLife;
+            el.dataset.life = maxLife;
+        }
+
+        function updateLifeBar(el) {
+            var bar = el.querySelector('.life-bar');
+            if (!bar) { return; }
+            var life = parseInt(el.dataset.life);
+            var maxLife = parseInt(el.dataset.maxLife);
+            var width = Math.max(0, (life / maxLife) * 100);
+            bar.style.width = width + '%';
+        }
+
+        function scheduleFadeOut(el) {
+            var container = el.querySelector('.life-container');
+            if (!container) { return; }
+            clearTimeout(fadeTimers.get(el));
+            var timer = setTimeout(function() {
+                container.style.opacity = '0';
+                container.addEventListener('transitionend', function handler() {
+                    container.removeEventListener('transitionend', handler);
+                    container.remove();
+                    delete el.dataset.maxLife;
+                    delete el.dataset.life;
+                    fadeTimers.delete(el);
+                });
+            }, 500);
+            fadeTimers.set(el, timer);
+        }
+
+        function shootDiv(el) {
+            if (!el.dataset.maxLife) {
+                createLifeBar(el, computeMaxLife(el));
+            }
+            var container = el.querySelector('.life-container');
+            if (container) {
+                container.style.opacity = '1';
+            }
+            clearTimeout(fadeTimers.get(el));
+            var life = parseInt(el.dataset.life);
+            life -= 1;
+            el.dataset.life = life;
+            updateLifeBar(el);
+            if (life <= 0) {
+                if (container) { container.remove(); }
+                swingAndFall(el);
+                fadeTimers.delete(el);
+                delete el.dataset.maxLife;
+                delete el.dataset.life;
+            } else {
+                scheduleFadeOut(el);
+            }
         }
 
         function fireGunEffect() {
@@ -169,10 +244,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 stopSound();
             });
             document.addEventListener("click", function(event) {
+                var targetDiv = event.target.closest('div');
+                if (targetDiv && !targetDiv.classList.contains('life-container') && !targetDiv.classList.contains('life-bar')) {
+                    shootDiv(targetDiv);
+                }
                 if (Math.random() <= 0.3) {
                     playSound();
-                };
-               console.log("A click event occurred!");
+                }
+                console.log("A click event occurred!");
             });
         })
 
@@ -197,6 +276,23 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         .fall {
             animation: fall 1s forwards;
+        }
+        .life-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            opacity: 1;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+        .life-bar {
+            height: 100%;
+            width: 100%;
+            background: red;
+            transition: width 0.2s;
         }
     </style>
 }
