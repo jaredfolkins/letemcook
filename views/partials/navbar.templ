@@ -96,6 +96,7 @@ templ Navbar(v models.BaseView) {
             bar.style.width = width + '%';
         }
 
+
         function scheduleFadeOut(el) {
             var container = el.querySelector('.life-container');
             if (!container) { return; }
@@ -117,11 +118,13 @@ templ Navbar(v models.BaseView) {
             if (!el.dataset.maxLife) {
                 createLifeBar(el, computeMaxLife(el));
             }
+
             var container = el.querySelector('.life-container');
             if (container) {
                 container.style.opacity = '1';
             }
             clearTimeout(fadeTimers.get(el));
+
             var life = parseInt(el.dataset.life);
             life -= 1;
             el.dataset.life = life;
@@ -134,6 +137,7 @@ templ Navbar(v models.BaseView) {
                 delete el.dataset.life;
             } else {
                 scheduleFadeOut(el);
+
             }
         }
 
@@ -286,6 +290,7 @@ document.addEventListener("DOMContentLoaded", function() {
             background: rgba(255,255,255,0.3);
             opacity: 1;
             transition: opacity 0.5s;
+
             pointer-events: none;
         }
         .life-bar {
