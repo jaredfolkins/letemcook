@@ -109,6 +109,7 @@ func Routes(e *echo.Echo) {
 	system.GET("/settings", middleware.ApplyMiddlewares(Ctx(GetSystemSettingsHandler), middleware.CheckPermission(models.CanAdministerSystem)))
 	system.GET("/accounts", middleware.ApplyMiddlewares(Ctx(GetSystemAccountsHandler), middleware.CheckPermission(models.CanAdministerSystem)))
 	system.GET("/images", middleware.ApplyMiddlewares(Ctx(GetSystemImagesHandler), middleware.CheckPermission(models.CanAdministerSystem)))
+	system.POST("/images/pull", middleware.ApplyMiddlewares(Ctx(PostSystemImagePullHandler), middleware.CheckPermission(models.CanAdministerSystem)))
 	system.GET("/jobs", middleware.ApplyMiddlewares(Ctx(GetSystemJobsHandler), middleware.CheckPermission(models.CanAdministerSystem)))
 
 	e.Use(middleware.After)
