@@ -9,7 +9,6 @@ import (
 	"github.com/jaredfolkins/letemcook/db"
 	"github.com/jaredfolkins/letemcook/models"
 	"github.com/jaredfolkins/letemcook/paths"
-	"github.com/jaredfolkins/letemcook/util"
 	"github.com/jaredfolkins/letemcook/views/pages"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -25,7 +24,7 @@ func RegisterHandler(c LemcContext) error {
 		return c.String(http.StatusNotFound, "Account not found")
 	}
 
-	newsquid, name, err := util.SquidAndNameByAccountID(account.ID)
+	newsquid, name, err := models.SquidAndNameByAccountID(account.ID)
 	if err != nil {
 		return c.String(http.StatusNotFound, "Can't create Squid")
 	}
@@ -62,7 +61,7 @@ func PostRegisterHandler(c LemcContext) error {
 		return c.String(http.StatusNotFound, "Account not found")
 	}
 
-	newSquid, newName, err := util.SquidAndNameByAccountID(account.ID)
+	newSquid, newName, err := models.SquidAndNameByAccountID(account.ID)
 	if err != nil {
 		return c.String(http.StatusNotFound, "Can't create Squid")
 	}

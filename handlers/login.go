@@ -11,7 +11,6 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/jaredfolkins/letemcook/models"
 	"github.com/jaredfolkins/letemcook/paths"
-	"github.com/jaredfolkins/letemcook/util"
 	"github.com/jaredfolkins/letemcook/views/pages"
 	"github.com/labstack/echo-contrib/session"
 	"golang.org/x/crypto/bcrypt"
@@ -133,7 +132,7 @@ func PostLoginHandler(c LemcContext) error {
 		ActingAs:   user, // Initially, acting as self
 	}
 
-	newSquid, newName, err := util.SquidAndNameByAccountID(user.Account.ID)
+	newSquid, newName, err := models.SquidAndNameByAccountID(user.Account.ID)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, "Failed to generate account identifier")
 	}

@@ -36,7 +36,7 @@ func Before(next echo.HandlerFunc) echo.HandlerFunc {
 			newSess.Save(c.Request(), c.Response())
 
 			// Redirect to login page for the default account (ID 1)
-			squid, name, err := util.SquidAndNameByAccountID(1)
+			squid, name, err := models.SquidAndNameByAccountID(1)
 			if err != nil {
 				log.Printf("Error getting squid/name for default account ID 1: %v. Redirecting to setup.", err)
 				return c.Redirect(http.StatusFound, "/setup") // Redirect to setup if default account lookup fails

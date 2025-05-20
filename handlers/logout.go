@@ -6,7 +6,6 @@ import (
 
 	"github.com/jaredfolkins/letemcook/models"
 	"github.com/jaredfolkins/letemcook/paths"
-	"github.com/jaredfolkins/letemcook/util"
 	"github.com/jaredfolkins/letemcook/views/pages"
 	"github.com/labstack/echo-contrib/session"
 )
@@ -17,7 +16,7 @@ func PostLogoutHandler(c LemcContext) error {
 		return err
 	}
 
-	newSquid, newName, err := util.SquidAndNameByAccountID(c.UserContext().LoggedInAs.Account.ID)
+	newSquid, newName, err := models.SquidAndNameByAccountID(c.UserContext().LoggedInAs.Account.ID)
 	if err != nil {
 		return c.String(http.StatusNotFound, "Can't create Squid")
 	}

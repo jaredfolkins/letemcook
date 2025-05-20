@@ -6,7 +6,6 @@ import (
 
 	"github.com/a-h/templ"
 	"github.com/jaredfolkins/letemcook/models"
-	"github.com/jaredfolkins/letemcook/util"
 	"github.com/jaredfolkins/letemcook/views/pages"
 	"github.com/labstack/echo/v4"
 )
@@ -29,7 +28,7 @@ func newLoginView(c LemcContext) (models.LoginView, error) {
 		return loginView, err
 	}
 
-	newsquid, name, err := util.SquidAndNameByAccountID(account.ID)
+	newsquid, name, err := models.SquidAndNameByAccountID(account.ID)
 	if err != nil {
 		return loginView, err
 	}

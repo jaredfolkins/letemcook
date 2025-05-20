@@ -110,7 +110,7 @@ func GetCookbookEditView(c LemcContext) error {
 		return err
 	}
 
-	newSquid, newName, err := util.SquidAndNameByAccountID(c.UserContext().ActingAs.Account.ID)
+	newSquid, newName, err := models.SquidAndNameByAccountID(c.UserContext().ActingAs.Account.ID)
 	if err != nil {
 		return c.String(http.StatusNotFound, "Can't create Squid")
 	}
@@ -294,7 +294,7 @@ func GetCookbookEditIndividualView(c LemcContext) error {
 		return err
 	}
 
-	newSquid, newName, err := util.SquidAndNameByAccountID(c.UserContext().ActingAs.Account.ID)
+	newSquid, newName, err := models.SquidAndNameByAccountID(c.UserContext().ActingAs.Account.ID)
 	if err != nil {
 		return c.String(http.StatusNotFound, "Can't create Squid")
 	}
@@ -342,7 +342,7 @@ func GetCookbookEditSharedView(c LemcContext) error {
 		return err
 	}
 
-	newSquid, newName, err := util.SquidAndNameByAccountID(c.UserContext().ActingAs.Account.ID)
+	newSquid, newName, err := models.SquidAndNameByAccountID(c.UserContext().ActingAs.Account.ID)
 	if err != nil {
 		return c.String(http.StatusNotFound, "Can't create Squid")
 	}
@@ -398,7 +398,7 @@ func GetCookbookEditAclsView(c LemcContext) error {
 		return err
 	}
 
-	newSquid, newName, err := util.SquidAndNameByAccountID(c.UserContext().ActingAs.Account.ID)
+	newSquid, newName, err := models.SquidAndNameByAccountID(c.UserContext().ActingAs.Account.ID)
 	if err != nil {
 		return c.String(http.StatusNotFound, "Can't create Squid")
 	}

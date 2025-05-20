@@ -2,13 +2,13 @@ package models
 
 import (
 	"context"
-	"gopkg.in/yaml.v3"
 	"os"
 	"sort"
 	"strings"
 	"time"
 
-	"github.com/docker/docker/api/types"
+	"gopkg.in/yaml.v3"
+
 	"github.com/docker/docker/client"
 	"github.com/docker/docker/errdefs"
 	"github.com/jaredfolkins/letemcook/util"

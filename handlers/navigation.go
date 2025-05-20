@@ -3,7 +3,6 @@ package handlers
 import (
 	"log"
 
-	"github.com/jaredfolkins/letemcook/util"
 	"github.com/jaredfolkins/letemcook/views/partials"
 
 	"github.com/jaredfolkins/letemcook/models"
@@ -17,7 +16,7 @@ func GetNavtop(c LemcContext) error {
 	if err != nil {
 		log.Printf("Failed to find account by squid '%s': %v", squid, err)
 	} else {
-		nsquid, nname, _ = util.SquidAndNameByAccountID(account.ID)
+		nsquid, nname, _ = models.SquidAndNameByAccountID(account.ID)
 	}
 
 	section := c.QueryParam("section")

@@ -10,7 +10,7 @@ import (
 
 	"github.com/jaredfolkins/letemcook/db"
 	"github.com/jaredfolkins/letemcook/middleware"
-	"github.com/jaredfolkins/letemcook/util"
+	"github.com/jaredfolkins/letemcook/models"
 	"github.com/labstack/echo/v4"
 )
 
@@ -32,7 +32,7 @@ func TestRedirLoginHandler(t *testing.T) {
 	if ctx.Response().Status != http.StatusTemporaryRedirect {
 		t.Fatalf("status %d", ctx.Response().Status)
 	}
-	squid, name, _ := util.SquidAndNameByAccountID(1)
+	squid, name, _ := models.SquidAndNameByAccountID(1)
 	expected := fmt.Sprintf("/lemc/login?squid=%s&account=%s", squid, name)
 	if loc := ctx.Response().Header().Get("Location"); loc != expected {
 		t.Errorf("location %s != %s", loc, expected)
@@ -49,7 +49,7 @@ func TestRedirRegisterHandler(t *testing.T) {
 	if ctx.Response().Status != http.StatusTemporaryRedirect {
 		t.Fatalf("status %d", ctx.Response().Status)
 	}
-	squid, name, _ := util.SquidAndNameByAccountID(1)
+	squid, name, _ := models.SquidAndNameByAccountID(1)
 	expected := fmt.Sprintf("/lemc/register?squid=%s&account=%s", squid, name)
 	if loc := ctx.Response().Header().Get("Location"); loc != expected {
 		t.Errorf("location %s != %s", loc, expected)

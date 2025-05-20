@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/jaredfolkins/letemcook/models"
-	"github.com/jaredfolkins/letemcook/util"
 	"github.com/jaredfolkins/letemcook/views/pages"
 	"github.com/labstack/echo/v4"
 )
@@ -60,7 +59,7 @@ func GetAppsHandler(c LemcContext) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "User context lost")
 	}
 
-	newSquid, newName, err := util.SquidAndNameByAccountID(c.UserContext().ActingAs.Account.ID)
+	newSquid, newName, err := models.SquidAndNameByAccountID(c.UserContext().ActingAs.Account.ID)
 	if err != nil {
 		return c.String(http.StatusNotFound, "Can't create Squid")
 	}

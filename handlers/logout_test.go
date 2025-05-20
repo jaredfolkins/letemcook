@@ -13,7 +13,6 @@ import (
 	"github.com/jaredfolkins/letemcook/db"
 	"github.com/jaredfolkins/letemcook/middleware"
 	"github.com/jaredfolkins/letemcook/models"
-	"github.com/jaredfolkins/letemcook/util"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 )
@@ -52,7 +51,7 @@ func TestPostLogoutHandler(t *testing.T) {
 		t.Fatalf("expected status 200, got %d", rec.Code)
 	}
 
-	squid, name, err := util.SquidAndNameByAccountID(1)
+	squid, name, err := models.SquidAndNameByAccountID(1)
 	if err != nil {
 		t.Fatalf("squid lookup: %v", err)
 	}

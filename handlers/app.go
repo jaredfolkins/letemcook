@@ -365,7 +365,7 @@ func PostAppCreate(c LemcContext) error {
 		totalPages = int(math.Ceil(float64(totalapps) / float64(limit)))
 	}
 
-	newSquid, newName, err := util.SquidAndNameByAccountID(c.UserContext().ActingAs.Account.ID)
+	newSquid, newName, err := models.SquidAndNameByAccountID(c.UserContext().ActingAs.Account.ID)
 	if err != nil {
 		return c.String(http.StatusNotFound, "Can't create Squid")
 	}
@@ -467,7 +467,7 @@ func AppRefreshHandler(c LemcContext) error {
 		totalPages = int(math.Ceil(float64(totalapps) / float64(DefaultappLimit)))
 	}
 
-	newSquid, newName, err := util.SquidAndNameByAccountID(c.UserContext().ActingAs.Account.ID)
+	newSquid, newName, err := models.SquidAndNameByAccountID(c.UserContext().ActingAs.Account.ID)
 	if err != nil {
 		return c.String(http.StatusNotFound, "Can't create Squid")
 	}

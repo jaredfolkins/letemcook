@@ -113,7 +113,7 @@ func PostCookbookCreate(c LemcContext) error {
 		return err // Or return a specific error response
 	}
 
-	newSquid, newName, err := util.SquidAndNameByAccountID(c.UserContext().ActingAs.Account.ID)
+	newSquid, newName, err := models.SquidAndNameByAccountID(c.UserContext().ActingAs.Account.ID)
 	if err != nil {
 		return c.String(http.StatusNotFound, "Can't create Squid")
 	}

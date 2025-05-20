@@ -111,7 +111,7 @@ func PostSetupHandler(c LemcContext) error {
 		return err
 	}
 
-	newSquid, newName, err := util.SquidAndNameByAccountID(account.ID)
+	newSquid, newName, err := models.SquidAndNameByAccountID(account.ID)
 	if err != nil {
 		return c.String(http.StatusNotFound, "Can't create Squid")
 	}

@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/jaredfolkins/letemcook/models"
-	"github.com/jaredfolkins/letemcook/util"
 	"github.com/jaredfolkins/letemcook/views/pages"
 )
 
@@ -48,7 +47,7 @@ func GetCookbooksHandler(c LemcContext) error {
 		return err
 	}
 
-	newSquid, newName, err := util.SquidAndNameByAccountID(c.UserContext().ActingAs.Account.ID)
+	newSquid, newName, err := models.SquidAndNameByAccountID(c.UserContext().ActingAs.Account.ID)
 	if err != nil {
 		return c.String(http.StatusNotFound, "Can't create Squid")
 	}
