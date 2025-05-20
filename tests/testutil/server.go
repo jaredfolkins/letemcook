@@ -37,7 +37,9 @@ func StartTestServer() (func(), error) {
 		return nil, fmt.Errorf("start server: %w", err)
 	}
 
-	if err := waitForServerReady(os.Getenv("LEMC_PORT_TEST"), 10*time.Second); err != nil {
+	// Wait briefly for the server to become ready. If it doesn't start,
+	// the integration tests will be skipped by the caller.
+	if err := waitForServerReady(os.Getenv("LEMC_PORT_TEST"), 5*time.Second); err != nil {
 		cancel()
 		_ = cmd.Process.Kill()
 		cmd.Wait()
