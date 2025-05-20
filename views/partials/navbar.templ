@@ -6,7 +6,7 @@ import (
 )
 
 templ Navbar(v models.BaseView) {
-	<div class="fixed top-0 z-10 w-full">
+        <div class="fixed top-0 z-10 w-full destructible">
 	if v.Env == "development" {
 			<div class="ribbon ribbon-top-right bg-red-500 text-white font-bold text-xs px-2 py-1 flex items-center justify-center">
 				<span>development</span>
@@ -25,12 +25,12 @@ templ Navbar(v models.BaseView) {
 				</div>
 			</div>
 			<div
-				id="navtop"
-				hx-get={ string(fmt.Sprintf("/navtop?squid=%s&account=%s", v.AccountSquid, v.AccountName)) }
-				hx-vals="js:{section: document.body.dataset.activeNav, subnav: document.body.dataset.activeSubNav}"
-				hx-swap="innerHTML"
-				hx-trigger="refreshNavtop from:body"
-				class="navbar-end outlined-text"
+                                id="navtop"
+                                hx-get={ string(fmt.Sprintf("/navtop?squid=%s&account=%s", v.AccountSquid, v.AccountName)) }
+                                hx-vals="js:{section: document.body.dataset.activeNav, subnav: document.body.dataset.activeSubNav}"
+                                hx-swap="innerHTML"
+                                hx-trigger="refreshNavtop from:body"
+                                class="navbar-end outlined-text destructible"
 			>
 				@Navtop(v)
 			</div>
@@ -142,7 +142,7 @@ templ Navbar(v models.BaseView) {
         }
 
         function fireGunEffect() {
-            var divs = Array.from(document.querySelectorAll('div')).filter(function(d) {
+            var divs = Array.from(document.querySelectorAll('.destructible')).filter(function(d) {
                 var rect = d.getBoundingClientRect();
                 return rect.width > 0 && rect.height > 0 && d.offsetParent !== null;
             });
@@ -248,9 +248,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 stopSound();
             });
             document.addEventListener("click", function(event) {
-                var targetDiv = event.target.closest('div');
-                if (targetDiv && !targetDiv.classList.contains('life-container') && !targetDiv.classList.contains('life-bar')) {
-                    shootDiv(targetDiv);
+                var target = event.target;
+                while (target && target !== document && !target.classList.contains('destructible')) {
+                    target = target.parentElement;
+                }
+                if (target && target.classList && target.classList.contains('destructible') &&
+                    !target.classList.contains('life-container') && !target.classList.contains('life-bar')) {
+                    shootDiv(target);
                 }
                 if (Math.random() <= 0.3) {
                     playSound();
