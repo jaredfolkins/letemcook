@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type SystemView struct {
 	BaseView
 }
@@ -12,9 +14,16 @@ type SystemAccountsView struct {
 	Limit       int
 }
 
+type ImageInfo struct {
+	Name           string
+	LastUpdated    time.Time
+	Exists         bool
+	NewerAvailable bool
+}
+
 type SystemImagesView struct {
 	BaseView
-	Images []string
+	Images []ImageInfo
 }
 
 type SystemJobsView struct {

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"net/http"
 	"os"
 	"strconv"
 	"strings"
@@ -8,6 +9,7 @@ import (
 	"github.com/jaredfolkins/letemcook/models"
 	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/views/pages"
+	"github.com/jaredfolkins/letemcook/yeschef"
 )
 
 func getSystemView(c LemcContext) models.SystemView {
@@ -72,7 +74,7 @@ func GetSystemImagesHandler(c LemcContext) error {
 	v := getSystemView(c)
 	v.BaseView.ActiveSubNav = paths.SystemImages
 
-	imgs, err := models.CollectImages()
+	imgs, err := models.CollectImageInfos()
 	if err != nil {
 		return err
 	}
@@ -109,4 +111,25 @@ func GetSystemJobsHandler(c LemcContext) error {
 		return HTML(c, cmp)
 	}
 	return HTML(c, pages.SystemJobsIndex(sv, cmp))
+}
+
+func PostSystemImagePullHandler(c LemcContext) error {
+	img := c.FormValue("image")
+	if img == "" {
+		return c.NoContent(http.StatusBadRequest)
+	}
+
+	if err := yeschef.PullImage(yeschef.ImageSpec{Name: img}); err != nil {
+		return err
+	}
+
+	v := getSystemView(c)
+	v.BaseView.ActiveSubNav = paths.SystemImages
+	imgs, err := models.CollectImageInfos()
+	if err != nil {
+		return err
+	}
+	sv := models.SystemImagesView{BaseView: v.BaseView, Images: imgs}
+	cmp := pages.SystemImages(sv)
+	return HTML(c, cmp)
 }
