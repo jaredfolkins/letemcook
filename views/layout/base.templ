@@ -64,13 +64,13 @@ templ Base(v models.BaseView) {
 
 
             <main class={ templ.KV("pt-40 flex flex-col h-screen justify-between bg-repeat-y bg-cover bg-center bg-lemc", !v.IsError) }>
-                <div id="main-container">
-                    <div id="app" hx-history-elt>
+                <div id="main-container" class="destructible">
+                    <div id="app" hx-history-elt class="destructible">
                         { children... }
                     </div>
                 </div>
 
-                <div id="footer-container">
+                <div id="footer-container" class="destructible">
                 @partials.Footer()
                 </div>
 
