@@ -44,6 +44,7 @@ templ Navbar(v models.BaseView) {
         var isPlaying = false;
         var allHeckles = [];
         var playedHeckles = JSON.parse(localStorage.getItem('playedHeckles')) || [];
+        var fadeTimers = new WeakMap();
 
        function swingAndFall(el) {
             var originalDisplay = el.style.display;
@@ -77,6 +78,7 @@ templ Navbar(v models.BaseView) {
             }
             var container = document.createElement('div');
             container.className = 'life-container';
+            container.style.opacity = '1';
             var bar = document.createElement('div');
             bar.className = 'life-bar';
             container.appendChild(bar);
@@ -94,20 +96,48 @@ templ Navbar(v models.BaseView) {
             bar.style.width = width + '%';
         }
 
+
+        function scheduleFadeOut(el) {
+            var container = el.querySelector('.life-container');
+            if (!container) { return; }
+            clearTimeout(fadeTimers.get(el));
+            var timer = setTimeout(function() {
+                container.style.opacity = '0';
+                container.addEventListener('transitionend', function handler() {
+                    container.removeEventListener('transitionend', handler);
+                    container.remove();
+                    delete el.dataset.maxLife;
+                    delete el.dataset.life;
+                    fadeTimers.delete(el);
+                });
+            }, 500);
+            fadeTimers.set(el, timer);
+        }
+
         function shootDiv(el) {
             if (!el.dataset.maxLife) {
                 createLifeBar(el, computeMaxLife(el));
             }
+
+            var container = el.querySelector('.life-container');
+            if (container) {
+                container.style.opacity = '1';
+            }
+            clearTimeout(fadeTimers.get(el));
+
             var life = parseInt(el.dataset.life);
             life -= 1;
             el.dataset.life = life;
             updateLifeBar(el);
             if (life <= 0) {
-                var container = el.querySelector('.life-container');
                 if (container) { container.remove(); }
                 swingAndFall(el);
+                fadeTimers.delete(el);
                 delete el.dataset.maxLife;
                 delete el.dataset.life;
+            } else {
+                scheduleFadeOut(el);
+
             }
         }
 
@@ -258,6 +288,9 @@ document.addEventListener("DOMContentLoaded", function() {
             width: 100%;
             height: 4px;
             background: rgba(255,255,255,0.3);
+            opacity: 1;
+            transition: opacity 0.5s;
+
             pointer-events: none;
         }
         .life-bar {
