@@ -24,43 +24,39 @@ templ JobsPage(v models.JobsView) {
 		<div class="flex flex-row gap-12 justify-end">
 		</div>
 	</div>
-	<div id="jobs-content-box" class="bg-base-100 p-9 edges gap-12 mx-12 my-4">
-		<div id="job-list-container" class="grid grid-cols-1 gap-12">
-			if len(v.Jobs) == 0 {
-				<p>No jobs found.</p>
-			} else {
-				<div class="overflow-x-auto">
-					<table class="table w-full">
-						<thead>
-							<tr>
-								<th>ID</th>
-								<th>Recipe</th>
-								<th>User</th>
-								<th>Type</th>
-								<th>Status</th>
+        <div id="jobs-content-box" class="bg-base-100 p-9 edges gap-12 mx-12 my-4">
+                <div class="overflow-x-auto">
+                        if len(v.Jobs) == 0 {
+                                <p>No jobs found.</p>
+                        } else {
+                                <table class="table w-full">
+                                                <thead>
+                                                        <tr>
+                                                                <th>ID</th>
+                                                                <th>Recipe</th>
+                                                                <th>User</th>
+                                                                <th>Type</th>
+                                                                <th>Status</th>
 								<th>Created At</th>
 								<th>Next Run / Scheduled At</th>
-							</tr>
-						</thead>
-						<tbody>
-							for _, job := range v.Jobs {
-								<tr>
-									<td>
-										{ job.ID } 
-									</td>
-									<td>{ job.RecipeName }</td>
-									<td>{ job.Username }</td>
-									<td>{ job.Type }</td>
-									<td>{ job.Status }</td>
-									<td>{ formatJobTime(job.CreatedAt) }</td>
-									<td>{ formatJobTime(job.ScheduledAt) }</td>
-								</tr>
-							}
-						</tbody>
-					</table>
-				</div>
-			}
-		</div>
+                                                        </tr>
+                                                </thead>
+                                                <tbody>
+                                                        for _, job := range v.Jobs {
+                                                                <tr>
+                                                                        <td>{ job.ID }</td>
+                                                                        <td>{ job.RecipeName }</td>
+                                                                        <td>{ job.Username }</td>
+                                                                        <td>{ job.Type }</td>
+                                                                        <td>{ job.Status }</td>
+                                                                        <td>{ formatJobTime(job.CreatedAt) }</td>
+                                                                        <td>{ formatJobTime(job.ScheduledAt) }</td>
+                                                                </tr>
+                                                        }
+                                                </tbody>
+                                        </table>
+                        }
+                </div>
 
 		if v.TotalPages > 1 {
 			<div class="flex justify-center items-center space-x-4 mt-8">
