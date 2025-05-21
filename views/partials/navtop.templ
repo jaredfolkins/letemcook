@@ -189,20 +189,33 @@ templ Navtop(v models.BaseView) {
 				<!--<div tabindex="0" role="button" class="btn m-1">{ v.UserContext.Username() }</div> -->
 				<div tabindex="0" role="button" class="btn btn-primary text-lg rounded-none m-1">{ v.UserContext.Username() }</div>
 				<ul tabindex="0" class="dropdown-content menu bg-primary z-[1] w-52 p-2 shadow m-1">
-					<li>
-						<a
-							hx-target="#app"
-							hx-swap="innerHTML transition:true"
-                                                       hx-push-url={ paths.Profile }
-                                                       href={ templ.URL(paths.Profile + "?partial=true") }
-							class="btn btn-ghost rounded-none text-lg"
-						>
-							Profile
-						</a>
-					</li>
-					<li>
-						<a
-							hx-confirm="Are you sure you'd like to logout?"
+                                       <li>
+                                               <a
+                                                       hx-target="#app"
+                                                       hx-swap="innerHTML transition:true"
+                                                      hx-push-url={ paths.Profile }
+                                                      href={ templ.URL(paths.Profile + "?partial=true") }
+                                                       class="btn btn-ghost rounded-none text-lg"
+                                               >
+                                                       Profile
+                                               </a>
+                                       </li>
+                                       if v.UserContext.LoggedInAs != nil && v.UserContext.LoggedInAs.Permissions != nil && v.UserContext.LoggedInAs.Permissions.PermSystem != nil && v.UserContext.LoggedInAs.Permissions.PermSystem.CanAdminister {
+                                               <li>
+                                                       <a
+                                                               hx-target="#app"
+                                                               hx-swap="innerHTML transition:true"
+                                                               hx-push-url={ paths.Impersonate }
+                                                               href={ templ.URL(paths.Impersonate + "?partial=true") }
+                                                               class="btn btn-ghost rounded-none text-lg"
+                                                       >
+                                                               Impersonate
+                                                       </a>
+                                               </li>
+                                       }
+                                       <li>
+                                               <a
+                                                       hx-confirm="Are you sure you'd like to logout?"
 							hx-swap="innerHTML transition:true"
                                                        hx-post={ paths.Logout }
 							hx-target="#app"
@@ -250,10 +263,13 @@ templ Navtop(v models.BaseView) {
 				}
 				<li>
 					<a>{ v.UserContext.Username() }</a>
-					<ul class="p-2">
+                                               <ul class="p-2">
                                                <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.Profile } href={ templ.URL(paths.Profile + "?partial=true") }>Profile</a></li>
-                                                <li><a hx-confirm="Are you sure you'd like to logout?" hx-swap="innerHTML transition:true" hx-post={ paths.Logout } hx-target="#app" hx-push-url={ string(fmt.Sprintf("%s?squid=%s&account=%s", paths.Login, v.AccountSquid, v.AccountName)) }>Logout</a></li>
-					</ul>
+                                               if v.UserContext.LoggedInAs != nil && v.UserContext.LoggedInAs.Permissions != nil && v.UserContext.LoggedInAs.Permissions.PermSystem != nil && v.UserContext.LoggedInAs.Permissions.PermSystem.CanAdminister {
+                                                   <li><a hx-target="#app" hx-swap="innerHTML transition:true" hx-push-url={ paths.Impersonate } href={ templ.URL(paths.Impersonate + "?partial=true") }>Impersonate</a></li>
+                                               }
+                                               <li><a hx-confirm="Are you sure you'd like to logout?" hx-swap="innerHTML transition:true" hx-post={ paths.Logout } hx-target="#app" hx-push-url={ string(fmt.Sprintf("%s?squid=%s&account=%s", paths.Login, v.AccountSquid, v.AccountName)) }>Logout</a></li>
+                                       </ul>
 				</li>
 			</ul>
 		</div>

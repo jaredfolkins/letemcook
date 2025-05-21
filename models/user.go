@@ -481,3 +481,38 @@ type User struct {
 	Account     *Account     `db:"-"`
 	Permissions *Permissions `db:"-"`
 }
+
+func SearchAllUsers(search string, limit int) ([]User, error) {
+	users := []User{}
+	query := `
+        SELECT
+            users.id,
+            users.username,
+            users.email,
+            accounts.id AS "account.id",
+            accounts.name AS "account.name",
+            accounts.squid AS "account.squid"
+        FROM users
+        JOIN permissions_accounts ON permissions_accounts.user_id = users.id
+        JOIN accounts ON permissions_accounts.account_id = accounts.id
+        WHERE users.is_deleted = false
+          AND users.is_disabled = false
+          AND (users.username LIKE $1 OR users.email LIKE $1)
+        GROUP BY users.id, accounts.id
+        ORDER BY users.username
+        LIMIT $2`
+	search = "%" + search + "%"
+	err := db.Db().Select(&users, query, search, limit)
+	if err != nil {
+		return nil, err
+	}
+	// Attach permission bundle for each user
+	for i := range users {
+		u := &users[i]
+		full, err := UserByIDAndAccountID(u.ID, u.Account.ID)
+		if err == nil {
+			users[i] = *full
+		}
+	}
+	return users, nil
+}

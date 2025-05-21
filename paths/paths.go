@@ -21,6 +21,8 @@ const (
 	SystemImages   = LEMCPrefix + "/system/images"
 	SystemJobs     = LEMCPrefix + "/system/jobs"
 
+	Impersonate = LEMCPrefix + "/impersonate"
+
 	LockerDownloadPattern = LEMCPrefix + "/locker/uuid/%s/page/%d/scope/%s/filename/"
 	McpSharedJobPattern   = LEMCPrefix + "/app/job/shared/uuid/%s/page/%d/recipe/%s"
 	SharedMount           = LEMCPrefix + "/shared"
