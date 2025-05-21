@@ -205,7 +205,7 @@ templ Javascript() {
                                 document.getElementById(key + '-script').innerHTML = output;
                             });
                             _map.set(key, '');
-                            buffers.set('html', _map);
+                            buffers.set('js', _map);
                             break;
                         case 'lemc.js.buffer;':
                             var _map = buffers.get('js');

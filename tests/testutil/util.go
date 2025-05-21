@@ -2,6 +2,7 @@ package testutil
 
 import (
 	"log"
+	"os"
 	"path/filepath"
 	"runtime"
 )
@@ -17,4 +18,12 @@ func RepoRoot() string {
 // DataRoot returns the data directory path used for tests.
 func DataRoot() string {
 	return filepath.Join(RepoRoot(), "data")
+}
+
+func EnvSetup(env string) {
+	dataRoot := DataRoot()
+	os.Setenv("LEMC_ENV", env)
+	os.Setenv("LEMC_DATA", dataRoot)
+	envDir := filepath.Join(dataRoot, env)
+	_ = os.MkdirAll(envDir, 0o755)
 }

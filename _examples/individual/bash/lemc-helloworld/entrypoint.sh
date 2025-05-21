@@ -19,8 +19,8 @@ lemc_css_buffer() {
 
 # Function to truncate HTML & CSS content areas
 lemc_truncate() {
-    echo "lemc.html.trunc;"
-    echo "lemc.css.trunc;"
+    echo "lemc.html.trunc;\n"
+    echo "lemc.css.trunc;\n"
 }
 
 # Function to send CSS file content line by line

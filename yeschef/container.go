@@ -33,7 +33,7 @@ func msg(message, imageHash, imageName string, job *JobRecipe, jm *util.JobMeta,
 		ViewType: job.Scope,
 	}
 
-	log.Printf("msg: %s", message)
+	time.Sleep(2 * time.Millisecond)
 
 	lf.StepWriteToLog(jm.StepID, message, imageHash, imageName)
 
