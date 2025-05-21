@@ -135,7 +135,6 @@ func msg(message, imageHash, imageName string, job *JobRecipe, jm *util.JobMeta,
 			return // Cannot proceed without a valid user ID
 		}
 		targetUserIDs = []int64{individualUserID}
-		log.Printf("[Job %s] Sending individual message to UserID %d for UUID %s", job.StepID, individualUserID, job.UUID)
 
 	case "shared":
 		// Use the pre-populated list for shared jobs
