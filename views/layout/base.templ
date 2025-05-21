@@ -28,7 +28,6 @@ templ Base(v models.BaseView) {
             <title>Let'em Cook! { v.Title }</title>
             <script src="https://unpkg.com/htmx.org@2.0.0" integrity="sha384-wS5l5IKJBvK6sPTKa2WZ1js3d947pvWXbPJ1OmWfEuxLgeHcEbjUUA5i9V5ZkpCw" crossorigin="anonymous"></script>
             <script src="https://unpkg.com/htmx-ext-ws@2.0.0/ws.js"></script>
-            <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/remove-me.js"></script>
 
             @partials.Javascript()
             <style>
@@ -56,7 +55,7 @@ templ Base(v models.BaseView) {
                 }
             </script>
 			<header>
-                <div id="toasty" hx-ext="remove-me" class="toast toast-top toast-end z-20 rounded-none" ></div>
+                <div id="toasty" class="toast toast-top toast-end z-20 rounded-none" ></div>
 				if !v.IsError {
 					@partials.Navbar(v)
 				}
