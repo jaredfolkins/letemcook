@@ -76,12 +76,30 @@ templ Javascript() {
 
             document.body.addEventListener("htmx:afterRequest", function (evt) {
                 if (evt.target.id != 'navtop') {
-                    var errObj = JSON.parse(evt.detail.xhr.getResponseHeader('X-Lemc-Flash-Error'));
-                    var successObj = JSON.parse(evt.detail.xhr.getResponseHeader('X-Lemc-Flash-Success'));
+                    var errObj = {};
+                    var successObj = {};
+                    var errHeader = evt.detail.xhr.getResponseHeader('X-Lemc-Flash-Error');
+                    var successHeader = evt.detail.xhr.getResponseHeader('X-Lemc-Flash-Success');
 
-                    if (errObj) {
+                    try {
+                        if (errHeader) {
+                            errObj = JSON.parse(errHeader);
+                        }
+                    } catch (e) {
+                        console.error('Error parsing X-Lemc-Flash-Error header', e);
+                    }
+
+                    try {
+                        if (successHeader) {
+                            successObj = JSON.parse(successHeader);
+                        }
+                    } catch (e) {
+                        console.error('Error parsing X-Lemc-Flash-Success header', e);
+                    }
+
+                    if (errHeader) {
                         hideSpinner(errObj, "error", evt.detail.requestConfig.verb);
-                    } else if (successObj) {
+                    } else if (successHeader) {
                         hideSpinner(successObj, "success", evt.detail.requestConfig.verb);
                     } else {
                         hideSpinner({}, "", evt.detail.requestConfig.verb);
