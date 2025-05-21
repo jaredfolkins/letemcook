@@ -129,7 +129,7 @@ type Recipe struct {
 	IsShared    bool        `yaml:"-"` // used for telling the job how to run, as a user or admin
 	Name        string      `yaml:"recipe"`
 	Description string      `yaml:"description"`
-	Form        []FormField `yaml:"form"`
+	Form        []FormField `yaml:"form,omitempty"`
 	Steps       []Step      `yaml:"steps"`
 }
 
