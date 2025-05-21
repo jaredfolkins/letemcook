@@ -3,7 +3,6 @@ package main_test
 import (
 	"context"
 	"net/url"
-	"strings"
 	"testing"
 	"time"
 
@@ -67,9 +66,7 @@ func TestNavClickAfterHardRefresh(t *testing.T) {
 		t.Fatalf("failed running chromedp tasks: %v", err)
 	}
 
-	if jsErr == "" {
-		t.Errorf("expected a JavaScript error, but none was captured")
-	} else if !strings.Contains(jsErr, "TypeError") {
-		t.Errorf("expected TypeError, got %q", jsErr)
+	if jsErr != "" {
+		t.Fatalf("unexpected JavaScript error captured: %s", jsErr)
 	}
 }
