@@ -26,8 +26,9 @@ templ Base(v models.BaseView) {
 			<link rel="icon" href={ string(fmt.Sprintf("/themes/%s/public/imgs/256x256.ico?v=%s", v.Theme, v.CacheBuster)) } sizes="256x256" type="image/x-icon"/>
 
             <title>Let'em Cook! { v.Title }</title>
-            <script src="https://unpkg.com/htmx.org@2.0.0" integrity="sha384-wS5l5IKJBvK6sPTKa2WZ1js3d947pvWXbPJ1OmWfEuxLgeHcEbjUUA5i9V5ZkpCw" crossorigin="anonymous"></script>
+            <script src="https://unpkg.com/htmx.org@2.0.4"></script> 
             <script src="https://unpkg.com/htmx-ext-ws@2.0.0/ws.js"></script>
+            <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/remove-me.js"></script>
 
             @partials.Javascript()
             <style>
