@@ -33,6 +33,10 @@ func msg(message, imageHash, imageName string, job *JobRecipe, jm *util.JobMeta,
 		ViewType: job.Scope,
 	}
 
+	// HACKY FIX FOR THE BUFFERED MESSAGES
+	// This is a hacky fix for the buffered messages
+	// If I don't do this, messages with no content get send but not
+	// in the json format that the server expects.
 	time.Sleep(2 * time.Millisecond)
 
 	lf.StepWriteToLog(jm.StepID, message, imageHash, imageName)
