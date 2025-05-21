@@ -18,6 +18,7 @@ import (
 	"time"
 
 	"github.com/docker/docker/api/types/filters"
+	"golang.org/x/time/rate"
 
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/mount"
@@ -26,6 +27,20 @@ import (
 	"github.com/jaredfolkins/letemcook/util"
 )
 
+var emptyTruncLimiter = rate.NewLimiter(rate.Every(10*time.Millisecond), 1)
+
+// isEmptyTrunc returns true if the message is a truncation command with no
+// payload. These messages are used as signals to clear UI buffers.
+func isEmptyTrunc(s string) bool {
+	prefixes := []string{LEMC_CSS_TRUNC, LEMC_HTML_TRUNC, LEMC_JS_TRUNC}
+	for _, p := range prefixes {
+		if strings.HasPrefix(s, p) && strings.TrimSpace(strings.TrimPrefix(s, p)) == "" {
+			return true
+		}
+	}
+	return false
+}
+
 func msg(message, imageHash, imageName string, job *JobRecipe, jm *util.JobMeta, cf *util.ContainerFiles, lf *util.LogFile) {
 	r := &Response{
 		UUID:     jm.UUID,
@@ -33,11 +48,11 @@ func msg(message, imageHash, imageName string, job *JobRecipe, jm *util.JobMeta,
 		ViewType: job.Scope,
 	}
 
-	// HACKY FIX FOR THE BUFFERED MESSAGES
-	// This is a hacky fix for the buffered messages
-	// If I don't do this, messages with no content get send but not
-	// in the json format that the server expects.
-	time.Sleep(2 * time.Millisecond)
+	// Throttle "empty" truncation commands so they don't overwhelm
+	// the websocket connection.
+	if isEmptyTrunc(message) {
+		_ = emptyTruncLimiter.Wait(context.Background())
+	}
 
 	lf.StepWriteToLog(jm.StepID, message, imageHash, imageName)
 
