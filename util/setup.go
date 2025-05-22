@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -36,6 +37,7 @@ func GenerateAlphabet() string {
 
 // SetupEnvironment initializes directories and the .env file.
 func SetupEnvironment() error {
+	syscall.Umask(0)
 	envValue := EnvName()
 	dataRoot := DataRoot()
 

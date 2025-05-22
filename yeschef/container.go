@@ -27,7 +27,7 @@ import (
 	"github.com/jaredfolkins/letemcook/util"
 )
 
-var emptyTruncLimiter = rate.NewLimiter(rate.Every(10*time.Millisecond), 1)
+var emptyTruncLimiter = rate.NewLimiter(rate.Every(100*time.Millisecond), 1)
 
 // isEmptyTrunc returns true if the message is a truncation command with no
 // payload. These messages are used as signals to clear UI buffers.
@@ -51,8 +51,14 @@ func msg(message, imageHash, imageName string, job *JobRecipe, jm *util.JobMeta,
 	// Throttle "empty" truncation commands so they don't overwhelm
 	// the websocket connection.
 	if isEmptyTrunc(message) {
-		_ = emptyTruncLimiter.Wait(context.Background())
+		time.Sleep(100 * time.Millisecond)
 	}
+
+	// WARNING! Throttle writes to the log file to prevent overwhelming the
+	// websocket connection. Hacky, but it works.
+	// This would cause messages to go missing if the client is slow
+	// to process them.
+	time.Sleep(10 * time.Millisecond)
 
 	lf.StepWriteToLog(jm.StepID, message, imageHash, imageName)
 
