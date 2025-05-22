@@ -139,7 +139,7 @@ func (jq *jobQueue) Push(job quartz.ScheduledJob) error {
 	}
 
 	if err = os.WriteFile(fmt.Sprintf("%s/%d", jq.Path, job.NextRunTime()),
-		serialized, FILE_MODE); err != nil {
+		serialized, util.FilePerm); err != nil {
 		logger.Errorf("Failed to write job: %s", err)
 		return err
 	}

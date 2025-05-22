@@ -23,7 +23,7 @@ import (
 )
 
 const (
-	FILE_MODE           fs.FileMode = 0744
+	FILE_MODE           fs.FileMode = util.DirPerm
 	LEMC_FQDN                       = "localhost"
 	DEFAULT_PORT                    = "5362"
 	APP_LOG_FILE                    = "app.log"

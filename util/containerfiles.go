@@ -70,7 +70,7 @@ func NewContainerFiles(jm *JobMeta, is_admin bool) (*ContainerFiles, error) {
 
 	cf.InternalPerUserPublicDir = filepath.Join(fm.LemcLocker, jm.UUID, basedir, fm.IndividualUsernameOrSharedUsername, fm.PageString, PUBLIC)
 	if _, err := os.Stat(cf.InternalPerUserPublicDir); os.IsNotExist(err) {
-		err := os.MkdirAll(cf.InternalPerUserPublicDir, 0755)
+		err := os.MkdirAll(cf.InternalPerUserPublicDir, DirPerm)
 		if err != nil {
 			return cf, err
 		}
@@ -78,7 +78,7 @@ func NewContainerFiles(jm *JobMeta, is_admin bool) (*ContainerFiles, error) {
 
 	cf.InternalPerUserPrivateDir = filepath.Join(fm.LemcLocker, jm.UUID, basedir, fm.IndividualUsernameOrSharedUsername, fm.PageString, PRIVATE)
 	if _, err := os.Stat(cf.InternalPerUserPrivateDir); os.IsNotExist(err) {
-		err := os.MkdirAll(cf.InternalPerUserPrivateDir, 0755)
+		err := os.MkdirAll(cf.InternalPerUserPrivateDir, DirPerm)
 		if err != nil {
 			return cf, err
 		}
@@ -86,7 +86,7 @@ func NewContainerFiles(jm *JobMeta, is_admin bool) (*ContainerFiles, error) {
 
 	cf.InternalPerUserCacheDir = filepath.Join(fm.LemcLocker, jm.UUID, basedir, fm.IndividualUsernameOrSharedUsername, fm.PageString, CACHE)
 	if _, err := os.Stat(cf.InternalPerUserCacheDir); os.IsNotExist(err) {
-		err := os.MkdirAll(cf.InternalPerUserCacheDir, 0755)
+		err := os.MkdirAll(cf.InternalPerUserCacheDir, DirPerm)
 		if err != nil {
 			return cf, err
 		}
@@ -94,7 +94,7 @@ func NewContainerFiles(jm *JobMeta, is_admin bool) (*ContainerFiles, error) {
 
 	cf.InternalSharedDir = filepath.Join(fm.LemcLocker, jm.UUID, SCOPE_SHARED_DIR)
 	if _, err := os.Stat(cf.InternalSharedDir); os.IsNotExist(err) {
-		err := os.MkdirAll(cf.InternalSharedDir, 0755)
+		err := os.MkdirAll(cf.InternalSharedDir, DirPerm)
 		if err != nil {
 			return cf, err
 		}
@@ -102,7 +102,7 @@ func NewContainerFiles(jm *JobMeta, is_admin bool) (*ContainerFiles, error) {
 
 	cf.InternalGlobalDir = filepath.Join(fm.LemcLocker, jm.UUID, GLOBAL_DIR)
 	if _, err := os.Stat(cf.InternalGlobalDir); os.IsNotExist(err) {
-		err := os.MkdirAll(cf.InternalGlobalDir, 0755)
+		err := os.MkdirAll(cf.InternalGlobalDir, DirPerm)
 		if err != nil {
 			return cf, err
 		}
@@ -113,17 +113,17 @@ func NewContainerFiles(jm *JobMeta, is_admin bool) (*ContainerFiles, error) {
 
 func (cf *ContainerFiles) OpenFiles() error {
 	var err error
-	cf.Html, err = os.OpenFile(filepath.Join(cf.InternalPerUserCacheDir, CACHE_HTML), os.O_RDWR|os.O_CREATE|os.O_SYNC, 0755)
+	cf.Html, err = os.OpenFile(filepath.Join(cf.InternalPerUserCacheDir, CACHE_HTML), os.O_RDWR|os.O_CREATE|os.O_SYNC, FilePerm)
 	if err != nil {
 		return err
 	}
 
-	cf.Css, err = os.OpenFile(filepath.Join(cf.InternalPerUserCacheDir, CACHE_CSS), os.O_RDWR|os.O_CREATE|os.O_SYNC, 0755)
+	cf.Css, err = os.OpenFile(filepath.Join(cf.InternalPerUserCacheDir, CACHE_CSS), os.O_RDWR|os.O_CREATE|os.O_SYNC, FilePerm)
 	if err != nil {
 		return err
 	}
 
-	cf.Js, err = os.OpenFile(filepath.Join(cf.InternalPerUserCacheDir, CACHE_JS), os.O_RDWR|os.O_CREATE|os.O_SYNC, 0755)
+	cf.Js, err = os.OpenFile(filepath.Join(cf.InternalPerUserCacheDir, CACHE_JS), os.O_RDWR|os.O_CREATE|os.O_SYNC, FilePerm)
 	if err != nil {
 		return err
 	}

@@ -15,7 +15,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-const FileMode fs.FileMode = 0o744
+const FileMode fs.FileMode = DirPerm
 
 // GenerateHash returns a random 16 byte hex string.
 func GenerateHash() (string, error) {
