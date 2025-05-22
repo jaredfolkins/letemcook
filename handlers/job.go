@@ -248,6 +248,14 @@ func PutCookbookJob(c LemcContext) error {
 		RecipientUserIDs: recipientUserIDs,
 	}
 
+	if missing, err := yeschef.CheckJobImages(job); err == nil && len(missing) > 0 {
+		c.AddErrorFlash("error", "missing container images: "+strings.Join(missing, ", "))
+		return c.NoContent(http.StatusConflict)
+	} else if err != nil {
+		c.AddErrorFlash("error", "failed to check images: "+err.Error())
+		return c.NoContent(http.StatusConflict)
+	}
+
 	msg := "job submitted and monitor opened"
 
 	err = yeschef.DoNow(job)
@@ -416,6 +424,14 @@ func PutAppJob(c LemcContext) error {
 		Scope:            scope,
 		Recipe:           final_recipe,
 		RecipientUserIDs: recipientUserIDs,
+	}
+
+	if missing, err := yeschef.CheckJobImages(job); err == nil && len(missing) > 0 {
+		c.AddErrorFlash("error", "missing container images: "+strings.Join(missing, ", "))
+		return c.NoContent(http.StatusConflict)
+	} else if err != nil {
+		c.AddErrorFlash("error", "failed to check images: "+err.Error())
+		return c.NoContent(http.StatusConflict)
 	}
 
 	msg := "job submitted and monitor opened"
