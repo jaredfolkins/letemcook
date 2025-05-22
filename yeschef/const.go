@@ -3,6 +3,8 @@ package yeschef
 import (
 	"io/fs"
 	"time"
+
+	"github.com/jaredfolkins/letemcook/util"
 )
 
 const (
@@ -33,7 +35,7 @@ const (
 	PONG_WAIT   = 60 * time.Second
 	PING_PERIOD = (PONG_WAIT * 9) / 10
 
-	FILE_MODE fs.FileMode = 0744
+	FILE_MODE fs.FileMode = util.DirPerm
 
 	html_fn = "cache.html"
 	css_fn  = "cache.css"

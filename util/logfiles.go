@@ -69,14 +69,14 @@ func (fm *FileMeta) OpenLogFile(jm *JobMeta) (*LogFile, error) {
 
 	lf.Dir = filepath.Join(fm.LemcLocker, jm.UUID, fm.Scope, fm.IndividualUsernameOrSharedUsername, LOGS)
 	if _, err := os.Stat(lf.Dir); os.IsNotExist(err) {
-		err := os.MkdirAll(lf.Dir, 0755)
+		err := os.MkdirAll(lf.Dir, DirPerm)
 		if err != nil {
 			return lf, err
 		}
 	}
 
 	fileName := fmt.Sprintf("%s-%s.log", AlphaNumHyphen(fm.PageString), AlphaNumHyphen(jm.RecipeName))
-	file, err := os.OpenFile(filepath.Join(lf.Dir, fileName), os.O_RDWR|os.O_CREATE|os.O_APPEND, 0755)
+	file, err := os.OpenFile(filepath.Join(lf.Dir, fileName), os.O_RDWR|os.O_CREATE|os.O_APPEND, FilePerm)
 	if err != nil {
 		return lf, err
 	}
