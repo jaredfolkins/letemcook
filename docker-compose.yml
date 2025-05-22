@@ -3,10 +3,10 @@ services:
     build: .
     image:  docker.io/jfolkins/letemcook:latest
     environment:
-      - LEMC_HOST_LOCKER_PATH=${PWD}/data/${LEMC_ENV}/locker
+      - LEMC_HOST_LOCKER_PATH=${PWD}/data/production/locker
     ports:
       - "5362:5362"
     volumes:
-      - ./data/${LEMC_ENV}:/app/data
-      - ./data/${LEMC_ENV}/assets:/app/data/assets
+      - ./data/production:/app/data
+      - ./data/production/assets:/app/data/assets
       - /var/run/docker.sock:/var/run/docker.sock

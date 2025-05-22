@@ -31,7 +31,7 @@ func LockerPath() string {
 }
 
 func QueuesPath() string {
-	return filepath.Join(LockerPath(), "queues")
+	return filepath.Join(EnvPath(), "queues")
 }
 
 func AssetsPath() string {
