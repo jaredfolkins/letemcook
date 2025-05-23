@@ -10,6 +10,7 @@ import (
 
 	"github.com/jaredfolkins/letemcook/db"
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/util"
 )
 
 func listFiles(directory string) ([]string, error) {
@@ -133,7 +134,7 @@ func GetHeckle(c LemcContext) error {
 	if os.Getenv("LEMC_ENV") == "dev" || os.Getenv("LEMC_ENV") == "development" {
 		heckleDir = filepath.Join("embedded", "assets", "heckle", "public")
 	} else {
-		heckleDir = filepath.Join("data", "assets", "heckle", "public")
+		heckleDir = filepath.Join(util.AssetsPath(), "heckle", "public")
 	}
 
 	fileNames, err := listFiles(heckleDir)
