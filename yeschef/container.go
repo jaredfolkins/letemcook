@@ -372,7 +372,18 @@ func runContainer(server *CmdServer, job *JobRecipe, uri string, env []string) e
 
 	hostCfg := NewHostConfig(cf, job.Recipe.IsShared)
 
+	//user := os.Geteuid()
+	//group := os.Getegid()
+	//log.Println("user", user, "group", group)
+	// so i desire to make this work but it takes
+	// crafting the container with a shared user
+	// and then the docker container running the lemc server
+	// has to be run as the shared user.
+	// i think i can do this by setting the user in the dockerfile
+	// and then setting the user in the docker run command.
+	// but i need to figure out the details.
 	cfg := &container.Config{
+		//	User:         fmt.Sprintf("%d:%d", user, group),
 		StopTimeout:  &job.ContainerTimeoutInSeconds,
 		Image:        image_name,
 		Env:          env,

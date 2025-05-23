@@ -12,10 +12,12 @@ import (
 	"github.com/reugn/go-quartz/quartz"
 )
 
-var lemc_do_now_rgx = regexp.MustCompile(`^now$`)
-var lemc_do_in_rgx = regexp.MustCompile(`^in\.\d+\.\w+$`)
-var lemc_do_every_rgx = regexp.MustCompile(`^every\.\d+\.\w+$`)
-var XoxoX *ChefsKiss
+var (
+	lemc_do_now_rgx   = regexp.MustCompile(`^now$`)
+	lemc_do_in_rgx    = regexp.MustCompile(`^in\.\d+\.\w+$`)
+	lemc_do_every_rgx = regexp.MustCompile(`^every\.\d+\.\w+$`)
+	XoxoX             *ChefsKiss
+)
 
 type ErrHandler struct{}
 

@@ -10,7 +10,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -37,7 +36,8 @@ func GenerateAlphabet() string {
 
 // SetupEnvironment initializes directories and the .env file.
 func SetupEnvironment() error {
-	syscall.Umask(0)
+	// i think i want to pass the umask in the env
+	//syscall.Umask(0)
 	envValue := EnvName()
 	dataRoot := DataRoot()
 
@@ -146,11 +146,14 @@ func SetupLogWriters(env, appPath, httpPath string) (io.Writer, io.Writer, func(
 		return os.Stdout, os.Stdout, cleanup, nil
 	}
 
-	appFile, err := os.OpenFile(appPath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0o666)
+	ap := fmt.Sprintf("%s/%s", EnvPath(), appPath)
+	appFile, err := os.OpenFile(ap, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0o666)
 	if err != nil {
 		return nil, nil, cleanup, err
 	}
-	httpFile, err := os.OpenFile(httpPath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0o666)
+
+	hp := fmt.Sprintf("%s/%s", EnvPath(), httpPath)
+	httpFile, err := os.OpenFile(hp, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0o666)
 	if err != nil {
 		appFile.Close()
 		return nil, nil, cleanup, err

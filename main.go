@@ -172,6 +172,9 @@ func main() {
 
 	}
 
+	user := os.Geteuid()
+	group := os.Getegid()
+	log.Println("user", user, "group", group)
 	handlers.Routes(e)
 
 	yeschef.Start()
