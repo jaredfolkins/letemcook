@@ -425,9 +425,14 @@ func (pc *PermCookbook) CookbookPermissions(user_id, account_id, cookbook_id int
 	query := `select created, updated, id, user_id, account_id, cookbook_id, can_view, can_edit, is_owner from permissions_cookbooks where user_id = $1 and account_id = $2 and cookbook_id = $3`
 	err := db.Db().Get(pc, query, user_id, account_id, cookbook_id)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			// No specific cookbook permission found for this user/account/cookbook combination
+			// Return nil to indicate this is not an error, just no explicit permissions
+			log.Printf("No specific cookbook permissions found for user %d, account %d, cookbook %d", user_id, account_id, cookbook_id)
+			return nil
+		}
 		return err
 	}
-
 	return nil
 }
 

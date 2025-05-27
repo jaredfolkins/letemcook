@@ -118,9 +118,6 @@ const (
 	CookbookAclUserToggleEditPattern = "/lemc/cookbook/acl/user/toggle/edit/%s/%d"
 	CookbookAclUserDeletePattern     = "/lemc/cookbook/acl/user/delete/%s/%d"
 
-	// Heckle template patterns
-	HecklePublicPattern = "/heckle/public/%s"
-
 	// Generic patterns
 	GenericJobPattern = "/lemc/%s/job/%s/uuid/%s/page/%d/recipe/%s"
 
