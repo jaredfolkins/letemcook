@@ -5,6 +5,7 @@ import (
     "fmt"
     "encoding/base64"    
     "github.com/jaredfolkins/letemcook/models"
+    "github.com/jaredfolkins/letemcook/paths"
 )
 
 func replaceDashWithUnderscore(input string) string {
@@ -112,7 +113,7 @@ templ renderJobFormModal(v []models.FormField, view_page, view_type, uuid, oldna
                         <form
                             hx-swap="afterbegin"
                             hx-target="#toasty"
-                            hx-put={ string(fmt.Sprintf("/lemc/%s/job/%s/uuid/%s/page/%d/recipe/%s", view_page, view_type, uuid, page_id, oldname)) }
+                            hx-put={ string(fmt.Sprintf(paths.GenericJobPattern, view_page, view_type, uuid, page_id, oldname)) }
                             class="drop-shadow-xl gap-4 p-2 rounded-none">
                             for _, f := range v {
                             <label class="gap-2 rounded-none">

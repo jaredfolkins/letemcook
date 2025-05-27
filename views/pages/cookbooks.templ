@@ -3,6 +3,7 @@ package pages
 import (
 	"fmt"
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/views/layout"
 )
 
@@ -27,7 +28,7 @@ templ Cookbooks(v models.CookbooksView) {
 							hx-target="#cookbooks-list"
 							hx-swap="innerHTML"
 							hx-headers="js:{'X-TimeZone': Intl.DateTimeFormat().resolvedOptions().timeZone}"
-							hx-post="/lemc/cookbook/create"
+							hx-post={ paths.CookbookCreate }
 							class="drop-shadow-xl flex flex-col gap-4 p-12 bg-base-100 rounded-none"
 						>
 							<label class="flex flex-col justify-start gap-2 rounded-none">
@@ -104,7 +105,7 @@ templ CookbooksList(v models.CookbooksView) {
 									<img
 										class="object-contain h-48 w-48 min-w-48"
 										alt="lemc thumbnail"
-										src={ string(templ.URL(fmt.Sprintf("/lemc/cookbook/thumbnail/download/%s?ts=%s", cb.UUID, cb.ThumbnailTimestamp))) }
+										src={ string(templ.URL(fmt.Sprintf(paths.CookbookThumbnailDownloadPattern, cb.UUID, cb.ThumbnailTimestamp))) }
 									/>
 								</div>
 							</td>
@@ -122,8 +123,8 @@ templ CookbooksList(v models.CookbooksView) {
 									<a
 										hx-target="#app"
 										hx-swap="innerHTML transition:true"
-										hx-push-url={ fmt.Sprintf("/lemc/cookbook/edit/%s/%s", "individual", cb.UUID) }
-										href={ templ.URL(fmt.Sprintf("/lemc/cookbook/edit/%s/%s?partial=true", "individual", cb.UUID)) }
+										hx-push-url={ fmt.Sprintf(paths.CookbookEditPattern, "individual", cb.UUID) }
+										href={ templ.URL(fmt.Sprintf(paths.CookbookEditPartialPattern, "individual", cb.UUID)) }
 										class="rounded-none text-lg btn m-1"
 									>
 										Cookbook
@@ -134,8 +135,8 @@ templ CookbooksList(v models.CookbooksView) {
 									<a
 										hx-target="#app"
 										hx-swap="innerHTML transition:true"
-										hx-push-url={ fmt.Sprintf("/lemc/cookbook/edit/%s/%s", "acls", cb.UUID) }
-										href={ templ.URL(fmt.Sprintf("/lemc/cookbook/edit/%s/%s?partial=true", "acls", cb.UUID)) }
+										hx-push-url={ fmt.Sprintf(paths.CookbookEditPattern, "acls", cb.UUID) }
+										href={ templ.URL(fmt.Sprintf(paths.CookbookEditPartialPattern, "acls", cb.UUID)) }
 										class="rounded-none text-lg btn m-1"
 									>
 										ACLs
@@ -154,11 +155,11 @@ templ CookbooksList(v models.CookbooksView) {
 		<div class="flex justify-center items-center space-x-4 mt-8">
 			if v.CurrentPage > 1 {
 				<a
-					href={ templ.URL(fmt.Sprintf("/lemc/cookbooks?page=%d&limit=%d", v.CurrentPage-1, v.Limit)) }
-					hx-get={ fmt.Sprintf("/lemc/cookbooks?page=%d&limit=%d&partial=true", v.CurrentPage-1, v.Limit) }
+					href={ templ.URL(fmt.Sprintf(paths.CookbooksPagePattern, v.CurrentPage-1, v.Limit)) }
+					hx-get={ fmt.Sprintf(paths.CookbooksPagePartialPattern, v.CurrentPage-1, v.Limit) }
 					hx-target="#app"
 					hx-swap="innerHTML transition:true scroll:top"
-					hx-push-url={ fmt.Sprintf("/lemc/cookbooks?page=%d&limit=%d", v.CurrentPage-1, v.Limit) }
+					hx-push-url={ fmt.Sprintf(paths.CookbooksPagePattern, v.CurrentPage-1, v.Limit) }
 					class="btn btn-sm btn-outline rounded-none"
 				>
 					&lt;
@@ -173,11 +174,11 @@ templ CookbooksList(v models.CookbooksView) {
 			</span>
 			if v.CurrentPage < v.TotalPages {
 				<a
-					href={ templ.URL(fmt.Sprintf("/lemc/cookbooks?page=%d&limit=%d", v.CurrentPage+1, v.Limit)) }
-					hx-get={ fmt.Sprintf("/lemc/cookbooks?page=%d&limit=%d&partial=true", v.CurrentPage+1, v.Limit) }
+					href={ templ.URL(fmt.Sprintf(paths.CookbooksPagePattern, v.CurrentPage+1, v.Limit)) }
+					hx-get={ fmt.Sprintf(paths.CookbooksPagePartialPattern, v.CurrentPage+1, v.Limit) }
 					hx-target="#app"
 					hx-swap="innerHTML transition:true scroll:top"
-					hx-push-url={ fmt.Sprintf("/lemc/cookbooks?page=%d&limit=%d", v.CurrentPage+1, v.Limit) }
+					hx-push-url={ fmt.Sprintf(paths.CookbooksPagePattern, v.CurrentPage+1, v.Limit) }
 					class="btn btn-sm btn-outline rounded-none"
 				>
 					&gt;

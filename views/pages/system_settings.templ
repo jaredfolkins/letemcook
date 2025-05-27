@@ -2,20 +2,21 @@ package pages
 
 import (
     "github.com/jaredfolkins/letemcook/models"
+    "github.com/jaredfolkins/letemcook/paths"
     "github.com/jaredfolkins/letemcook/views/layout"
 )
 
 templ SystemSettings(v models.SystemSettingsView) {
     <div id="systemsettingsnav" class="cookbooknav-attrs flex flex-col justify-end md:flex-row mx-12 mb-2">
         <div class="flex-1 flex items-center justify-start">
-            <h1 class="text-2xl font-bold">System Settings</h1>
+            <h1 class="text-2xl font-bold">{ paths.TitleSystemSettings }</h1>
         </div>
         <div class="flex flex-row gap-12 justify-end"></div>
     </div>
     <div id="systemsettings-content-box" class="bg-base-100 p-9 edges gap-12 mx-12 my-4">
         <div class="overflow-x-auto">
             <table class="table w-full">
-                <thead><tr><th>Key</th><th>Value</th></tr></thead>
+                <thead><tr><th>{ paths.TableHeaderKey }</th><th>{ paths.TableHeaderValue }</th></tr></thead>
                 <tbody>
                     for key, val := range v.Settings {
                         <tr><td>{ key }</td><td>{ val }</td></tr>

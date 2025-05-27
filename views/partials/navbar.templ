@@ -3,6 +3,7 @@ package partials
 import (
     "fmt"
     "github.com/jaredfolkins/letemcook/models"
+    "github.com/jaredfolkins/letemcook/paths"
 )
 
 
@@ -30,7 +31,7 @@ templ Navbar(v models.BaseView) {
 
 		<div
         id="navtop"
-       hx-get={ string(fmt.Sprintf("/navtop?squid=%s&account=%s", v.AccountSquid, v.AccountName)) }
+       hx-get={ string(fmt.Sprintf(paths.NavTopPattern, v.AccountSquid, v.AccountName)) }
         hx-vals="js:{section: document.body.dataset.activeNav, subnav: document.body.dataset.activeSubNav}"
         hx-swap="innerHTML"
         hx-trigger="refreshNavtop from:body"
@@ -56,7 +57,7 @@ templ Navbar(v models.BaseView) {
                 const squid = urlParams.get('squid');
 
                 // Construct fetch URL
-                let fetchUrl = '/heckle';
+                let fetchUrl = '{ paths.Heckle }';
                 if (squid) {
                     fetchUrl += '?squid=' + encodeURIComponent(squid);
                 }
@@ -107,7 +108,7 @@ templ Navbar(v models.BaseView) {
                             isPlaying = true;
                             var logoElm = document.getElementById('logo');
                             logoElm.classList.add('shake');
-                            var audioUrl = '/heckle/public/' + encodeURIComponent(selectedHeckle);
+                            var audioUrl = '{ paths.HecklePublic }/' + encodeURIComponent(selectedHeckle);
                             audioPlayer.src = audioUrl;
                                 audioPlayer.play();
                             playedHeckles.push(selectedHeckle);

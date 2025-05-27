@@ -5,6 +5,7 @@ import (
 "strconv"
 
 "github.com/jaredfolkins/letemcook/models"
+"github.com/jaredfolkins/letemcook/paths"
 "github.com/jaredfolkins/letemcook/views/layout"
 )
 
@@ -29,7 +30,7 @@ templ UsersPage(v models.UsersView) {
 							hx-target="#user-list-container"
 							hx-swap="innerHTML"
 							hx-headers="js:{'X-TimeZone': Intl.DateTimeFormat().resolvedOptions().timeZone}"
-                                                       hx-post="/lemc/account/user/create"
+                                                       hx-post={ paths.AccountUserCreate }
 							class="drop-shadow-xl flex flex-col gap-4 p-12 bg-base-100 rounded-none"
 						>
 							<label class="flex flex-col justify-start gap-2 rounded-none">
@@ -131,7 +132,7 @@ templ UsersPartial(v models.UsersView) {
 						<tr>
 							<td>{ fmt.Sprintf("%d", user.ID) }</td>
 							<td>
-                                                               <a href={ templ.URL(fmt.Sprintf("/lemc/account/user/%d", user.ID)) } class="rounded-none text-lg btn">
+                                                               <a href={ templ.URL(fmt.Sprintf(paths.AccountUserPattern, user.ID)) } class="rounded-none text-lg btn">
 									{ user.Username }
 								</a>
 							</td>
@@ -148,11 +149,11 @@ templ UsersPartial(v models.UsersView) {
 		<div class="flex justify-center items-center space-x-4 mt-8">
 			if v.CurrentPage > 1 {
 				<a
-                                    href={ templ.URL(fmt.Sprintf("/lemc/account/users?page=%d&limit=%d", v.CurrentPage-1, v.Limit)) }
-                                    hx-get={ fmt.Sprintf("/lemc/account/users?page=%d&limit=%d&partial=true", v.CurrentPage-1, v.Limit) }
+                                    href={ templ.URL(fmt.Sprintf(paths.AccountUsersPagePattern, v.CurrentPage-1, v.Limit)) }
+                                    hx-get={ fmt.Sprintf(paths.AccountUsersPagePartialPattern, v.CurrentPage-1, v.Limit) }
                                     hx-target="#app"
                                     hx-swap="innerHTML transition:true scroll:top"
-                                    hx-push-url={ fmt.Sprintf("/lemc/account/users?page=%d&limit=%d", v.CurrentPage-1, v.Limit) }
+                                    hx-push-url={ fmt.Sprintf(paths.AccountUsersPagePattern, v.CurrentPage-1, v.Limit) }
 					class="btn btn-sm btn-outline rounded-none" 
 				>
 					&lt;
@@ -167,11 +168,11 @@ templ UsersPartial(v models.UsersView) {
 			</span>
 			if v.CurrentPage < v.TotalPages {
 				<a
-                                    href={ templ.URL(fmt.Sprintf("/lemc/account/users?page=%d&limit=%d", v.CurrentPage+1, v.Limit)) }
-                                    hx-get={ fmt.Sprintf("/lemc/account/users?page=%d&limit=%d&partial=true", v.CurrentPage+1, v.Limit) }
+                                    href={ templ.URL(fmt.Sprintf(paths.AccountUsersPagePattern, v.CurrentPage+1, v.Limit)) }
+                                    hx-get={ fmt.Sprintf(paths.AccountUsersPagePartialPattern, v.CurrentPage+1, v.Limit) }
                                     hx-target="#app"
                                     hx-swap="innerHTML transition:true scroll:top"
-                                    hx-push-url={ fmt.Sprintf("/lemc/account/users?page=%d&limit=%d", v.CurrentPage+1, v.Limit) }
+                                    hx-push-url={ fmt.Sprintf(paths.AccountUsersPagePattern, v.CurrentPage+1, v.Limit) }
 					class="btn btn-sm btn-outline rounded-none" 
 				>
 					&gt;

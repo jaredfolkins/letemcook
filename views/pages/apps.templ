@@ -3,13 +3,11 @@ package pages
 import (
 	"fmt"
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/views/layout"
 )
 
-const (
-	AppCreate   = "/lemc/app/create"
-	CookbookSearch = "/lemc/cookbook/search"
-)
+
 
 templ Apps(v models.AppsView) {
 	<div id="cookbooknav" class="cookbooknav-attrs flex flex-col justify-end md:flex-row mx-12 mb-2">
@@ -34,7 +32,7 @@ templ Apps(v models.AppsView) {
 							hx-swap="innerHTML"
 							hx-headers="js:{'X-TimeZone': Intl.DateTimeFormat().resolvedOptions().timeZone}"
 							class="drop-shadow-xl flex flex-col gap-4 p-12 bg-base-100 rounded-none"
-							action={ AppCreate }
+							action={ paths.AppCreate }
 							method="post"
 						>
 							<label class="flex flex-col justify-start gap-2 rounded-none">
@@ -64,7 +62,7 @@ templ Apps(v models.AppsView) {
 									class="flex input input input-bordered bg-white input-primary rounded-none w-full h-full flex-grow md:flex-row"
 									name="cookbook-search"
 									hx-params="cookbook-search"
-									hx-get={ CookbookSearch }
+									hx-get={ paths.CookbookSearch }
 									hx-trigger="keyup changed"
 									hx-target="#acl-search-results"
 								/>
@@ -149,7 +147,7 @@ templ AppsList(v models.AppsView) {
 										<img
 											class="object-contain h-48 w-48 min-w-48"
 											alt="lemc thumbnail"
-											src={ string(templ.URL(fmt.Sprintf("/lemc/app/thumbnail/download/%s", cb.UUID))) }
+											src={ string(templ.URL(fmt.Sprintf(paths.AppThumbnailDownloadPattern, cb.UUID))) }
 										/>
 									</td>
 									<td>{ cb.Name }</td>
@@ -163,8 +161,8 @@ templ AppsList(v models.AppsView) {
 											<a
 												hx-target="#app"
 												hx-swap="innerHTML transition:true"
-												hx-push-url={ fmt.Sprintf("/lemc/app/index/%s/%s", "individual", cb.UUID) }
-												href={ templ.URL(fmt.Sprintf("/lemc/app/index/%s/%s?partial=true", "individual", cb.UUID)) }
+												hx-push-url={ fmt.Sprintf(paths.AppIndexPattern, "individual", cb.UUID) }
+												href={ templ.URL(fmt.Sprintf(paths.AppIndexPartialPattern, "individual", cb.UUID)) }
 												class="btn text-lg rounded-none m-1"
 											>
 												App
@@ -175,8 +173,8 @@ templ AppsList(v models.AppsView) {
 											<a
 												hx-target="#app"
 												hx-swap="innerHTML transition:true"
-												hx-push-url={ fmt.Sprintf("/lemc/app/index/s/%s/%s", "shared", cb.UUID) }
-												href={ templ.URL(fmt.Sprintf("/lemc/app/index/s/%s/%s?partial=true", "shared", cb.UUID)) }
+												hx-push-url={ fmt.Sprintf(paths.AppIndexSharedPattern, "shared", cb.UUID) }
+												href={ templ.URL(fmt.Sprintf(paths.AppIndexSharedPartialPattern, "shared", cb.UUID)) }
 												class="btn text-lg rounded-none m-1"
 											>
 												Shared
@@ -187,8 +185,8 @@ templ AppsList(v models.AppsView) {
 											<a
 												hx-target="#app"
 												hx-swap="innerHTML transition:true"
-												hx-push-url={ fmt.Sprintf("/lemc/app/index/%s/%s", "acls", cb.UUID) }
-												href={ templ.URL(fmt.Sprintf("/lemc/app/index/%s/%s?partial=true", "acls", cb.UUID)) }
+												hx-push-url={ fmt.Sprintf(paths.AppIndexPattern, "acls", cb.UUID) }
+												href={ templ.URL(fmt.Sprintf(paths.AppIndexPartialPattern, "acls", cb.UUID)) }
 												class="btn text-lg rounded-none m-1"
 											>
 												ACLs
@@ -196,7 +194,7 @@ templ AppsList(v models.AppsView) {
 										}
 										if cb.UserPerms != nil && cb.UserPerms.CanAdminister {
 											<button
-												hx-post={ fmt.Sprintf("/lemc/app/refresh/%s", cb.UUID) }
+												hx-post={ fmt.Sprintf(paths.AppRefreshPattern, cb.UUID) }
 												hx-swap="none"
 												class="btn text-lg rounded-none btn-outline m-1"
 											>
@@ -219,11 +217,11 @@ templ AppsList(v models.AppsView) {
 				<!-- Previous Button -->
 				if v.CurrentPage > 1 {
 					<a
-						href={ templ.URL(fmt.Sprintf("/lemc/apps?page=%d&limit=%d", v.CurrentPage-1, v.Limit)) }
-						hx-get={ fmt.Sprintf("/lemc/apps?page=%d&limit=%d&partial=true", v.CurrentPage-1, v.Limit) }
+						href={ templ.URL(fmt.Sprintf(paths.AppsPagePattern, v.CurrentPage-1, v.Limit)) }
+						hx-get={ fmt.Sprintf(paths.AppsPagePartialPattern, v.CurrentPage-1, v.Limit) }
 						hx-target="#app"
 						hx-swap="innerHTML transition:true scroll:none"
-						hx-push-url={ fmt.Sprintf("/lemc/apps?page=%d&limit=%d", v.CurrentPage-1, v.Limit) }
+						hx-push-url={ fmt.Sprintf(paths.AppsPagePattern, v.CurrentPage-1, v.Limit) }
 						class="btn btn-sm btn-outline rounded-none"
 					>
 						&lt;
@@ -240,11 +238,11 @@ templ AppsList(v models.AppsView) {
 				<!-- Next Button -->
 				if v.CurrentPage < v.TotalPages {
 					<a
-						href={ templ.URL(fmt.Sprintf("/lemc/apps?page=%d&limit=%d", v.CurrentPage+1, v.Limit)) }
-						hx-get={ fmt.Sprintf("/lemc/apps?page=%d&limit=%d&partial=true", v.CurrentPage+1, v.Limit) }
+						href={ templ.URL(fmt.Sprintf(paths.AppsPagePattern, v.CurrentPage+1, v.Limit)) }
+						hx-get={ fmt.Sprintf(paths.AppsPagePartialPattern, v.CurrentPage+1, v.Limit) }
 						hx-target="#app"
 						hx-swap="innerHTML transition:true scroll:none"
-						hx-push-url={ fmt.Sprintf("/lemc/apps?page=%d&limit=%d", v.CurrentPage+1, v.Limit) }
+						hx-push-url={ fmt.Sprintf(paths.AppsPagePattern, v.CurrentPage+1, v.Limit) }
 						class="btn btn-sm btn-outline rounded-none"
 					>
 						&gt;

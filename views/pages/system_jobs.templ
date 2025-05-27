@@ -3,6 +3,7 @@ package pages
 import (
     "fmt"
     "github.com/jaredfolkins/letemcook/models"
+    "github.com/jaredfolkins/letemcook/paths"
     "github.com/jaredfolkins/letemcook/views/layout"
 )
 
@@ -29,13 +30,13 @@ templ SystemJobs(v models.SystemJobsView) {
         if v.TotalPages > 1 {
             <div class="flex justify-center items-center space-x-4 mt-8">
                 if v.CurrentPage > 1 {
-                    <a hx-get={ fmt.Sprintf("/lemc/system/jobs?page=%d&limit=%d&partial=true", v.CurrentPage-1, v.Limit) } hx-target="#app" hx-swap="innerHTML transition:true scroll:top" hx-push-url={ fmt.Sprintf("/lemc/system/jobs?page=%d&limit=%d", v.CurrentPage-1, v.Limit) } class="btn btn-sm btn-outline rounded-none">&lt;</a>
+                    <a hx-get={ fmt.Sprintf(paths.SystemJobsPagePartialPattern, v.CurrentPage-1, v.Limit) } hx-target="#app" hx-swap="innerHTML transition:true scroll:top" hx-push-url={ fmt.Sprintf(paths.SystemJobsPagePattern, v.CurrentPage-1, v.Limit) } class="btn btn-sm btn-outline rounded-none">&lt;</a>
                 } else {
                     <button class="btn btn-sm btn-outline rounded-none" disabled>&lt;</button>
                 }
                 <span class="text-sm">Page { fmt.Sprintf("%d", v.CurrentPage) } of { fmt.Sprintf("%d", v.TotalPages) }</span>
                 if v.CurrentPage < v.TotalPages {
-                    <a hx-get={ fmt.Sprintf("/lemc/system/jobs?page=%d&limit=%d&partial=true", v.CurrentPage+1, v.Limit) } hx-target="#app" hx-swap="innerHTML transition:true scroll:top" hx-push-url={ fmt.Sprintf("/lemc/system/jobs?page=%d&limit=%d", v.CurrentPage+1, v.Limit) } class="btn btn-sm btn-outline rounded-none">&gt;</a>
+                    <a hx-get={ fmt.Sprintf(paths.SystemJobsPagePartialPattern, v.CurrentPage+1, v.Limit) } hx-target="#app" hx-swap="innerHTML transition:true scroll:top" hx-push-url={ fmt.Sprintf(paths.SystemJobsPagePattern, v.CurrentPage+1, v.Limit) } class="btn btn-sm btn-outline rounded-none">&gt;</a>
                 } else {
                     <button class="btn btn-sm btn-outline rounded-none" disabled>&gt;</button>
                 }

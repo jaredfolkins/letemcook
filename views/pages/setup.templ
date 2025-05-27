@@ -2,6 +2,7 @@ package pages
 
 import (
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/views/layout"
 )
 
@@ -12,7 +13,7 @@ templ Setup(v models.SetupView) {
 				Admin Setup
 			</h1>
 			<form
-				hx-post="/setup"
+				hx-post={ paths.Setup }
 				hx-target="#app"
 				hx-swap="innerHTML"
 				class="drop-shadow-xl flex flex-col gap-4 p-12 rounded-none"

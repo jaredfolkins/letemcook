@@ -3,6 +3,7 @@ package pages
 import (
     "github.com/jaredfolkins/letemcook/views/layout"
     "github.com/jaredfolkins/letemcook/models"
+    "github.com/jaredfolkins/letemcook/paths"
     "fmt"
     "gopkg.in/yaml.v3"
 )
@@ -11,7 +12,7 @@ script eval(msg string) {
     eval(msg);
 }
 
-script uploadCookbookThumbnailScript() {
+script uploadCookbookThumbnailScript(uploadUrl string) {
        document.getElementById('thumbnail-upload-form').addEventListener('change', function(event) {
           event.preventDefault();
           console.log('Form submission prevented');
@@ -20,7 +21,7 @@ script uploadCookbookThumbnailScript() {
           var formData = new FormData(form);
           var uuid = form.getAttribute('data-uuid');
           var yaml_type = form.getAttribute('data-type');
-          var url = `/lemc/cookbook/thumbnail/upload/${uuid}`;
+          var url = uploadUrl.replace('%s', uuid);
           var xhr = new XMLHttpRequest();
 
           xhr.open('POST', url, true);
@@ -61,6 +62,54 @@ script uploadCookbookThumbnailScript() {
       });
 }
 
+script uploadCookbookYamlScript(uploadUrlPattern string) {
+    document.getElementById('file-upload-form-dropdown').addEventListener('change', function(event) {
+        event.preventDefault();
+        console.log('Form submission prevented');
+
+        var form = document.getElementById('file-upload-form-dropdown');
+        var formData = new FormData(form);
+        var uuid = form.getAttribute('data-uuid');
+        var yaml_type = form.getAttribute('data-type');
+        var url = uploadUrlPattern.replace(/%s/g, function(match, offset) {
+            return offset === uploadUrlPattern.indexOf('%s') ? yaml_type : uuid;
+        });
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('POST', url, true);
+
+        xhr.upload.addEventListener('progress', function(event) {
+            if (event.lengthComputable) {
+            document.getElementById('upload-progress').style.display = 'block';
+                var percentComplete = (event.loaded / event.total) * 100;
+                console.log('Upload progress:', percentComplete);
+                document.getElementById('upload-progress').value = percentComplete;
+
+                if (percentComplete == 100) {
+                    document.getElementById('upload-progress').style.display = 'none';
+                    document.getElementById('upload-progress').value = 0;
+                }
+            }
+        });
+
+        xhr.addEventListener('load', function(event) {
+            if (xhr.status == 200) {
+                console.log('Upload complete');
+                 htmx.trigger(document.body, 'refreshCookbook', {});
+            } else {
+                console.error('Upload failed with status:', xhr.status);
+            }
+        });
+
+        xhr.addEventListener('error', function(event) {
+            console.error('Upload error:', event);
+        });
+
+        xhr.send(formData);
+        console.log('XHR request sent');
+    });
+}
+
 templ renderYamlModal(v models.CoreView, action string) {
       <dialog id={ string(fmt.Sprintf("yaml_%s_modal", action)) } class="modal overscroll-none rounded-none">
         <div class="edit-box edges p-12 overscroll-none rounded-none">
@@ -78,7 +127,7 @@ templ renderYamlModal(v models.CoreView, action string) {
                                 id={ string(fmt.Sprintf("config-%s-%s-%s", v.ViewType, action, v.YamlDefault.UUID)) }
                                 name={ string(fmt.Sprintf("yaml-%s", action)) }
                                 class="yaml-text h-full"
-                                hx-post={ string(templ.URL(fmt.Sprintf("/lemc/cookbook/config/%s/%s/%s", v.ViewType, action, v.YamlDefault.UUID))) }
+                                hx-post={ string(templ.URL(fmt.Sprintf(paths.CookbookConfigPattern, v.ViewType, action, v.YamlDefault.UUID))) }
                                 hx-trigger="keyup delay:700ms changed"
                                 hx-target="#cookbook"
                                 hx-swap="innerHTML"
@@ -117,8 +166,8 @@ templ RenderCookbookSubHeaderAndNav(v models.CoreView) {
             <a
                 hx-target="#app"
                 hx-swap="innerHTML transition:true"
-                hx-push-url={ fmt.Sprintf("/lemc/cookbook/edit/%s/%s", "individual", v.YamlDefault.UUID) }
-                href={ templ.URL(fmt.Sprintf("/lemc/cookbook/edit/%s/%s?partial=true", "individual", v.YamlDefault.UUID)) }
+                hx-push-url={ fmt.Sprintf(paths.CookbookEditPattern, "individual", v.YamlDefault.UUID) }
+                href={ templ.URL(fmt.Sprintf(paths.CookbookEditPartialPattern, "individual", v.YamlDefault.UUID)) }
                 class={ fmt.Sprintf("rounded-none btn text-lg %s", activeUser) }>
                 Individual
             </a>
@@ -127,8 +176,8 @@ templ RenderCookbookSubHeaderAndNav(v models.CoreView) {
             <a
                 hx-target="#app"
                 hx-swap="innerHTML transition:true"
-                hx-push-url={ fmt.Sprintf("/lemc/cookbook/edit/%s/%s", "shared", v.YamlDefault.UUID) }
-                href={ templ.URL(fmt.Sprintf("/lemc/cookbook/edit/%s/%s?partial=true", "shared", v.YamlDefault.UUID)) }
+                hx-push-url={ fmt.Sprintf(paths.CookbookEditPattern, "shared", v.YamlDefault.UUID) }
+                href={ templ.URL(fmt.Sprintf(paths.CookbookEditPartialPattern, "shared", v.YamlDefault.UUID)) }
                 class={ fmt.Sprintf("rounded-none btn mx-2 text-lg %s", activeAdmin) }>
                 Shared
             </a>
@@ -139,7 +188,7 @@ templ RenderCookbookSubHeaderAndNav(v models.CoreView) {
             if v.ViewType != "acls" {
                 <button
                     hx-target={ string(fmt.Sprintf("#config-%s-%s-%s", v.ViewType, "all", v.YamlDefault.UUID)) }
-                    hx-get={ string(templ.URL(fmt.Sprintf("/lemc/cookbook/config/%s/all/%s", v.ViewType, v.YamlDefault.UUID))) }
+                    hx-get={ string(templ.URL(fmt.Sprintf(paths.CookbookConfigAllPattern, v.ViewType, v.YamlDefault.UUID))) }
                     onclick={ eval(fmt.Sprintf("yaml_%s_modal.showModal()", "all")) }
                     hx-swap="textContent"
                     class="rounded-none btn btn-primary">
@@ -179,7 +228,7 @@ templ RenderCookbookHeader(v models.CoreView) {
                                     type="checkbox"
                                     class="toggle toggle-primary"
                                     hx-swap="none"
-                                    hx-patch={string(templ.URL(fmt.Sprintf("/lemc/cookbook/toggle/published/%s", v.YamlDefault.UUID)))}
+                                    hx-patch={string(templ.URL(fmt.Sprintf(paths.CookbookTogglePublishedPattern, v.YamlDefault.UUID)))}
                                     if v.Cookbook.IsPublished {
                                         checked="checked"
                                     }
@@ -195,7 +244,7 @@ templ RenderCookbookHeader(v models.CoreView) {
                                     type="checkbox"
                                     class="toggle toggle-primary"
                                     hx-swap="none"
-                                    hx-patch={string(templ.URL(fmt.Sprintf("/lemc/cookbook/toggle/deleted/%s", v.YamlDefault.UUID)))}
+                                    hx-patch={string(templ.URL(fmt.Sprintf(paths.CookbookToggleDeletedPattern, v.YamlDefault.UUID)))}
                                     if v.Cookbook.IsDeleted {
                                         checked="checked"
                                     }
@@ -213,7 +262,7 @@ templ RenderCookbookHeader(v models.CoreView) {
                         </li>
                         <li>
                             <a
-                                href={ templ.URL(fmt.Sprintf("/lemc/cookbook/yaml/download/%s/%s", v.ViewType, v.YamlDefault.UUID)) }
+                                href={ templ.URL(fmt.Sprintf(paths.CookbookYamlDownloadPattern, v.ViewType, v.YamlDefault.UUID)) }
                                 download={ string(fmt.Sprintf("%s-%s.yaml", v.YamlDefault.UUID, v.ViewType)) }
                                 hx-disable
                                 class="w-full px-4 py-2 flex items-center justify-between rounded-none">
@@ -243,53 +292,7 @@ templ RenderCookbookHeader(v models.CoreView) {
                         @CookbookDescription(v)
                     </span>
                 </div>
-            <script>
-
-                document.getElementById('file-upload-form-dropdown').addEventListener('change', function(event) {
-                    event.preventDefault();
-                    console.log('Form submission prevented');
-
-                    var form = document.getElementById('file-upload-form-dropdown');
-                    var formData = new FormData(form);
-                    var uuid = form.getAttribute('data-uuid');
-                    var yaml_type = form.getAttribute('data-type');
-                    var url = `/lemc/cookbook/yaml/upload/${yaml_type}/${uuid}`;
-                    var xhr = new XMLHttpRequest();
-
-                    xhr.open('POST', url, true);
-
-                    xhr.upload.addEventListener('progress', function(event) {
-                        if (event.lengthComputable) {
-                        document.getElementById('upload-progress').style.display = 'block';
-                            var percentComplete = (event.loaded / event.total) * 100;
-                            console.log('Upload progress:', percentComplete);
-                            document.getElementById('upload-progress').value = percentComplete;
-
-                            if (percentComplete == 100) {
-                                document.getElementById('upload-progress').style.display = 'none';
-                                document.getElementById('upload-progress').value = 0;
-                            }
-                        }
-                    });
-
-                    xhr.addEventListener('load', function(event) {
-                        if (xhr.status == 200) {
-                            console.log('Upload complete');
-                             htmx.trigger(document.body, 'refreshCookbook', {});
-                        } else {
-                            console.error('Upload failed with status:', xhr.status);
-                        }
-                    });
-
-                    xhr.addEventListener('error', function(event) {
-                        console.error('Upload error:', event);
-                    });
-
-                    xhr.send(formData);
-                    console.log('XHR request sent');
-                });
-
-            </script>
+            @uploadCookbookYamlScript(paths.CookbookYamlUploadPattern)
             }
         </div>
     </div>

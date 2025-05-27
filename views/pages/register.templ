@@ -11,7 +11,7 @@ templ Register(v models.RegisterView) {
 	<section class="card rounded-none w-fit bg-base-100 mx-auto mb-8 edges">
 		<div class="card-body pb-2">
 			<h1 class="card-title border-b border-b-slate-600 pb-[4px]">
-				Register
+				{ paths.TitleRegister }
 			</h1>
 			<form
                                hx-post={ string(fmt.Sprintf("%s?squid=%s&account=%s", paths.Register, v.BaseView.AccountSquid, v.BaseView.AccountName)) }
@@ -20,7 +20,7 @@ templ Register(v models.RegisterView) {
 				class="drop-shadow-xl flex flex-col gap-4 p-12 rounded-none"
 			>
 				<label class="flex flex-col justify-start gap-2">
-					Email:
+					{ paths.LabelEmail }
 					<input
 						class="input input-bordered bg-white input-primary rounded-none"
 						type="email"
@@ -29,12 +29,12 @@ templ Register(v models.RegisterView) {
 						autofocus
 						disabled?={ v.BaseView.IsProtected }
 						if v.BaseView.IsProtected {
-							value="disabled"
+							value={ paths.DisabledFieldValue }
 						}
 					/>
 				</label>
 				<label class="flex flex-col justify-start gap-2">
-					Username:
+					{ paths.LabelUsername }
 					<input
 						class="input input-bordered bg-white input-primary rounded-none"
 						type="text"
@@ -43,12 +43,12 @@ templ Register(v models.RegisterView) {
 						autofocus
 						disabled?={ v.BaseView.IsProtected }
 						if v.BaseView.IsProtected {
-							value="disabled"
+							value={ paths.DisabledFieldValue }
 						}
 					/>
 				</label>
 				<label class="flex flex-col justify-start gap-2 relative">
-					Password:
+					{ paths.LabelPassword }
 					<input
 						class="input input-bordered bg-white input-primary rounded-none"
 						type="password"
@@ -57,11 +57,11 @@ templ Register(v models.RegisterView) {
 						minlength="6"
 						disabled?={ v.BaseView.IsProtected }
 						if v.BaseView.IsProtected {
-							value="disabled"
+							value={ paths.DisabledFieldValue }
 						}
 					/>
 					<button
-						title="View password"
+						title={ paths.LabelViewPassword }
 						type="button"
 						disabled?={ v.BaseView.IsProtected }
 						class="absolute top-12 right-3 rounded-none"
@@ -81,7 +81,7 @@ templ Register(v models.RegisterView) {
 					<button
 						class="rounded-none btn btn-primary"
 					>
-						Register
+						{ paths.ButtonRegister }
 					</button>
 				</div>
 			</form>

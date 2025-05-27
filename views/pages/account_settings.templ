@@ -2,13 +2,14 @@ package pages
 
 import (
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/views/layout"
 )
 
 templ AccountSettings(v models.AccountSettingsView) {
 	<div id="cookbooknav" class="cookbooknav-attrs flex flex-col justify-end md:flex-row mx-12 mb-2">
 		<div class="flex-1 flex items-center justify-start">
-			<h1 class="text-2xl font-bold">Account Settings</h1>
+			            <h1 class="text-2xl font-bold">{ paths.TitleAccountSettings }</h1>
 		</div>
 		<div class="flex flex-row gap-12 justify-end">
 		</div>
@@ -20,7 +21,7 @@ templ AccountSettings(v models.AccountSettingsView) {
 
 templ AccountSettingsPartial(v models.AccountSettingsView) {
 			<form
-				hx-post="/lemc/account/settings"
+				hx-post={ paths.AccountSettings }
 				hx-target="#app" 
                 hx-swap="innerHTML transition:true"
 				class="space-y-4 p-4"
@@ -28,7 +29,7 @@ templ AccountSettingsPartial(v models.AccountSettingsView) {
 				<!-- Theme Setting -->
 				<label class="form-control w-full">
 					<div class="label">
-						<span class="label-text">Theme</span>
+						<span class="label-text">{ paths.LabelTheme }</span>
 					</div>
 					<select name="theme" class="select select-bordered bg-white rounded-none">
 						if len(v.AvailableThemes) == 0 {
@@ -51,7 +52,7 @@ templ AccountSettingsPartial(v models.AccountSettingsView) {
 				<!-- Registration Setting -->
 				<div class="form-control">
 					<label class="label cursor-pointer">
-						<span class="label-text">Allow User Registration</span>
+						<span class="label-text">{ paths.LabelAllowUserReg }</span>
 						<input type="checkbox" name="registration" class="toggle toggle-primary" checked?={v.Settings.Registration}/>
 					</label>
 				</div>
@@ -59,14 +60,14 @@ templ AccountSettingsPartial(v models.AccountSettingsView) {
 				<!-- Heckle Setting -->
 				<div class="form-control">
 					<label class="label cursor-pointer">
-						<span class="label-text">Enable Heckle Mode</span>
+						<span class="label-text">{ paths.LabelEnableHeckle }</span>
 						<input type="checkbox" name="heckle" class="toggle toggle-primary" checked?={v.Settings.Heckle}/>
 					</label>
 				</div>
 
 				<div class="card-actions justify-end mt-6">
 					<button type="submit" class="btn btn-primary rounded-none">
-						Save Settings
+						{ paths.ButtonSaveSettings }
 					</button>
 				</div>
 			</form>

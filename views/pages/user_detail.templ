@@ -3,6 +3,7 @@ package pages
 import (
 	"fmt"
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/views/layout"
 	"strconv"
 )
@@ -76,12 +77,12 @@ templ UserDetailPage(v models.UserDetailView) {
 										for _, accPerm := range v.Permissions.Accounts {
 											<tr>
 												<td class="text-lg">{ accPerm.AccountName } (ID: { fmt.Sprintf("%d", accPerm.AccountID) })</td>
-                                                                               <td><div class="flex justify-center"><input type="checkbox" name="can_create_apps" class="toggle toggle-sm toggle-primary" checked?={ accPerm.CanCreateapps } hx-put={ string(templ.URL(fmt.Sprintf("/lemc/account/user/%d/account/%d/permission/can_create_apps", v.User.ID, accPerm.AccountID))) } hx-trigger="change"/></div></td>
-                                                                               <td><div class="flex justify-center"><input type="checkbox" name="can_view_apps" class="toggle toggle-sm toggle-primary" checked?={ accPerm.CanViewapps } hx-put={ string(templ.URL(fmt.Sprintf("/lemc/account/user/%d/account/%d/permission/can_view_apps", v.User.ID, accPerm.AccountID))) } hx-trigger="change"/></div></td>
-                                                                               <td><div class="flex justify-center"><input type="checkbox" name="can_create_cookbooks" class="toggle toggle-sm toggle-primary" checked?={ accPerm.CanCreateCookbooks } hx-put={ string(templ.URL(fmt.Sprintf("/lemc/account/user/%d/account/%d/permission/can_create_cookbooks", v.User.ID, accPerm.AccountID))) } hx-trigger="change"/></div></td>
-                                                                               <td><div class="flex justify-center"><input type="checkbox" name="can_view_cookbooks" class="toggle toggle-sm toggle-primary" checked?={ accPerm.CanViewCookbooks } hx-put={ string(templ.URL(fmt.Sprintf("/lemc/account/user/%d/account/%d/permission/can_view_cookbooks", v.User.ID, accPerm.AccountID))) } hx-trigger="change"/></div></td>
-                                                                               <td><div class="flex justify-center"><input type="checkbox" name="can_administer" class="toggle toggle-sm toggle-primary" checked?={ accPerm.CanAdminister } hx-put={ string(templ.URL(fmt.Sprintf("/lemc/account/user/%d/account/%d/permission/can_administer", v.User.ID, accPerm.AccountID))) } hx-trigger="change"/></div></td>
-                                                                               <td><div class="flex justify-center"><input type="checkbox" name="is_owner" class="toggle toggle-sm toggle-primary" checked?={ accPerm.IsOwner } hx-put={ string(templ.URL(fmt.Sprintf("/lemc/account/user/%d/account/%d/permission/is_owner", v.User.ID, accPerm.AccountID))) } hx-trigger="change"/></div></td>
+                                                                               <td><div class="flex justify-center"><input type="checkbox" name="can_create_apps" class="toggle toggle-sm toggle-primary" checked?={ accPerm.CanCreateapps } hx-put={ string(templ.URL(fmt.Sprintf(paths.AccountUserPermissionCanCreateApps, v.User.ID, accPerm.AccountID))) } hx-trigger="change"/></div></td>
+                                                                               <td><div class="flex justify-center"><input type="checkbox" name="can_view_apps" class="toggle toggle-sm toggle-primary" checked?={ accPerm.CanViewapps } hx-put={ string(templ.URL(fmt.Sprintf(paths.AccountUserPermissionCanViewApps, v.User.ID, accPerm.AccountID))) } hx-trigger="change"/></div></td>
+                                                                               <td><div class="flex justify-center"><input type="checkbox" name="can_create_cookbooks" class="toggle toggle-sm toggle-primary" checked?={ accPerm.CanCreateCookbooks } hx-put={ string(templ.URL(fmt.Sprintf(paths.AccountUserPermissionCanCreateCookbooks, v.User.ID, accPerm.AccountID))) } hx-trigger="change"/></div></td>
+                                                                               <td><div class="flex justify-center"><input type="checkbox" name="can_view_cookbooks" class="toggle toggle-sm toggle-primary" checked?={ accPerm.CanViewCookbooks } hx-put={ string(templ.URL(fmt.Sprintf(paths.AccountUserPermissionCanViewCookbooks, v.User.ID, accPerm.AccountID))) } hx-trigger="change"/></div></td>
+                                                                               <td><div class="flex justify-center"><input type="checkbox" name="can_administer" class="toggle toggle-sm toggle-primary" checked?={ accPerm.CanAdminister } hx-put={ string(templ.URL(fmt.Sprintf(paths.AccountUserPermissionCanAdminister, v.User.ID, accPerm.AccountID))) } hx-trigger="change"/></div></td>
+                                                                               <td><div class="flex justify-center"><input type="checkbox" name="is_owner" class="toggle toggle-sm toggle-primary" checked?={ accPerm.IsOwner } hx-put={ string(templ.URL(fmt.Sprintf(paths.AccountUserPermissionIsOwner, v.User.ID, accPerm.AccountID))) } hx-trigger="change"/></div></td>
 											</tr>
 										}
 									</tbody>
@@ -111,7 +112,7 @@ templ UserDetailPage(v models.UserDetailView) {
 								for _, cbPerm := range v.Permissions.Cookbooks {
 									<tr>
 										<td>
-											<a href={ templ.URL(fmt.Sprintf("/lemc/cookbook/edit/individual/%s", cbPerm.CookbookUUID)) } class="rounded-none text-lg btn">
+											<a href={ templ.URL(fmt.Sprintf(paths.CookbookEditIndividualPattern, cbPerm.CookbookUUID)) } class="rounded-none text-lg btn">
 												{ cbPerm.CookbookName } (ID: { fmt.Sprintf("%d", cbPerm.CookbookID) })
 											</a>
 										</td>
@@ -168,12 +169,12 @@ templ UserDetailPage(v models.UserDetailView) {
 								for _, appPerm := range v.Permissions.Apps {
 									<tr>
 										<td>
-											<a href={ templ.URL(fmt.Sprintf("/lemc/app/index/a/%s/%s", "acls", appPerm.AppUUID)) } class="rounded-none text-lg btn">
+											<a href={ templ.URL(fmt.Sprintf(paths.AppIndexAclsPattern, appPerm.AppUUID)) } class="rounded-none text-lg btn">
 												{ appPerm.AppName } (ID: { fmt.Sprintf("%d", appPerm.AppID) })
 											</a>
 										</td>
 										<td>
-											<a href={ templ.URL(fmt.Sprintf("/lemc/cookbook/edit/individual/%s", appPerm.CookbookUUID)) } class="rounded-none text-lg btn">
+											<a href={ templ.URL(fmt.Sprintf(paths.CookbookEditIndividualPattern, appPerm.CookbookUUID)) } class="rounded-none text-lg btn">
 												{ appPerm.CookbookName } (ID: { fmt.Sprintf("%d", appPerm.CookbookID) })
 											</a>
 										</td>

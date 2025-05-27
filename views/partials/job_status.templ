@@ -60,7 +60,7 @@ templ JobStatusView(uuid string, pageid string, scope string, now, in, every boo
 
                 <div id={ string(fmt.Sprintf("lemc-cron-int-%s-%s-%s", uuid, pageid, scope)) } class="text-sm">
                     <div class="indicator p-2">
-                      <span class="indicator-item  indicator-end indicator-middle badge">
+                      <span class="indicator-item indicator-end indicator-middle badge">
                           if (every) {
                             1
                           } else {

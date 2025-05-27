@@ -3,6 +3,7 @@ import (
     "fmt"
     "github.com/jaredfolkins/letemcook/views/partials"
     "github.com/jaredfolkins/letemcook/models"
+    "github.com/jaredfolkins/letemcook/paths"
 )
 
 script unsafeInsertAdjacentHTML(key, script string) {
@@ -18,12 +19,12 @@ templ Base(v models.BaseView) {
 			<meta name="google" content="notranslate"/>
 
             <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.2/ckeditor5.css" />
-			<link rel="stylesheet" href={ string(fmt.Sprintf("/themes/%s/public/css/compiled.css?v=%s", v.Theme, v.CacheBuster)) }/>
-			<link rel="icon" href={ string(fmt.Sprintf("/themes/%s/public/imgs/16x16.ico?v=%s", v.Theme, v.CacheBuster)) } sizes="16x16" type="image/x-icon"/>
-			<link rel="icon" href={ string(fmt.Sprintf("/themes/%s/public/imgs/32x32.ico?v=%s", v.Theme, v.CacheBuster)) } sizes="32x32" type="image/x-icon"/>
-			<link rel="icon" href={ string(fmt.Sprintf("/themes/%s/public/imgs/64x64.ico?v=%s", v.Theme, v.CacheBuster)) } sizes="64x64" type="image/x-icon"/>
-			<link rel="icon" href={ string(fmt.Sprintf("/themes/%s/public/imgs/128x128.ico?v=%s", v.Theme, v.CacheBuster)) } sizes="128x128" type="image/x-icon"/>
-			<link rel="icon" href={ string(fmt.Sprintf("/themes/%s/public/imgs/256x256.ico?v=%s", v.Theme, v.CacheBuster)) } sizes="256x256" type="image/x-icon"/>
+			<link rel="stylesheet" href={ string(fmt.Sprintf(paths.ThemeCssPattern, v.Theme, v.CacheBuster)) }/>
+			<link rel="icon" href={ string(fmt.Sprintf(paths.ThemeIconPattern, v.Theme, "16", "16", v.CacheBuster)) } sizes="16x16" type="image/x-icon"/>
+			<link rel="icon" href={ string(fmt.Sprintf(paths.ThemeIconPattern, v.Theme, "32", "32", v.CacheBuster)) } sizes="32x32" type="image/x-icon"/>
+			<link rel="icon" href={ string(fmt.Sprintf(paths.ThemeIconPattern, v.Theme, "64", "64", v.CacheBuster)) } sizes="64x64" type="image/x-icon"/>
+			<link rel="icon" href={ string(fmt.Sprintf(paths.ThemeIconPattern, v.Theme, "128", "128", v.CacheBuster)) } sizes="128x128" type="image/x-icon"/>
+			<link rel="icon" href={ string(fmt.Sprintf(paths.ThemeIconPattern, v.Theme, "256", "256", v.CacheBuster)) } sizes="256x256" type="image/x-icon"/>
 
             <title>Let'em Cook! { v.Title }</title>
             <script src="https://unpkg.com/htmx.org@2.0.4"></script> 
@@ -44,7 +45,7 @@ templ Base(v models.BaseView) {
 			hx-boost="true"
 			hx-ext="ws"
                         data-active-nav={ v.ActiveNav }
-			if v.UserContext.IsAuthenticated() { ws-connect="/ws" } >
+			if v.UserContext.IsAuthenticated() { ws-connect={ paths.WebSocketPattern } } >
             // bug: no empty src="" or the browser hates you
             <audio hx-preserve id="audioPlayer"></audio>
             <script type="importmap">

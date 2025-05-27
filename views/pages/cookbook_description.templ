@@ -2,6 +2,7 @@ package pages
 
 import (
     "github.com/jaredfolkins/letemcook/models"
+    "github.com/jaredfolkins/letemcook/paths"
     "fmt"
 )
 
@@ -31,7 +32,7 @@ templ CookbookDescription(v models.CoreView) {
                             id="lemc-cookbook-thumbnail"
                             class="image"
                             alt="lemc thumbnail"
-                            src={ string(templ.URL(fmt.Sprintf("/lemc/cookbook/thumbnail/download/%s?ts=%s", v.YamlDefault.UUID, v.YamlDefault.Cookbook.Storage.Thumbnail.Timestamp))) }>
+                            src={ string(templ.URL(fmt.Sprintf(paths.CookbookThumbnailDownloadPattern, v.YamlDefault.UUID, v.YamlDefault.Cookbook.Storage.Thumbnail.Timestamp))) }>
 
                             <div class="button-container">
                                 <form
@@ -46,7 +47,7 @@ templ CookbookDescription(v models.CoreView) {
                                         </svg>
                                     </div>
                                 </form>
-                                @uploadCookbookThumbnailScript()
+                                @uploadCookbookThumbnailScript(paths.CookbookThumbnailUploadPattern)
                             </div>
                         </div>
                     </div>
@@ -56,14 +57,14 @@ templ CookbookDescription(v models.CoreView) {
                             id="cookbook_name"
                             class="flex text-2xl input flex-grow md:flex-row rounded-none cookbook-meta-bg input-bordered bg-white rounded-none w-full h-full flex-grow md:flex-row"
                             name="cookbook_name"
-                            hx-post={ string(templ.URL(fmt.Sprintf("/lemc/cookbook/meta/update/%s", v.YamlDefault.UUID))) }
+                            hx-post={ string(templ.URL(fmt.Sprintf(paths.CookbookMetaUpdatePattern, v.YamlDefault.UUID))) }
                             hx-trigger="keyup delay:700ms changed"
                             hx-target="#cookbook_name"
                             value={ fmt.Sprintf("%s", v.Cookbook.Name) } />
                         </div>
                         <div class="flex-1 flex flex-col">
                                 <textarea
-                                    hx-post={ string(templ.URL(fmt.Sprintf("/lemc/cookbook/meta/update/%s", v.YamlDefault.UUID))) }
+                                    hx-post={ string(templ.URL(fmt.Sprintf(paths.CookbookMetaUpdatePattern, v.YamlDefault.UUID))) }
                                     hx-trigger="keyup delay:700ms changed"
                                     hx-target="#cookbook_desc"
                                     hx-swap="innerHTML"

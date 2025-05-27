@@ -3,6 +3,7 @@ package pages
 import (
 	"fmt"
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/views/layout"
 	"github.com/jaredfolkins/letemcook/views/partials"
 )
@@ -18,7 +19,7 @@ templ App(v models.CoreView) {
 					<img
 						class="image"
 						alt="lemc thumbnail"
-						src={ string(templ.URL(fmt.Sprintf("/lemc/app/thumbnail/download/%s", v.YamlDefault.UUID))) }
+						src={ string(templ.URL(fmt.Sprintf(paths.AppThumbnailDownloadPattern, v.YamlDefault.UUID))) }
 					/>
 				</div>
 			</div>
@@ -80,24 +81,24 @@ templ RenderappRecipesNav(v models.CoreView) {
          <a
             hx-target="#app"
             hx-swap="innerHTML transition:true"
-            hx-push-url={ fmt.Sprintf("/lemc/app/index/i/individual/%s", v.Cookbook.UUID) }
-            href={ templ.URL(fmt.Sprintf("/lemc/app/index/i/individual/%s?partial=true", v.Cookbook.UUID)) }
+            hx-push-url={ fmt.Sprintf(paths.AppIndexIndividualPattern, v.Cookbook.UUID) }
+            href={ templ.URL(fmt.Sprintf(paths.AppIndexIndividualPartialPattern, v.Cookbook.UUID)) }
             class={ fmt.Sprintf("rounded-none btn text-lg %s", activeUser) }>
             Individual
          </a>
           <a
              hx-target="#app"
              hx-swap="innerHTML transition:true"
-             hx-push-url={ fmt.Sprintf("/lemc/app/index/s/shared/%s", v.Cookbook.UUID) }
-             href={ templ.URL(fmt.Sprintf("/lemc/app/index/s/shared/%s?partial=true", v.Cookbook.UUID)) }
+             hx-push-url={ fmt.Sprintf(paths.AppIndexSharedPattern, v.Cookbook.UUID) }
+             href={ templ.URL(fmt.Sprintf(paths.AppIndexSharedPartialPattern, v.Cookbook.UUID)) }
              class={ fmt.Sprintf("rounded-none btn mx-2 text-lg %s", activeAdmin) }>
              Shared
           </a>
           <a
              hx-target="#app"
              hx-swap="innerHTML transition:true"
-             hx-push-url={ fmt.Sprintf("/lemc/app/index/a/acls/%s", v.Cookbook.UUID) }
-             href={ templ.URL(fmt.Sprintf("/lemc/app/index/a/acls/%s?partial=true", v.Cookbook.UUID)) }
+             hx-push-url={ fmt.Sprintf(paths.AppIndexAclsPattern, v.Cookbook.UUID) }
+             href={ templ.URL(fmt.Sprintf(paths.AppIndexAclsPartialPattern, v.Cookbook.UUID)) }
              class={ fmt.Sprintf("rounded-none btn text-lg %s", activeAcls) }>
              ACLs
           </a>

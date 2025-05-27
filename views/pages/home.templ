@@ -1,7 +1,9 @@
 package pages
 
 import (
+	"fmt"
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/views/layout"
 )
 
@@ -18,20 +20,24 @@ templ Home(v models.HomeView) {
 				if !v.BaseView.IsProtected {
 					<p class="text-base font-thin">Have an account?</p>
 					<footer class="flex gap-4 justify-center p-1">
-						<button
-							hx-swap="transition:true"
-							href="/register"
+						<a
+							hx-target="#app"
+							hx-swap="innerHTML transition:true"
+							hx-push-url={ string(fmt.Sprintf("%s?squid=%s&account=%s", paths.Register, v.BaseView.AccountSquid, v.BaseView.AccountName)) }
+							href={ templ.URL(fmt.Sprintf("%s?squid=%s&account=%s&partial=true", paths.Register, v.BaseView.AccountSquid, v.BaseView.AccountName)) }
 							class="badge badge-secondary rounded-none px-6 py-4 hover:scale-[1.1] text-lg font-thin"
 						>
 							Register
-						</button>
-						<button
-							hx-swap="transition:true"
-							href="/login"
+						</a>
+						<a
+							hx-target="#app"
+							hx-swap="innerHTML transition:true"
+							hx-push-url={ string(fmt.Sprintf("%s?squid=%s&account=%s", paths.Login, v.BaseView.AccountSquid, v.BaseView.AccountName)) }
+							href={ templ.URL(fmt.Sprintf("%s?squid=%s&account=%s&partial=true", paths.Login, v.BaseView.AccountSquid, v.BaseView.AccountName)) }
 							class="badge badge-primary rounded-none px-6 py-4 hover:scale-[1.1] text-lg font-thin"
 						>
 							Log In
-						</button>
+						</a>
 					</footer>
 				}
 			</div>

@@ -2,6 +2,7 @@ package pages
 
 import (
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/views/partials"
 )
 
@@ -9,7 +10,7 @@ templ AppAcls(v models.CoreView) {
 	<div class="mb-8">
 	<div id="cookbooknav" class="cookbooknav-attrs flex flex-col justify-end md:flex-row mx-12 mb-2">
 		<div class="flex-1 flex items-center justify-start">
-				<h1 class="text-2xl font-bold">App Acls</h1>
+				<h1 class="text-2xl font-bold">{ paths.TitleAppAcls }</h1>
 			</div>
 		</div>
 	</div>

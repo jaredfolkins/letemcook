@@ -2,6 +2,7 @@ package partials
 
 import (
     "github.com/jaredfolkins/letemcook/models"
+    "github.com/jaredfolkins/letemcook/paths"
     "fmt"
 )
 
@@ -33,7 +34,7 @@ templ App(v models.CoreView) {
 
               <div role="tabpanel" class="tab-content bg-base-100 p-6">
                 <div
-                    hx-get={ string(templ.URL(fmt.Sprintf("/lemc/app/job/status/uuid/%s/page/%d/scope/%s", v.YamlDefault.UUID, e.PageID, v.ViewType))) }
+                    hx-get={ string(templ.URL(fmt.Sprintf(paths.AppJobStatusPattern, v.YamlDefault.UUID, e.PageID, v.ViewType))) }
                     hx-trigger="every 6s"
                     hx-swap="innerHTML"
                     id={ string(fmt.Sprintf("job-status-page-%d-scope-%s", e.PageID, v.ViewType)) }>
@@ -109,7 +110,7 @@ templ App(v models.CoreView) {
                                             <button
                                                 hx-swap="afterbegin"
                                                 hx-target="#toasty"
-                                                hx-put={ string(fmt.Sprintf("/lemc/app/job/%s/uuid/%s/page/%d/recipe/%s", v.ViewType, v.YamlDefault.UUID, e.PageID, r.Name)) }
+                                                hx-put={ string(fmt.Sprintf(paths.AppJobPattern, v.ViewType, v.YamlDefault.UUID, e.PageID, r.Name)) }
                                                 class="rounded-none btn btn-primary mt-2 mb-2">
                                                 { r.Name }
                                              </button>

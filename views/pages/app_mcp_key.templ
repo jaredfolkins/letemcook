@@ -2,6 +2,7 @@ package pages
 
 import (
     "github.com/jaredfolkins/letemcook/models"
+    "github.com/jaredfolkins/letemcook/paths"
 )
 
 templ AppMcpKeyModal(v models.CoreView) {
@@ -9,7 +10,7 @@ templ AppMcpKeyModal(v models.CoreView) {
         <div class="edit-box edges p-12 overscroll-none rounded-none bg-base-100">
             <button onclick="mcp_key_modal.close()" class="btn btn-sm btn-circle btn-ghost absolute left-2 rounded-none top-2">✕</button>
             <div class="flex flex-col mt-4">
-                <label class="mb-2 font-bold">MCP Key</label>
+                <label class="mb-2 font-bold">{ paths.TitleMcpKey }</label>
                 <input type="text" readonly value={ v.App.ApiKey } class="input input-bordered w-full rounded-none" />
             </div>
         </div>

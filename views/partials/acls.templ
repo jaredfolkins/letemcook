@@ -2,6 +2,7 @@ package partials
 
 import (
     "github.com/jaredfolkins/letemcook/models"
+    "github.com/jaredfolkins/letemcook/paths"
     "fmt"
 )
 
@@ -20,7 +21,7 @@ templ DisplayAclSearchResults(v models.CoreView) {
                     <div id="acl-search-display">
                         for _, acl := range v.CookbookAclSearchResults {
                             <div
-                                hx-post={ string(templ.URL(fmt.Sprintf("/lemc/cookbook/acl/user/add/%s/%d", v.Cookbook.UUID, acl.UserID))) }
+                                hx-post={ string(templ.URL(fmt.Sprintf(paths.CookbookAclUserAddPattern, v.Cookbook.UUID, acl.UserID))) }
                                 hx-swap="outerHTML"
                                 hx-trigger="click"
                                 hx-target="#acl-main"
@@ -45,7 +46,7 @@ templ DisplayAppAclSearchResults(v models.CoreView) {
 			<div id="acl-search-display" class="mt-2 border border-base-300 rounded-none max-h-48 overflow-y-auto">
 				for _, acl := range v.AppAclSearchResults {
 					<div
-						hx-post={ string(templ.URL(fmt.Sprintf("/lemc/app/acl/user/add/%s/%d", v.App.UUID, acl.UserID))) }
+						hx-post={ string(templ.URL(fmt.Sprintf(paths.AppAclUserAddPattern, v.App.UUID, acl.UserID))) }
 						hx-swap="outerHTML"
 						hx-trigger="click"
 						hx-target="#acl-main"
@@ -72,7 +73,7 @@ templ printappAclRow(v models.CoreView, acl models.AppAcl) {
 			} else {
 				if v.App != nil {
 					<input
-						hx-put={ fmt.Sprintf("/lemc/app/acl/user/toggle/individual/%s/%d", v.App.UUID, acl.UserID) }
+						hx-put={ fmt.Sprintf(paths.AppAclUserToggleIndividualPattern, v.App.UUID, acl.UserID) }
 						hx-swap="outerHTML"
 						hx-target="#acl-main"
 						type="checkbox"
@@ -89,7 +90,7 @@ templ printappAclRow(v models.CoreView, acl models.AppAcl) {
 			} else {
 				if v.App != nil {
 					<input
-						hx-put={ fmt.Sprintf("/lemc/app/acl/user/toggle/shared/%s/%d", v.App.UUID, acl.UserID) }
+						hx-put={ fmt.Sprintf(paths.AppAclUserToggleSharedPattern, v.App.UUID, acl.UserID) }
 						hx-swap="outerHTML"
 						hx-target="#acl-main"
 						type="checkbox"
@@ -106,7 +107,7 @@ templ printappAclRow(v models.CoreView, acl models.AppAcl) {
 			} else {
 				if v.App != nil {
 					<input
-						hx-put={ fmt.Sprintf("/lemc/app/acl/user/toggle/admin/%s/%d", v.App.UUID, acl.UserID) }
+						hx-put={ fmt.Sprintf(paths.AppAclUserToggleAdminPattern, v.App.UUID, acl.UserID) }
 						hx-swap="outerHTML"
 						hx-target="#acl-main"
 						type="checkbox"
@@ -121,7 +122,7 @@ templ printappAclRow(v models.CoreView, acl models.AppAcl) {
 			if !acl.IsOwner {
 				if v.App != nil {
 					<button class="rounded-none btn btn-primary"
-						hx-delete={ string(templ.URL(fmt.Sprintf("/lemc/app/acl/user/delete/%s/%d", v.App.UUID, acl.UserID))) }
+						hx-delete={ string(templ.URL(fmt.Sprintf(paths.AppAclUserDeletePattern, v.App.UUID, acl.UserID))) }
 						hx-swap="outerHTML"
 						hx-trigger="click"
 						hx-target="#acl-main">
@@ -130,14 +131,14 @@ templ printappAclRow(v models.CoreView, acl models.AppAcl) {
 						</svg>
 					</button>
 				} else {
-					<button class="btn-disabled rounded-none btn btn-primary tooltip" data-tip="app data unavailable">
+					<button class="btn-disabled rounded-none btn btn-primary tooltip" data-tip={ paths.TooltipAppDataUnavailable }>
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
 						  <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
 						</svg>
 					</button>
 				}
 			} else {
-				<button class="btn-disabled rounded-none btn btn-primary tooltip" data-tip="unable to delete the owner">
+				<button class="btn-disabled rounded-none btn btn-primary tooltip" data-tip={ paths.TooltipUnableDeleteOwner }>
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
 					  <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
 					</svg>
@@ -169,7 +170,7 @@ templ printAclRow(v models.CoreView, acl models.CookbookAcl) {
                         class="checkbox rounded-none" />
                 } else if acl.CanEdit {
                     <input
-                        hx-put={ fmt.Sprintf("/lemc/cookbook/acl/user/toggle/edit/%s/%d", v.YamlDefault.UUID, acl.UserID) }
+                        hx-put={ fmt.Sprintf(paths.CookbookAclUserToggleEditPattern, v.YamlDefault.UUID, acl.UserID) }
                         type="checkbox"
                         checked="checked"
                         hx-swap="outerHTML"
@@ -178,7 +179,7 @@ templ printAclRow(v models.CoreView, acl models.CookbookAcl) {
                         class="checkbox rounded-none" />
                 } else {
                     <input
-                        hx-put={ fmt.Sprintf("/lemc/cookbook/acl/user/toggle/edit/%s/%d", v.YamlDefault.UUID, acl.UserID) }
+                        hx-put={ fmt.Sprintf(paths.CookbookAclUserToggleEditPattern, v.YamlDefault.UUID, acl.UserID) }
                         type="checkbox"
                         hx-swap="outerHTML"
                         hx-trigger="click"
@@ -189,7 +190,7 @@ templ printAclRow(v models.CoreView, acl models.CookbookAcl) {
             <td>
             if !acl.IsOwner {
                 <button class="rounded-none btn btn-primary"
-                    hx-delete={ string(templ.URL(fmt.Sprintf("/lemc/cookbook/acl/user/delete/%s/%d", v.Cookbook.UUID, acl.UserID))) }
+                    hx-delete={ string(templ.URL(fmt.Sprintf(paths.CookbookAclUserDeletePattern, v.Cookbook.UUID, acl.UserID))) }
                     hx-swap="outerHTML"
                     hx-trigger="click"
                     hx-target="#acl-main">
@@ -198,7 +199,7 @@ templ printAclRow(v models.CoreView, acl models.CookbookAcl) {
                     </svg>
                 </button>
             } else {
-                <button class="btn-disabled rounded-none btn btn-primary tooltip" data-tip="unable to delete the owner">
+                <button class="btn-disabled rounded-none btn btn-primary tooltip" data-tip={ paths.TooltipUnableDeleteOwner }>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                       <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                     </svg>
@@ -215,36 +216,36 @@ templ Acls(v models.CoreView) {
                   <div class="acl-search-container w-auto flex flex-row">
                         <input
                         id="acl-search-input"
-                        placeholder="username/email"
+                                                    placeholder={ paths.PlaceholderUsernameEmail }
                         class="flex input w-full h-full flex-grow md:flex-row rounded-none cookbook-meta-bg"
                         name="acl-search"
                         hx-params="acl-search"
-                        hx-get={ string(templ.URL(fmt.Sprintf("/lemc/cookbook/acl/search/users/%s", v.YamlDefault.UUID))) }
+                        hx-get={ string(templ.URL(fmt.Sprintf(paths.CookbookAclSearchUsersPattern, v.YamlDefault.UUID))) }
                         hx-trigger="keyup changed"
                         hx-target="#acl-search-results" />
                      @DisplayAclSearchResults(v)
                   </div>
                     if len(v.CookbookAcls) == 0 {
-                        <p>No Acls Found</p>
+                        <p>{ paths.MessageNoAclsFound }</p>
                     } else {
                             <div class="overflow-x-auto mt-4">
                                     <table id="acl-users-table" class="table">
                                       <thead>
                                         <tr>
                                             <th>
-                                                <p>Username</p>
+                                                <p>{ paths.TableHeaderUsername }</p>
                                             </th>
                                             <th>
-                                                <p>Email</p>
+                                                <p>{ paths.TableHeaderEmail }</p>
                                             </th>
                                             <th>
-                                                <p>View</p>
+                                                <p>{ paths.TableHeaderView }</p>
                                             </th>
                                             <th>
-                                                <p>Edit</p>
+                                                <p>{ paths.TableHeaderEdit }</p>
                                             </th>
                                             <th>
-                                                <p>Remove</p>
+                                                <p>{ paths.TableHeaderRemove }</p>
                                             </th>
                                         </tr>
                                       </thead>

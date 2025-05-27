@@ -3,6 +3,7 @@ package partials
 import (
     "fmt"
     "github.com/jaredfolkins/letemcook/models"
+    "github.com/jaredfolkins/letemcook/paths"
 )
 
 templ DisplayImpersonateSearchResults(v models.ImpersonateView) {
@@ -10,7 +11,7 @@ templ DisplayImpersonateSearchResults(v models.ImpersonateView) {
         if len(v.Users) > 0 {
             <div id="impersonate-search-display" class="mt-2 border border-base-300 rounded-none max-h-48 overflow-y-auto">
                 for _, u := range v.Users {
-                    <div hx-post={ fmt.Sprintf("/lemc/impersonate/%d/%d", u.ID, u.Account.ID) } hx-swap="none" hx-trigger="click" class="hover:bg-base-200 p-2 rounded-none cursor-pointer">
+                    <div hx-post={ fmt.Sprintf(paths.ImpersonatePattern, u.ID, u.Account.ID) } hx-swap="none" hx-trigger="click" class="hover:bg-base-200 p-2 rounded-none cursor-pointer">
                         @templ.Raw(u.Username) - @templ.Raw(u.Email) [@templ.Raw(u.Account.Name)]
                     </div>
                 }

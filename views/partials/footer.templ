@@ -3,6 +3,7 @@ package partials
 import (
     "time"
     "strconv"
+    "github.com/jaredfolkins/letemcook/paths"
 )
 
 templ Copyright() {
@@ -11,9 +12,9 @@ templ Copyright() {
     <p>
         <span class="text-xs">
             if year != 2024 {
-                Copyright © 2024-{ yearStr }
+                { paths.FooterCopyright } 2024-{ yearStr }
             } else {
-                Copyright © 2024
+                { paths.FooterCopyright } 2024
             }
         </span>
     </p>
@@ -33,16 +34,16 @@ templ Footer() {
                   <aside class="items-center grid-flow-col outlined-text">
                     <p>
                         <span class="text-lg">
-                            <a href="https://github.com/jaredfolkins/letemcook" target="_blank">
-                                Let'em Cook!
-                            </a>
+                                                    <a href="https://github.com/jaredfolkins/letemcook" target="_blank">
+                            { paths.FooterAppName }
+                        </a>
                         </span>
                    </p>
                    <p>
                         <span class="text-sm">
-                            Made with 🔥 by
+                            { paths.FooterMadeWith }
                             <a href="https://jaredfolkins.com" target="_blank">
-                                Jared Folkins
+                                { paths.FooterAuthorName }
                             </a>
                         </span>
                    </p>

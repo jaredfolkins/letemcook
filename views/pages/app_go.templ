@@ -3,6 +3,7 @@ package pages
 import (
 	"fmt"
 	"github.com/jaredfolkins/letemcook/models"
+	"github.com/jaredfolkins/letemcook/paths"
 	"github.com/jaredfolkins/letemcook/views/partials"
 )
 
@@ -53,7 +54,7 @@ templ RenderAppGoTopNav(v models.CoreView) {
                                         type="checkbox"
                                         class="toggle toggle-primary"
                                         hx-swap="none"
-                                        hx-patch={string(templ.URL(fmt.Sprintf("/lemc/app/onregister/toggle/%s", v.YamlDefault.UUID)))}
+                                        hx-patch={string(templ.URL(fmt.Sprintf(paths.AppOnRegisterTogglePattern, v.YamlDefault.UUID)))}
                                         if v.App.OnRegister {
                                             checked="checked"
                                         }
@@ -84,8 +85,8 @@ templ RenderAppGoNav(v models.CoreView) {
          <a
             hx-target="#app"
             hx-swap="innerHTML transition:true"
-            hx-push-url={ fmt.Sprintf("/lemc/app/index/%s/%s", "individual", v.YamlDefault.UUID) }
-            href={ templ.URL(fmt.Sprintf("/lemc/app/index/%s/%s?partial=true", "individual", v.YamlDefault.UUID)) }
+            hx-push-url={ fmt.Sprintf(paths.AppIndexPattern, "individual", v.YamlDefault.UUID) }
+            href={ templ.URL(fmt.Sprintf(paths.AppIndexPartialPattern, "individual", v.YamlDefault.UUID)) }
             class={ fmt.Sprintf("rounded-none btn text-lg %s", activeUser) }>
             Individual
          </a>
@@ -94,8 +95,8 @@ templ RenderAppGoNav(v models.CoreView) {
           <a
              hx-target="#app"
              hx-swap="innerHTML transition:true"
-             hx-push-url={ fmt.Sprintf("/lemc/app/index/%s/%s", "shared", v.YamlDefault.UUID) }
-             href={ templ.URL(fmt.Sprintf("/lemc/app/index/%s/%s?partial=true", "shared", v.YamlDefault.UUID)) }
+             hx-push-url={ fmt.Sprintf(paths.AppIndexPattern, "shared", v.YamlDefault.UUID) }
+             href={ templ.URL(fmt.Sprintf(paths.AppIndexPartialPattern, "shared", v.YamlDefault.UUID)) }
              class={ fmt.Sprintf("rounded-none btn mx-2 text-lg %s", activeAdmin) }>
              Shared
           </a>

@@ -139,7 +139,7 @@ templ Navtop(v models.BaseView) {
 								hx-target="#app"
 								hx-swap="innerHTML transition:true"
                                                             hx-push-url={ paths.SystemSettings }
-								href="/lemc/system/settings?partial=true"
+								href={ templ.URL(paths.SystemSettingsPartial) }
                                                                 class={ fmt.Sprintf("btn btn-ghost rounded-none text-lg %s", activeSystemSettings) }
                                                                 hx-on:click={ templ.JSUnsafeFuncCall(fmt.Sprintf("document.body.dataset.activeNav='system'; document.body.dataset.activeSubNav='%s'; window.htmx && htmx.trigger('body', 'refreshNavtop')", paths.SystemSettings)) }
 							>
