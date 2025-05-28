@@ -2,10 +2,12 @@ package yeschef
 
 import (
 	"encoding/json"
-	"github.com/reugn/go-quartz/job"
-	"github.com/reugn/go-quartz/quartz"
+	"fmt"
 	"strings"
 	"time"
+
+	"github.com/reugn/go-quartz/job"
+	"github.com/reugn/go-quartz/quartz"
 )
 
 func marshal(job quartz.ScheduledJob) ([]byte, error) {
@@ -26,10 +28,22 @@ func unmarshalEveryStepJob(encoded []byte) (quartz.ScheduledJob, error) {
 		return nil, err
 	}
 
+	if nj.Job == nil {
+		return nil, fmt.Errorf("job is nil in serializedStepJob")
+	}
+
 	jobKey := quartz.NewJobKeyWithGroup(nj.JobKey, nj.Group)
 	jobDetail := quartz.NewJobDetailWithOptions(nj.Job, jobKey, nj.Options)
 	triggerOpts := strings.Split(nj.Trigger, quartz.Sep)
-	interval, _ := time.ParseDuration(triggerOpts[1])
+
+	if len(triggerOpts) < 2 {
+		return nil, fmt.Errorf("invalid trigger format: %s", nj.Trigger)
+	}
+
+	interval, err := time.ParseDuration(triggerOpts[1])
+	if err != nil {
+		return nil, fmt.Errorf("invalid interval format: %s", triggerOpts[1])
+	}
 
 	var trigger quartz.Trigger
 	trigger = quartz.NewSimpleTrigger(interval)
@@ -47,11 +61,23 @@ func unmarshalRecipeJob(encoded []byte) (quartz.ScheduledJob, error) {
 		return nil, err
 	}
 
+	if nj.Job == nil {
+		return nil, fmt.Errorf("job is nil in serializedRecipeJob")
+	}
+
 	jk := quartz.NewJobKeyWithGroup(nj.JobKey, nj.Group)
 	isolatedJob := job.NewIsolatedJob(nj.Job)
 	jobDetail := quartz.NewJobDetailWithOptions(isolatedJob, jk, nj.Options)
 	triggerOpts := strings.Split(nj.Trigger, quartz.Sep)
-	interval, _ := time.ParseDuration(triggerOpts[1])
+
+	if len(triggerOpts) < 2 {
+		return nil, fmt.Errorf("invalid trigger format: %s", nj.Trigger)
+	}
+
+	interval, err := time.ParseDuration(triggerOpts[1])
+	if err != nil {
+		return nil, fmt.Errorf("invalid interval format: %s", triggerOpts[1])
+	}
 
 	var trigger quartz.Trigger
 	trigger = quartz.NewRunOnceTrigger(interval)
@@ -74,10 +100,22 @@ func unmarshalInStepJob(encoded []byte) (quartz.ScheduledJob, error) {
 		return nil, err
 	}
 
+	if nj.Job == nil {
+		return nil, fmt.Errorf("job is nil in serializedStepJob")
+	}
+
 	jobKey := quartz.NewJobKeyWithGroup(nj.JobKey, nj.Group)
 	jobDetail := quartz.NewJobDetailWithOptions(nj.Job, jobKey, nj.Options)
 	triggerOpts := strings.Split(nj.Trigger, quartz.Sep)
-	interval, _ := time.ParseDuration(triggerOpts[1])
+
+	if len(triggerOpts) < 2 {
+		return nil, fmt.Errorf("invalid trigger format: %s", nj.Trigger)
+	}
+
+	interval, err := time.ParseDuration(triggerOpts[1])
+	if err != nil {
+		return nil, fmt.Errorf("invalid interval format: %s", triggerOpts[1])
+	}
 
 	var trigger quartz.Trigger
 	trigger = quartz.NewRunOnceTrigger(interval)

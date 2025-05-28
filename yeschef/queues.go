@@ -68,6 +68,7 @@ func (jq *jobQueue) Recover(s *quartz.StdScheduler) error {
 	// First, collect all jobs while holding the mutex
 	var jobsToSchedule []quartz.ScheduledJob
 	var filesToRemove []string
+	var invalidFilesToRemove []string
 
 	jq.mu.Lock()
 	files, err := os.ReadDir(jq.Path)
@@ -102,6 +103,14 @@ func (jq *jobQueue) Recover(s *quartz.StdScheduler) error {
 		}
 		if err != nil {
 			logger.Errorf("Recover unmarshal job: %v", err)
+			invalidFilesToRemove = append(invalidFilesToRemove, path)
+			continue
+		}
+
+		// Validate the job before scheduling
+		if err := ValidateScheduledJob(job); err != nil {
+			logger.Errorf("Recover job validation failed: %v", err)
+			invalidFilesToRemove = append(invalidFilesToRemove, path)
 			continue
 		}
 
@@ -109,10 +118,19 @@ func (jq *jobQueue) Recover(s *quartz.StdScheduler) error {
 		filesToRemove = append(filesToRemove, path)
 	}
 
-	// Remove files while still holding the mutex
+	// Remove valid files while still holding the mutex
 	for _, path := range filesToRemove {
 		if err := os.Remove(path); err != nil {
 			logger.Errorf("Recover remove job file: %v", err)
+		}
+	}
+
+	// Remove invalid files to prevent future problems
+	for _, path := range invalidFilesToRemove {
+		if err := os.Remove(path); err != nil {
+			logger.Errorf("Recover remove invalid job file: %v", err)
+		} else {
+			logger.Infof("Removed invalid job file during recovery: %s", path)
 		}
 	}
 	jq.mu.Unlock()
@@ -168,32 +186,53 @@ func (jq *jobQueue) Pop() (quartz.ScheduledJob, error) {
 	jq.mu.Lock()
 	defer jq.mu.Unlock()
 
-	job, err := findHead(jq)
+	// First validate system state
+	if err := ValidateSystemState(); err != nil {
+		logger.Errorf("System validation failed: %v", err)
+		return nil, err
+	}
 
-	if err == nil {
-		// Try both .json and non-.json filenames for backward compatibility
+	job, err := findHead(jq)
+	if err != nil {
+		return nil, err
+	}
+
+	// Validate the job before proceeding
+	if err := ValidateScheduledJob(job); err != nil {
+		logger.Errorf("Job validation failed: %v", err)
+		// Remove the invalid job file to prevent repeated failures
 		timestamp := job.NextRunTime()
 		jsonPath := fmt.Sprintf("%s/%d.json", jq.Path, timestamp)
 		plainPath := fmt.Sprintf("%s/%d", jq.Path, timestamp)
 
-		// Try to remove .json file first, then plain file
-		err = os.Remove(jsonPath)
-		if err != nil {
-			err = os.Remove(plainPath)
+		// Try to remove both possible file formats
+		if removeErr := os.Remove(jsonPath); removeErr != nil {
+			os.Remove(plainPath) // Try plain format if json fails
 		}
 
-		if err != nil {
-			logger.Errorf("Failed to delete job: %s", err)
-			return nil, err
-		}
-
-		key := job.JobDetail().JobKey().Name()
-		logger.Debugf("Adding job to RunningMan: %s", key)
-		XoxoX.RunningMan.Add(key)
-		return job, nil
+		return nil, err
 	}
 
-	return nil, nil
+	// Try both .json and non-.json filenames for backward compatibility
+	timestamp := job.NextRunTime()
+	jsonPath := fmt.Sprintf("%s/%d.json", jq.Path, timestamp)
+	plainPath := fmt.Sprintf("%s/%d", jq.Path, timestamp)
+
+	// Try to remove .json file first, then plain file
+	err = os.Remove(jsonPath)
+	if err != nil {
+		err = os.Remove(plainPath)
+	}
+
+	if err != nil {
+		logger.Errorf("Failed to delete job: %s", err)
+		return nil, err
+	}
+
+	key := job.JobDetail().JobKey().Name()
+	logger.Debugf("Adding job to RunningMan: %s", key)
+	XoxoX.RunningMan.Add(key)
+	return job, nil
 }
 
 func (jq *jobQueue) Head() (quartz.ScheduledJob, error) {
@@ -203,7 +242,17 @@ func (jq *jobQueue) Head() (quartz.ScheduledJob, error) {
 	job, err := findHead(jq)
 	if err != nil && err.Error() != "no jobs found" {
 		logger.Errorf("Failed to find job head: %s", err)
+		return nil, err
 	}
+
+	if job != nil {
+		// Validate the job before returning
+		if err := ValidateScheduledJob(job); err != nil {
+			logger.Errorf("Job validation failed in Head: %v", err)
+			return nil, err
+		}
+	}
+
 	return job, err
 }
 
@@ -289,20 +338,29 @@ func (jq *jobQueue) Get(jobKey *quartz.JobKey) (quartz.ScheduledJob, error) {
 				case NOW_QUEUE:
 					job, erri = unmarshalRecipeJob(data)
 					if erri != nil {
-						return nil, erri
+						logger.Errorf("Failed to unmarshal recipe job in Get: %v", erri)
+						continue
 					}
 				case IN_QUEUE:
 					job, erri = unmarshalInStepJob(data)
 					if erri != nil {
-						return nil, erri
+						logger.Errorf("Failed to unmarshal in step job in Get: %v", erri)
+						continue
 					}
 				case EVERY_QUEUE:
 					job, erri = unmarshalEveryStepJob(data)
 					if erri != nil {
-						return nil, erri
+						logger.Errorf("Failed to unmarshal every step job in Get: %v", erri)
+						continue
 					}
 				default:
 					return nil, fmt.Errorf("unknown queue name: %s", jq.Name)
+				}
+
+				// Validate the job before checking the key
+				if err := ValidateScheduledJob(job); err != nil {
+					logger.Errorf("Job validation failed in Get: %v", err)
+					continue
 				}
 
 				if jobKey.Equals(job.JobDetail().JobKey()) {
@@ -336,20 +394,35 @@ func (jq *jobQueue) Remove(jobKey *quartz.JobKey) (quartz.ScheduledJob, error) {
 				case NOW_QUEUE:
 					job, erri = unmarshalRecipeJob(data)
 					if erri != nil {
-						return nil, erri
+						logger.Errorf("Failed to unmarshal recipe job in Remove: %v", erri)
+						continue
 					}
 				case IN_QUEUE:
 					job, erri = unmarshalInStepJob(data)
 					if erri != nil {
-						return nil, erri
+						logger.Errorf("Failed to unmarshal in step job in Remove: %v", erri)
+						continue
 					}
 				case EVERY_QUEUE:
 					job, erri = unmarshalEveryStepJob(data)
 					if erri != nil {
-						return nil, erri
+						logger.Errorf("Failed to unmarshal every step job in Remove: %v", erri)
+						continue
 					}
 				default:
 					return nil, fmt.Errorf("unknown queue name: %s", jq.Name)
+				}
+
+				// Validate the job before checking the key
+				if err := ValidateScheduledJob(job); err != nil {
+					logger.Errorf("Job validation failed in Remove: %v", err)
+					// Still try to remove the file if the key matches
+					if jobKey.Name() == file.Name() || strings.TrimSuffix(file.Name(), ".json") == jobKey.Name() {
+						if err = os.Remove(path); err == nil {
+							return nil, fmt.Errorf("removed invalid job file: %v", err)
+						}
+					}
+					continue
 				}
 
 				if jobKey.Name() == job.JobDetail().JobKey().Name() {

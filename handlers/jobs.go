@@ -208,8 +208,11 @@ func getJobs(page, limit int, c LemcContext) ([]models.JobInfo, int, error) { //
 		// Try to parse as old persistedJobInfo format first
 		var jobData persistedJobInfo
 		if unmarshalErr := json.Unmarshal(fileData, &jobData); unmarshalErr == nil {
-			loadedJobs = append(loadedJobs, jobData)
-			return nil
+			// Check if the parsed data is actually valid (not just empty struct)
+			if jobData.ID != "" && jobData.AccountID != 0 {
+				loadedJobs = append(loadedJobs, jobData)
+				return nil
+			}
 		}
 
 		// Try to parse as yeschef format

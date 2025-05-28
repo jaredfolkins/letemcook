@@ -15,6 +15,7 @@ import (
 	"github.com/jaredfolkins/letemcook/views/partials"
 	"github.com/jaredfolkins/letemcook/yeschef"
 	"github.com/labstack/gommon/log"
+	"github.com/reugn/go-quartz/quartz"
 	"gopkg.in/yaml.v3"
 )
 
@@ -100,19 +101,45 @@ type JobStatus struct {
 func NewJobStatus(jr *yeschef.JobRecipe) *JobStatus {
 	js := &JobStatus{}
 
+	// Check if XoxoX is initialized
+	if yeschef.XoxoX == nil || yeschef.XoxoX.RunningMan == nil {
+		return js
+	}
+
+	// Check NOW jobs - both running and scheduled
 	nowKey := yeschef.LemcJobKey(jr, yeschef.NOW_QUEUE)
 	if yeschef.XoxoX.RunningMan.IsRunning(nowKey) {
 		js.NowRunning = true
+	} else if yeschef.XoxoX.NowQueue != nil {
+		// Check if there's a scheduled NOW job
+		jobKey := quartz.NewJobKey(nowKey)
+		if job, err := yeschef.XoxoX.NowQueue.Get(jobKey); err == nil && job != nil {
+			js.NowRunning = true
+		}
 	}
 
+	// Check IN jobs - both running and scheduled
 	inKey := yeschef.LemcJobKey(jr, yeschef.IN_QUEUE)
 	if yeschef.XoxoX.RunningMan.IsRunning(inKey) {
 		js.InRunning = true
+	} else if yeschef.XoxoX.InQueue != nil {
+		// Check if there's a scheduled IN job
+		jobKey := quartz.NewJobKey(inKey)
+		if job, err := yeschef.XoxoX.InQueue.Get(jobKey); err == nil && job != nil {
+			js.InRunning = true
+		}
 	}
 
+	// Check EVERY jobs - both running and scheduled
 	everyKey := yeschef.LemcJobKey(jr, yeschef.EVERY_QUEUE)
 	if yeschef.XoxoX.RunningMan.IsRunning(everyKey) {
 		js.EveryRunning = true
+	} else if yeschef.XoxoX.EveryQueue != nil {
+		// Check if there's a scheduled EVERY job
+		jobKey := quartz.NewJobKey(everyKey)
+		if job, err := yeschef.XoxoX.EveryQueue.Get(jobKey); err == nil && job != nil {
+			js.EveryRunning = true
+		}
 	}
 
 	return js
