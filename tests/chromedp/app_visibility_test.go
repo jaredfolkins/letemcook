@@ -9,16 +9,15 @@ import (
 	"time"
 
 	"github.com/chromedp/chromedp"
+	"github.com/jaredfolkins/letemcook/tests/testutil"
 )
 
 const (
 	seedPassword      = "asdfasdfasdf"
 	accAlphaName      = "Account Alpha"
 	accAlphaOwnerUser = "alpha-owner"
-	accAlphaSquid     = "xkQN" // Hardcoded based on seed logic for Account ID 1
 	accBravoName      = "Account Bravo"
 	accBravoOwnerUser = "bravo-owner"
-	accBravoSquid     = "Xijg" // Hardcoded based on seed logic for Account ID 2
 	alphaAppPrefix    = "Alpha App"
 	bravoAppPrefix    = "Bravo App"
 	appsPath          = "/lemc/apps"
@@ -42,62 +41,60 @@ func TestAppVisibility(t *testing.T) {
 		t.Skip("Skipping integration test in short mode")
 	}
 
+	// Load the actual squid values from the test environment
+	alphaSquid, bravoSquid, err := testutil.LoadTestEnv()
+	if err != nil {
+		t.Fatalf("Failed to load test environment: %v", err)
+	}
+
 	testCases := []appVisibilityTestData{
 		{
 			testName:           "AlphaOwnerSeesAlphaApp",
 			username:           accAlphaOwnerUser,
 			password:           seedPassword,
 			accountName:        accAlphaName,
-			squid:              accAlphaSquid,
+			squid:              alphaSquid,
 			shouldSeeSubstr:    "Description for Alpha App", // Check description
 			shouldNotSeeSubstr: bravoAppPrefix,
 			expectPresence:     true,
 		},
 		{
-			testName:           "AlphaUser1ShouldNotSeeApps", // Renamed based on current observed behavior
-			username:           "alpha_user_1",               // Seeded regular user
+			testName:           "AlphaViewerShouldSeeApps", // Use actual user from seed data
+			username:           "alpha-viewer",             // Actual user in seed data
 			password:           seedPassword,
 			accountName:        accAlphaName,
-			squid:              accAlphaSquid,
-			shouldSeeSubstr:    alphaAppPrefix, // Regular user currently sees "no apps"
-			shouldNotSeeSubstr: bravoAppPrefix, // Should also not see other account's apps
-			expectPresence:     false,          // Assert *absence* of shouldSeeSubstr based on current behavior
+			squid:              alphaSquid,
+			shouldSeeSubstr:    alphaAppPrefix, // Regular user should see apps they have permission for
+			shouldNotSeeSubstr: bravoAppPrefix, // Should not see other account's apps
+			expectPresence:     true,           // This user has view permissions
 		},
 		{
 			testName:           "BravoOwnerSeesBravoApp",
 			username:           accBravoOwnerUser,
 			password:           seedPassword,
 			accountName:        accBravoName,
-			squid:              accBravoSquid,
+			squid:              bravoSquid,
 			shouldSeeSubstr:    "Description for Bravo App", // Check description
 			shouldNotSeeSubstr: alphaAppPrefix,
 			expectPresence:     true,
 		},
 		{
-			testName:           "BravoUser1ShouldNotSeeApps", // Renamed based on current observed behavior
-			username:           "bravo_user_1",               // Seeded regular user
+			testName:           "BravoMainShouldSeeApps", // Use actual user from seed data
+			username:           "bravo-main",             // Actual user in seed data
 			password:           seedPassword,
 			accountName:        accBravoName,
-			squid:              accBravoSquid,
-			shouldSeeSubstr:    bravoAppPrefix, // Regular user currently sees "no apps"
-			shouldNotSeeSubstr: alphaAppPrefix, // Should also not see other account's apps
-			expectPresence:     false,          // Assert *absence* of shouldSeeSubstr based on current behavior
+			squid:              bravoSquid,
+			shouldSeeSubstr:    bravoAppPrefix, // Regular user should see apps they have permission for
+			shouldNotSeeSubstr: alphaAppPrefix, // Should not see other account's apps
+			expectPresence:     true,           // This user has view permissions
 		},
 	}
-
-	var (
-		baseURL             = getBaseURL()
-		loginPath           = "/lemc/login"
-		usernameSelector    = `input[name="username"]`
-		passwordSelector    = `input[name="password"]`
-		loginButtonSelector = `button.btn-primary`
-	)
 
 	for _, tc := range testCases {
 		tc := tc // Capture range variable
 		t.Run(tc.testName, func(t *testing.T) {
 
-			ctx, cancel := createHeadlessContext(t)
+			ctx, cancel := testutil.CreateHeadlessContext()
 			defer cancel()
 
 			ctx, cancelTimeout := context.WithTimeout(ctx, 15*time.Second) // Increased timeout
@@ -106,8 +103,8 @@ func TestAppVisibility(t *testing.T) {
 			loginURLValues := url.Values{}
 			loginURLValues.Set("squid", tc.squid)
 			loginURLValues.Set("account", tc.accountName)
-			loginURL := baseURL + loginPath + "?" + loginURLValues.Encode()
-			targetappsURL := baseURL + appsPath // URL to navigate to after login
+			loginURL := testutil.GetBaseURL() + "/lemc/login" + "?" + loginURLValues.Encode()
+			targetappsURL := testutil.GetBaseURL() + appsPath // URL to navigate to after login
 
 			t.Logf("[%s] Navigating to login: %s", tc.testName, loginURL)
 
@@ -115,10 +112,10 @@ func TestAppVisibility(t *testing.T) {
 
 			tasks := chromedp.Tasks{
 				chromedp.Navigate(loginURL),
-				chromedp.WaitVisible(usernameSelector, chromedp.ByQuery),
-				chromedp.SendKeys(usernameSelector, tc.username, chromedp.ByQuery),
-				chromedp.SendKeys(passwordSelector, tc.password, chromedp.ByQuery),
-				chromedp.Click(loginButtonSelector, chromedp.ByQuery),
+				chromedp.WaitVisible(testutil.UsernameSelector, chromedp.ByQuery),
+				chromedp.SendKeys(testutil.UsernameSelector, tc.username, chromedp.ByQuery),
+				chromedp.SendKeys(testutil.PasswordSelector, tc.password, chromedp.ByQuery),
+				chromedp.Click(testutil.LoginButtonSelector, chromedp.ByQuery),
 				chromedp.Sleep(1 * time.Second),
 				chromedp.Navigate(targetappsURL),
 				chromedp.ActionFunc(func(ctx context.Context) error {

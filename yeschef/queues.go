@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"sync"
 
 	"github.com/jaredfolkins/letemcook/util"
@@ -64,11 +65,14 @@ type jobQueue struct {
 // schedules them with the provided scheduler. This allows the system to
 // restore jobs after an unexpected shutdown or crash.
 func (jq *jobQueue) Recover(s *quartz.StdScheduler) error {
-	jq.mu.Lock()
-	defer jq.mu.Unlock()
+	// First, collect all jobs while holding the mutex
+	var jobsToSchedule []quartz.ScheduledJob
+	var filesToRemove []string
 
+	jq.mu.Lock()
 	files, err := os.ReadDir(jq.Path)
 	if err != nil {
+		jq.mu.Unlock()
 		return err
 	}
 
@@ -92,16 +96,29 @@ func (jq *jobQueue) Recover(s *quartz.StdScheduler) error {
 			job, err = unmarshalInStepJob(data)
 		case EVERY_QUEUE:
 			job, err = unmarshalEveryStepJob(data)
+		default:
+			logger.Errorf("Recover unknown queue name: %s", jq.Name)
+			continue
 		}
 		if err != nil {
 			logger.Errorf("Recover unmarshal job: %v", err)
 			continue
 		}
 
+		jobsToSchedule = append(jobsToSchedule, job)
+		filesToRemove = append(filesToRemove, path)
+	}
+
+	// Remove files while still holding the mutex
+	for _, path := range filesToRemove {
 		if err := os.Remove(path); err != nil {
 			logger.Errorf("Recover remove job file: %v", err)
 		}
+	}
+	jq.mu.Unlock()
 
+	// Now schedule jobs without holding the mutex
+	for _, job := range jobsToSchedule {
 		if err := s.ScheduleJob(job.JobDetail(), job.Trigger()); err != nil {
 			logger.Errorf("Recover schedule job: %v", err)
 		}
@@ -138,7 +155,8 @@ func (jq *jobQueue) Push(job quartz.ScheduledJob) error {
 		return err
 	}
 
-	if err = os.WriteFile(fmt.Sprintf("%s/%d", jq.Path, job.NextRunTime()),
+	// Store with .json extension for UI compatibility
+	if err = os.WriteFile(fmt.Sprintf("%s/%d.json", jq.Path, job.NextRunTime()),
 		serialized, util.FilePerm); err != nil {
 		logger.Errorf("Failed to write job: %s", err)
 		return err
@@ -153,7 +171,17 @@ func (jq *jobQueue) Pop() (quartz.ScheduledJob, error) {
 	job, err := findHead(jq)
 
 	if err == nil {
-		err = os.Remove(fmt.Sprintf("%s/%d", jq.Path, job.NextRunTime()))
+		// Try both .json and non-.json filenames for backward compatibility
+		timestamp := job.NextRunTime()
+		jsonPath := fmt.Sprintf("%s/%d.json", jq.Path, timestamp)
+		plainPath := fmt.Sprintf("%s/%d", jq.Path, timestamp)
+
+		// Try to remove .json file first, then plain file
+		err = os.Remove(jsonPath)
+		if err != nil {
+			err = os.Remove(plainPath)
+		}
+
 		if err != nil {
 			logger.Errorf("Failed to delete job: %s", err)
 			return nil, err
@@ -186,11 +214,23 @@ func findHead(jq *jobQueue) (quartz.ScheduledJob, error) {
 	}
 
 	var lastUpdate int64 = math.MaxInt64
+	var filename string
 	for _, file := range fileInfo {
 		if !file.IsDir() {
-			time, err := strconv.ParseInt(file.Name(), 10, 64)
+			name := file.Name()
+			var timeStr string
+
+			// Handle both .json and non-.json filenames for backward compatibility
+			if strings.HasSuffix(name, ".json") {
+				timeStr = strings.TrimSuffix(name, ".json")
+			} else {
+				timeStr = name
+			}
+
+			time, err := strconv.ParseInt(timeStr, 10, 64)
 			if err == nil && time < lastUpdate {
 				lastUpdate = time
+				filename = name
 			}
 		}
 	}
@@ -199,7 +239,7 @@ func findHead(jq *jobQueue) (quartz.ScheduledJob, error) {
 		return nil, errors.New("no jobs found")
 	}
 
-	data, err := os.ReadFile(fmt.Sprintf("%s/%d", jq.Path, lastUpdate))
+	data, err := os.ReadFile(fmt.Sprintf("%s/%s", jq.Path, filename))
 	if err != nil {
 		return nil, err
 	}
@@ -223,6 +263,8 @@ func findHead(jq *jobQueue) (quartz.ScheduledJob, error) {
 		if err != nil {
 			return nil, err
 		}
+	default:
+		return nil, fmt.Errorf("unknown queue name: %s", jq.Name)
 	}
 
 	return job, nil
@@ -259,6 +301,8 @@ func (jq *jobQueue) Get(jobKey *quartz.JobKey) (quartz.ScheduledJob, error) {
 					if erri != nil {
 						return nil, erri
 					}
+				default:
+					return nil, fmt.Errorf("unknown queue name: %s", jq.Name)
 				}
 
 				if jobKey.Equals(job.JobDetail().JobKey()) {
@@ -304,6 +348,8 @@ func (jq *jobQueue) Remove(jobKey *quartz.JobKey) (quartz.ScheduledJob, error) {
 					if erri != nil {
 						return nil, erri
 					}
+				default:
+					return nil, fmt.Errorf("unknown queue name: %s", jq.Name)
 				}
 
 				if jobKey.Name() == job.JobDetail().JobKey().Name() {

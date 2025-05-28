@@ -146,13 +146,19 @@ func SetupLogWriters(env, appPath, httpPath string) (io.Writer, io.Writer, func(
 		return os.Stdout, os.Stdout, cleanup, nil
 	}
 
-	ap := fmt.Sprintf("%s/%s", EnvPath(), appPath)
+	// Ensure the environment directory exists
+	envPath := EnvPath()
+	if err := os.MkdirAll(envPath, FileMode); err != nil {
+		return nil, nil, cleanup, fmt.Errorf("failed to create env directory: %w", err)
+	}
+
+	ap := fmt.Sprintf("%s/%s", envPath, appPath)
 	appFile, err := os.OpenFile(ap, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0o666)
 	if err != nil {
 		return nil, nil, cleanup, err
 	}
 
-	hp := fmt.Sprintf("%s/%s", EnvPath(), httpPath)
+	hp := fmt.Sprintf("%s/%s", envPath, httpPath)
 	httpFile, err := os.OpenFile(hp, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0o666)
 	if err != nil {
 		appFile.Close()

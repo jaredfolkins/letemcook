@@ -20,6 +20,30 @@ func (dij *StepJob) Execute(ctx context.Context) error {
 	execCtx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
+	// Only check for NOW job conflicts if we have a valid recipe with all required fields
+	// This prevents panics in test scenarios with incomplete JobRecipe structs
+	if dij.RecipeJob != nil && dij.RecipeJob.Scope != "" && dij.RecipeJob.UserID != "" && dij.RecipeJob.UUID != "" && dij.RecipeJob.PageID != "" {
+		// Check if a NOW job is already running for this recipe before executing the delayed step
+		nowKey := LemcJobKey(dij.RecipeJob, NOW_QUEUE)
+
+		XoxoX.RunningMan.mu.Lock()
+		if XoxoX.RunningMan.list[nowKey] {
+			XoxoX.RunningMan.mu.Unlock()
+			return fmt.Errorf("error: a NOW job is already running for this recipe")
+		}
+
+		// Mark this delayed job as a running NOW job during execution
+		XoxoX.RunningMan.list[nowKey] = true
+		XoxoX.RunningMan.mu.Unlock()
+
+		// Ensure we clean up the running status when done
+		defer func() {
+			XoxoX.RunningMan.mu.Lock()
+			delete(XoxoX.RunningMan.list, nowKey)
+			XoxoX.RunningMan.mu.Unlock()
+		}()
+	}
+
 	err := DoStep(execCtx, dij.RecipeJob, dij.Step)
 	if err != nil {
 		cancel()

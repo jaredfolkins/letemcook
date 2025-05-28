@@ -43,8 +43,12 @@ func TestDumpFS(t *testing.T) {
 
 func TestSetupLogWriters(t *testing.T) {
 	tmp := t.TempDir()
-	app := filepath.Join(tmp, "app.log")
-	http := filepath.Join(tmp, "http.log")
+	t.Setenv("LEMC_DATA", tmp)
+	t.Setenv("LEMC_ENV", "test")
+
+	// Use relative paths as the function expects
+	app := "app.log"
+	http := "http.log"
 
 	w1, w2, cleanup, err := SetupLogWriters("production", app, http)
 	if err != nil {
@@ -54,11 +58,17 @@ func TestSetupLogWriters(t *testing.T) {
 	if w1 == os.Stdout || w2 == os.Stdout {
 		t.Fatalf("expected file writers")
 	}
-	if _, err := os.Stat(app); err != nil {
-		t.Fatalf("app log not created")
+
+	// Check if files were created in the expected location
+	envPath := EnvPath()
+	appPath := filepath.Join(envPath, app)
+	httpPath := filepath.Join(envPath, http)
+
+	if _, err := os.Stat(appPath); err != nil {
+		t.Fatalf("app log not created at %s: %v", appPath, err)
 	}
-	if _, err := os.Stat(http); err != nil {
-		t.Fatalf("http log not created")
+	if _, err := os.Stat(httpPath); err != nil {
+		t.Fatalf("http log not created at %s: %v", httpPath, err)
 	}
 
 	_, _, _, err = SetupLogWriters("dev", app, http)

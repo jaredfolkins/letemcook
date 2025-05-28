@@ -29,7 +29,7 @@ func TestJobQueueRecover(t *testing.T) {
 	q := &jobQueue{Path: tmpDir, Name: NOW_QUEUE}
 	config := quartz.StdSchedulerOptions{}
 
-	job := &JobRecipe{UUID: "u", JobType: "now"}
+	job := &JobRecipe{UUID: "u", JobType: "now", UserID: "test-user", PageID: "test-page"}
 	jd := quartz.NewJobDetail(job, quartz.NewJobKey("recover"))
 	trg := quartz.NewRunOnceTrigger(time.Hour)
 	next := time.Now().Add(time.Hour).Unix()
@@ -39,7 +39,7 @@ func TestJobQueueRecover(t *testing.T) {
 		t.Fatalf("push: %v", err)
 	}
 
-	origPath := filepath.Join(tmpDir, fmt.Sprintf("%d", next))
+	origPath := filepath.Join(tmpDir, fmt.Sprintf("%d.json", next))
 	if _, err := os.Stat(origPath); err != nil {
 		t.Fatalf("job file missing: %v", err)
 	}

@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 
 	"github.com/jaredfolkins/letemcook/middleware"
@@ -26,6 +27,9 @@ func TestGetAppsHandlerUnauthenticated(t *testing.T) {
 
 // TestGetAppsHandlerDefaults verifies handler defaults page and limit when invalid values provided.
 func TestGetAppsHandlerDefaults(t *testing.T) {
+	// Set up required environment variables
+	os.Setenv("LEMC_SQUID_ALPHABET", "abcdefghijklmnopqrstuvwxyz0123456789")
+
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodGet, "/lemc/apps?page=x&limit=bad", nil)
 	rec := httptest.NewRecorder()

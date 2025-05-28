@@ -461,10 +461,10 @@ func ToggleAppPermission(userID, accountID, appID int64, permToToggle Permission
 
 	// 1. Fetch the current permission record within the transaction
 	pc := PermApp{}
-	// Select only necessary fields + id for update, and use FOR UPDATE for locking
+	// Select only necessary fields + id for update
 	getQuery := `SELECT id, can_shared, can_individual, can_administer
 	               FROM permissions_apps
-	              WHERE user_id = $1 AND account_id = $2 AND app_id = $3 FOR UPDATE`
+	              WHERE user_id = $1 AND account_id = $2 AND app_id = $3`
 	err = tx.Get(&pc, getQuery, userID, accountID, appID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {

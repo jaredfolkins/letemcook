@@ -31,7 +31,7 @@ func TestMarshalUnmarshalEveryStepJob(t *testing.T) {
 }
 
 func TestMarshalUnmarshalRecipeJob(t *testing.T) {
-	rj := &JobRecipe{UUID: "u", JobType: "now"}
+	rj := &JobRecipe{UUID: "u", JobType: "now", UserID: "test-user", PageID: "test-page"}
 	jd := quartz.NewJobDetail(rj, quartz.NewJobKey("rk"))
 	trg := quartz.NewRunOnceTrigger(time.Second)
 	sj := &scheduledLemcJob{jobDetail: jd, trigger: trg, nextRunTime: 7}

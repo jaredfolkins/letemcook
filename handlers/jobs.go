@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/jaredfolkins/letemcook/models"
@@ -26,6 +27,146 @@ type persistedJobInfo struct {
 	Status      string     `json:"status"`     // e.g., "Scheduled", "Running", "Completed"
 	CreatedAt   time.Time  `json:"created_at"`
 	ScheduledAt *time.Time `json:"scheduled_at,omitempty"` // Pointer, might be null
+}
+
+// YesChef job structures - imported from yeschef package structures
+type yeschefStepJob struct {
+	Job         *yeschefStepJobData `json:"job"`
+	JobKey      string              `json:"job_key"`
+	Description string              `json:"description"`
+	Group       string              `json:"group"`
+	Trigger     string              `json:"trigger"`
+	NextRunTime int64               `json:"next_run_time"`
+}
+
+type yeschefStepJobData struct {
+	Step      *yeschefStep      `json:"Step"`
+	RecipeJob *yeschefRecipeJob `json:"RecipeJob"`
+}
+
+type yeschefStep struct {
+	Step    int    `json:"Step"`
+	Name    string `json:"Name"`
+	Image   string `json:"Image"`
+	Do      string `json:"Do"`
+	Timeout string `json:"Timeout"`
+}
+
+type yeschefRecipeJob struct {
+	JobType    string         `json:"JobType"`
+	UUID       string         `json:"UUID"`
+	CookbookID string         `json:"CookbookID"`
+	AppID      string         `json:"AppID"`
+	UserID     string         `json:"UserID"`
+	Username   string         `json:"Username"`
+	PageID     string         `json:"PageID"`
+	StepID     string         `json:"StepID"`
+	Scope      string         `json:"Scope"`
+	Recipe     *yeschefRecipe `json:"Recipe"`
+}
+
+type yeschefRecipe struct {
+	Name        string `json:"Name"`
+	Description string `json:"Description"`
+}
+
+type yeschefRecipeJobFile struct {
+	Job         *yeschefRecipeJob `json:"job"`
+	JobKey      string            `json:"job_key"`
+	Description string            `json:"description"`
+	Group       string            `json:"group"`
+	Trigger     string            `json:"trigger"`
+	NextRunTime int64             `json:"next_run_time"`
+}
+
+func extractJobInfoFromYeschef(fileData []byte, filename string, dirPath string) (*persistedJobInfo, error) {
+	// Determine job type from directory path
+	jobType := "UNKNOWN"
+	if strings.Contains(dirPath, "/now/") || strings.HasSuffix(dirPath, "/now") {
+		jobType = "NOW"
+	} else if strings.Contains(dirPath, "/in/") || strings.HasSuffix(dirPath, "/in") {
+		jobType = "IN"
+	} else if strings.Contains(dirPath, "/every/") || strings.HasSuffix(dirPath, "/every") {
+		jobType = "EVERY"
+	}
+
+	// Try to parse as step job first
+	var stepJob yeschefStepJob
+	if err := json.Unmarshal(fileData, &stepJob); err == nil && stepJob.Job != nil && stepJob.Job.RecipeJob != nil {
+		userID, _ := strconv.ParseInt(stepJob.Job.RecipeJob.UserID, 10, 64)
+
+		recipeName := "Unknown Recipe"
+		if stepJob.Job.RecipeJob.Recipe != nil {
+			recipeName = stepJob.Job.RecipeJob.Recipe.Name
+		} else if stepJob.Job.Step != nil {
+			recipeName = stepJob.Job.Step.Name
+		}
+
+		// Extract timestamp from filename for ID and creation time
+		var timestamp int64
+		var err error
+		if strings.HasSuffix(filename, ".json") {
+			timestamp, err = strconv.ParseInt(strings.TrimSuffix(filename, ".json"), 10, 64)
+		} else {
+			timestamp, err = strconv.ParseInt(filename, 10, 64)
+		}
+		if err != nil {
+			timestamp = time.Now().UnixNano()
+		}
+
+		createdAt := time.Unix(0, timestamp)
+		scheduledAt := time.Unix(0, stepJob.NextRunTime)
+
+		return &persistedJobInfo{
+			ID:          filename,
+			RecipeName:  recipeName,
+			Username:    stepJob.Job.RecipeJob.Username,
+			AccountID:   userID,
+			JobType:     jobType,
+			Status:      "Scheduled",
+			CreatedAt:   createdAt,
+			ScheduledAt: &scheduledAt,
+		}, nil
+	}
+
+	// Try to parse as recipe job
+	var recipeJob yeschefRecipeJobFile
+	if err := json.Unmarshal(fileData, &recipeJob); err == nil && recipeJob.Job != nil {
+		userID, _ := strconv.ParseInt(recipeJob.Job.UserID, 10, 64)
+
+		recipeName := "Unknown Recipe"
+		if recipeJob.Job.Recipe != nil {
+			recipeName = recipeJob.Job.Recipe.Name
+		}
+
+		// Extract timestamp from filename for ID and creation time
+		var timestamp int64
+		var err error
+		if strings.HasSuffix(filename, ".json") {
+			timestamp, err = strconv.ParseInt(strings.TrimSuffix(filename, ".json"), 10, 64)
+		} else {
+			timestamp, err = strconv.ParseInt(filename, 10, 64)
+		}
+		if err != nil {
+			timestamp = time.Now().UnixNano()
+		}
+
+		createdAt := time.Unix(0, timestamp)
+		scheduledAt := time.Unix(0, recipeJob.NextRunTime)
+
+		return &persistedJobInfo{
+			ID:          filename,
+			RecipeName:  recipeName,
+			Username:    recipeJob.Job.Username,
+			AccountID:   userID,
+			JobType:     jobType,
+			Status:      "Scheduled",
+			CreatedAt:   createdAt,
+			ScheduledAt: &scheduledAt,
+		}, nil
+	}
+
+	return nil, fmt.Errorf("unable to parse as yeschef job format")
 }
 
 func getJobs(page, limit int, c LemcContext) ([]models.JobInfo, int, error) { // Removed userID param, using context 'c' instead
@@ -49,8 +190,13 @@ func getJobs(page, limit int, c LemcContext) ([]models.JobInfo, int, error) { //
 			return nil
 		}
 
-		if filepath.Ext(d.Name()) != ".json" {
-			return nil
+		// Accept both .json files and files without extensions (for backward compatibility)
+		filename := d.Name()
+		if !strings.HasSuffix(filename, ".json") {
+			// Check if it's a timestamp-like filename (all digits)
+			if _, err := strconv.ParseInt(filename, 10, 64); err != nil {
+				return nil // Skip non-numeric filenames without .json extension
+			}
 		}
 
 		fileData, readErr := os.ReadFile(path)
@@ -59,13 +205,20 @@ func getJobs(page, limit int, c LemcContext) ([]models.JobInfo, int, error) { //
 			return nil
 		}
 
+		// Try to parse as old persistedJobInfo format first
 		var jobData persistedJobInfo
-		if unmarshalErr := json.Unmarshal(fileData, &jobData); unmarshalErr != nil {
-			log.Printf("Error unmarshalling job file '%s': %v", path, unmarshalErr)
+		if unmarshalErr := json.Unmarshal(fileData, &jobData); unmarshalErr == nil {
+			loadedJobs = append(loadedJobs, jobData)
 			return nil
 		}
 
-		loadedJobs = append(loadedJobs, jobData)
+		// Try to parse as yeschef format
+		if jobInfo, err := extractJobInfoFromYeschef(fileData, filename, path); err == nil {
+			loadedJobs = append(loadedJobs, *jobInfo)
+		} else {
+			log.Printf("Error parsing job file '%s' as either format: %v", path, err)
+		}
+
 		return nil
 	})
 	if err != nil {

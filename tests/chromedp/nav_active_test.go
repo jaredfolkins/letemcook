@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/chromedp/chromedp"
+	"github.com/jaredfolkins/letemcook/tests/testutil"
 )
 
 func TestNavActiveSwitching(t *testing.T) {
@@ -15,24 +16,30 @@ func TestNavActiveSwitching(t *testing.T) {
 		t.Skip("Skipping integration test in short mode")
 	}
 
-	ctx, cancel := createHeadlessContext(t)
+	// Load the actual squid values from the test environment
+	alphaSquid, _, err := testutil.LoadTestEnv()
+	if err != nil {
+		t.Fatalf("Failed to load test environment: %v", err)
+	}
+
+	ctx, cancel := testutil.CreateHeadlessContext()
 	defer cancel()
 
 	ctx, cancelTimeout := context.WithTimeout(ctx, 20*time.Second)
 	defer cancelTimeout()
 
 	loginURLValues := url.Values{}
-	loginURLValues.Set("squid", "xkQN")
-	loginURLValues.Set("account", "Account Alpha")
-	loginURL := baseURL + loginPath + "?" + loginURLValues.Encode()
+	loginURLValues.Set("squid", alphaSquid)
+	loginURLValues.Set("account", testutil.AlphaAccountName)
+	loginURL := testutil.GetBaseURL() + "/lemc/login" + "?" + loginURLValues.Encode()
 
 	tasks := chromedp.Tasks{
 		chromedp.Navigate(loginURL),
-		chromedp.WaitVisible(usernameSelector, chromedp.ByQuery),
-		chromedp.SendKeys(usernameSelector, validUsername, chromedp.ByQuery),
-		chromedp.SendKeys(passwordSelector, validPassword, chromedp.ByQuery),
-		chromedp.Click(loginButtonSelector, chromedp.ByQuery),
-		chromedp.WaitVisible(flashSuccessSelector, chromedp.ByQuery),
+		chromedp.WaitVisible(testutil.UsernameSelector, chromedp.ByQuery),
+		chromedp.SendKeys(testutil.UsernameSelector, testutil.AlphaOwnerUsername, chromedp.ByQuery),
+		chromedp.SendKeys(testutil.PasswordSelector, testutil.TestPassword, chromedp.ByQuery),
+		chromedp.Click(testutil.LoginButtonSelector, chromedp.ByQuery),
+		chromedp.Sleep(3 * time.Second), // Wait for login to complete
 	}
 
 	if err := chromedp.Run(ctx, tasks); err != nil {

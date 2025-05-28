@@ -8,12 +8,6 @@ import (
 	"github.com/reugn/go-quartz/quartz"
 )
 
-const (
-	NOW   = "now"
-	IN    = "in"
-	EVERY = "every"
-)
-
 func (jq *jobQueue) ScheduledJobs(matchers []quartz.Matcher[quartz.ScheduledJob]) ([]quartz.ScheduledJob, error) {
 	jq.mu.Lock()
 	defer jq.mu.Unlock()
@@ -33,21 +27,23 @@ func (jq *jobQueue) ScheduledJobs(matchers []quartz.Matcher[quartz.ScheduledJob]
 				var job quartz.ScheduledJob
 
 				switch jq.Name {
-				case NOW:
+				case NOW_QUEUE:
 					job, erri = unmarshalRecipeJob(data)
 					if erri != nil {
 						return nil, erri
 					}
-				case IN:
-					job, erri = unmarshalRecipeJob(data)
+				case IN_QUEUE:
+					job, erri = unmarshalInStepJob(data)
 					if erri != nil {
 						return nil, erri
 					}
-				case EVERY:
+				case EVERY_QUEUE:
 					job, erri = unmarshalEveryStepJob(data)
 					if erri != nil {
 						return nil, erri
 					}
+				default:
+					return nil, fmt.Errorf("unknown queue name: %s", jq.Name)
 				}
 
 				if isMatch(job, matchers) {

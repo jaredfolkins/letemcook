@@ -30,11 +30,6 @@ func DoIn(st models.Step, job *JobRecipe) error {
 
 	k := LemcJobKey(job, IN_QUEUE)
 
-	nowKey := LemcJobKey(job, NOW_QUEUE)
-	if XoxoX.RunningMan.IsRunning(nowKey) {
-		return fmt.Errorf("error: a NOW job is already running for this recipe")
-	}
-
 	dij := &StepJob{Step: st, RecipeJob: job}
 	kg := quartz.NewJobKeyWithGroup(k, jobGroup(job.UserID, job.PageID, job.UUID))
 	detail := quartz.NewJobDetail(dij, kg)
