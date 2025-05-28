@@ -57,7 +57,7 @@ templ Navbar(v models.BaseView) {
                 const squid = urlParams.get('squid');
 
                 // Construct fetch URL
-                let fetchUrl = '/heckle';
+                let fetchUrl = "{{ paths.Heckle }}";
                 if (squid) {
                     fetchUrl += '?squid=' + encodeURIComponent(squid);
                 }
@@ -108,7 +108,7 @@ templ Navbar(v models.BaseView) {
                             isPlaying = true;
                             var logoElm = document.getElementById('logo');
                             logoElm.classList.add('shake');
-                            var audioUrl = '/heckle/public/' + encodeURIComponent(selectedHeckle);
+                            var audioUrl = "{{ paths.HecklePublic }}" + '/' + encodeURIComponent(selectedHeckle);
                             audioPlayer.src = audioUrl;
                                 audioPlayer.play();
                             playedHeckles.push(selectedHeckle);

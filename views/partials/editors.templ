@@ -1,7 +1,18 @@
 package partials
 
 import (
+	"github.com/jaredfolkins/letemcook/paths"
 )
+
+// Define paths as a global JavaScript object
+templ EditorPaths() {
+<script>
+    window.LemcPaths = {
+        CookbookWikiImage: "{{ paths.CookbookWikiImagePattern }}",
+        CookbookWikiCreate: "{{ paths.CookbookWikiCreatePattern }}"
+    };
+</script>
+}
 
 templ readOnlyEditors() {
 <script type="module">
@@ -241,7 +252,7 @@ templ readwriteEditors() {
                     }
                 },
 				simpleUpload: {
-                   uploadUrl: `/lemc/cookbook/wiki/image/${yaml_type}/${uuid}`,
+                   uploadUrl: window.LemcPaths.CookbookWikiImage.replace('%s', yaml_type).replace('%s', uuid),
                 },
 				image: {
 					resizeOptions: [
@@ -297,8 +308,8 @@ templ readwriteEditors() {
                     content: data,
                     yaml_type: yaml_type
                 }
-                sendPostRequestFetch(`/lemc/cookbook/wiki/create/${uuid}`, obj);
-                 resolve();
+                sendPostRequestFetch(window.LemcPaths.CookbookWikiCreate.replace('%s', uuid), obj);
+                resolve();
         } );
     }
 
