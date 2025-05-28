@@ -313,9 +313,6 @@ func PostAppCreate(c LemcContext) error {
 		return c.NoContent(http.StatusConflict)
 	}
 
-	log.Println("cb.YamlShared: ", cb.YamlShared)
-	log.Println("cb.YamlIndividual: ", cb.YamlIndividual)
-
 	app := &models.App{
 		AccountID:      c.UserContext().ActingAs.Account.ID,
 		OwnerID:        c.UserContext().ActingAs.ID,
