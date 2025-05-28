@@ -53,13 +53,9 @@ templ Javascript() {
         handleTabAnchors();
         document.body.addEventListener('htmx:afterSwap', handleTabAnchors);
 
-        if (typeof socket === 'undefined') {
-            let socket;
-        }
-
-        if (typeof elt === 'undefined') {
-            let elt;
-        }
+        // Declare variables at function scope to avoid reference errors
+        var socket;
+        var elt;
 
         if (typeof added === 'undefined') {
             var added = false;
