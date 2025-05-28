@@ -36,7 +36,7 @@ script eval(msg string) {
 templ buildSelectField(f models.FormField) {
     <select
     type={ f.Type }
-    name={ fmt.Sprintf("LEMC_FIELD_%s", replaceDashWithUnderscore(f.Name)) }
+    name={ replaceDashWithUnderscore(f.Name) }
     class="select select-bordered w-full max-w-xs bg-white rounded-none lemc-select-wrapper">
         <div class="form-control">
             <span class="label-text">{ f.Name }</span>
@@ -56,7 +56,7 @@ templ buildRadioField(f models.FormField) {
                         <div class="w-1/8 flex items-center lemc-radio">
                             <input
                                 type={ f.Type }
-                                name={ fmt.Sprintf("LEMC_FIELD_%s", replaceDashWithUnderscore(f.Name)) }
+                                name={ replaceDashWithUnderscore(f.Name) }
                                 value={ d }
                                 if i == 0 {
                                 checked="checked"
@@ -76,7 +76,7 @@ templ buildRadioField(f models.FormField) {
 templ buildTextField(f models.FormField) {
         <input
             type={ f.Type }
-            name={ fmt.Sprintf("LEMC_FIELD_%s", replaceDashWithUnderscore(f.Name)) }
+            name={ replaceDashWithUnderscore(f.Name) }
             if len(f.Defaults) == 1 {
                 placeholder={ f.Defaults[0] }
             }
@@ -86,7 +86,7 @@ templ buildTextField(f models.FormField) {
 templ buildTextareaField(f models.FormField) {
         <textarea
             type={ f.Type }
-            name={ fmt.Sprintf("LEMC_FIELD_%s", replaceDashWithUnderscore(f.Name)) }
+            name={ replaceDashWithUnderscore(f.Name) }
             if len(f.Defaults) == 1 {
                 placeholder={ f.Defaults[0] }
             }

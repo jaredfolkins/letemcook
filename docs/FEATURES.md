@@ -96,10 +96,10 @@ LEMC injects several environment variables into the step's container for context
 | `LEMC_CSS_ID`                 | Dynamically generated ID for the job's CSS `<style>` tag.                                                   | `uuid-JOB_UUID-pageid-PAGE_ID-scope-SCOPE-style` |
 | `LEMC_JS_ID`                  | Dynamically generated ID for the job's JavaScript `<script>` area.                                          | `uuid-JOB_UUID-pageid-PAGE_ID-scope-SCOPE-script` |
 
-**Form-Derived Variables**: For each form field defined in a recipe (e.g., a field named `My_Param` or `my-parameter` in the YAML), LEMC creates an environment variable. The HTML form input will be named `LEMC_FIELD_FORM_NAME_HERE` (where `FORM_NAME_HERE` is derived from your YAML definition, with spaces and hyphens converted to underscores, e.g., `LEMC_FIELD_My_Param` or `LEMC_FIELD_my_parameter`). In the container, the environment variable name will **retain the `LEMC_FIELD_` prefix**, and the part of the name following the prefix (derived from the YAML definition) will be **converted to uppercase**.
-    *   Example: If YAML field is `My_Param` (HTML form name `LEMC_FIELD_My_Param`), the resulting env var in the container is `LEMC_FIELD_MY_PARAM=value`.
-    *   Example: If YAML field is `my_lower_param` (HTML form name `LEMC_FIELD_my_lower_param`), env var is `LEMC_FIELD_MY_LOWER_PARAM=value`.
-    *   Example: If YAML field is `my-mixed-Param` (HTML form name `LEMC_FIELD_my_mixed_Param`), env var is `LEMC_FIELD_MY_MIXED_PARAM=value`.
+**Form-Derived Variables**: For each form field defined in a recipe (e.g., a field named `My_Param` or `my-parameter` in the YAML), LEMC creates an environment variable. The HTML form input will be named using the field name directly (derived from your YAML definition, with spaces and hyphens converted to underscores, e.g., `My_Param` or `my_parameter`). In the container, the environment variable name will be the field name **converted to uppercase**.
+    *   Example: If YAML field is `My_Param` (HTML form name `My_Param`), the resulting env var in the container is `MY_PARAM=value`.
+    *   Example: If YAML field is `my_lower_param` (HTML form name `my_lower_param`), env var is `MY_LOWER_PARAM=value`.
+    *   Example: If YAML field is `my-mixed-Param` (HTML form name `my_mixed_Param`), env var is `MY_MIXED_PARAM=value`.
 
 **Note on `LEMC_HTTP_DOWNLOAD_BASE_URL`**: To form a complete URL, append the specific filename directly after this base path. The path resolves to a file within the job's public artifact store. For example, if `LEMC_HTTP_DOWNLOAD_BASE_URL` is `/lemc/locker/uuid/abc/page/1/scope/individual/filename/` and your file is `report.txt`, the full path used in a link would be `/lemc/locker/uuid/abc/page/1/scope/individual/filename/report.txt`.
 
