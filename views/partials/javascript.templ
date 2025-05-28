@@ -10,6 +10,27 @@ templ Javascript() {
         }
         window.lemcInitialized = true;
 
+        // Custom logging wrapper - set to false to disable all debug logging
+        window.LemcDebug = {
+            enabled: false, // Set to true to enable debug logging
+            log: function(...args) {
+                if (this.enabled) console.log(...args);
+            },
+            warn: function(...args) {
+                if (this.enabled) console.warn(...args);
+            },
+            error: function(...args) {
+                if (this.enabled) console.error(...args);
+            },
+            info: function(...args) {
+                if (this.enabled) console.info(...args);
+            },
+            // Always log errors regardless of debug setting
+            forceError: function(...args) {
+                console.error(...args);
+            }
+        };
+
         function handleTabAnchors() {
             var hash = window.location.hash;
             if (hash.startsWith('#page-')) {
@@ -69,13 +90,41 @@ templ Javascript() {
             });
 
             document.body.addEventListener("htmx:beforeRequest", function (evt) {
+                window.LemcDebug.log('htmx:beforeRequest triggered', {
+                    targetId: evt.target.id,
+                    targetElement: evt.target,
+                    url: evt.detail.requestConfig?.path || 'unknown',
+                    method: evt.detail.requestConfig?.verb || 'unknown'
+                });
+                // Show spinner for all requests except navtop
                 if (evt.target.id != 'navtop') {
+                    window.LemcDebug.log('Showing spinner for request');
                     showSpinner();
+                    
+                    // For requests with empty targetId, add a backup timeout
+                    if (!evt.target.id || evt.target.id === '') {
+                        window.LemcDebug.log('Setting backup timeout for request with empty targetId');
+                        setTimeout(function() {
+                            if (lemcSpinnerQueue.length > 0) {
+                                window.LemcDebug.warn('Backup timeout: Cleaning up potentially stuck spinner for empty targetId request');
+                                hideSpinner({}, 'error', evt.detail.requestConfig?.verb || 'unknown');
+                            }
+                        }, 8000); // 8 second backup timeout
+                    }
                 }
             });
 
             document.body.addEventListener("htmx:afterRequest", function (evt) {
+                window.LemcDebug.log('htmx:afterRequest triggered', {
+                    targetId: evt.target.id,
+                    status: evt.detail.xhr?.status || 'unknown',
+                    url: evt.detail.requestConfig?.path || 'unknown',
+                    method: evt.detail.requestConfig?.verb || 'unknown',
+                    successful: evt.detail.successful
+                });
+                // Hide spinner for all non-navtop requests, including those with empty targetId
                 if (evt.target.id != 'navtop') {
+                    window.LemcDebug.log('Processing afterRequest for spinner hiding');
                     var errObj = {};
                     var successObj = {};
                     var errHeader = evt.detail.xhr.getResponseHeader('X-Lemc-Flash-Error');
@@ -86,7 +135,7 @@ templ Javascript() {
                             errObj = JSON.parse(errHeader);
                         }
                     } catch (e) {
-                        console.error('Error parsing X-Lemc-Flash-Error header', e);
+                        window.LemcDebug.forceError('Error parsing X-Lemc-Flash-Error header', e);
                     }
 
                     try {
@@ -94,31 +143,92 @@ templ Javascript() {
                             successObj = JSON.parse(successHeader);
                         }
                     } catch (e) {
-                        console.error('Error parsing X-Lemc-Flash-Success header', e);
+                        window.LemcDebug.forceError('Error parsing X-Lemc-Flash-Success header', e);
                     }
 
                     if (errHeader) {
+                        window.LemcDebug.log('Hiding spinner with error state');
                         hideSpinner(errObj, "error", evt.detail.requestConfig.verb);
                     } else if (successHeader) {
+                        window.LemcDebug.log('Hiding spinner with success state');
                         hideSpinner(successObj, "success", evt.detail.requestConfig.verb);
                     } else {
+                        window.LemcDebug.log('Hiding spinner with default state');
                         hideSpinner({}, "", evt.detail.requestConfig.verb);
                     }
                 }
             });
 
             document.body.addEventListener("htmx:wsClose", function (evt) {
+                window.LemcDebug.log('htmx:wsClose triggered');
             });
 
             document.body.addEventListener("htmx:wsError", function (evt) {
+                window.LemcDebug.log('htmx:wsError triggered', evt);
+            });
+
+            // Add error handling for requests that might leave spinners hanging
+            document.body.addEventListener("htmx:responseError", function (evt) {
+                window.LemcDebug.log('htmx:responseError triggered', {
+                    targetId: evt.target.id,
+                    status: evt.detail.xhr?.status || 'unknown',
+                    url: evt.detail.requestConfig?.path || 'unknown'
+                });
+                if (evt.target.id != 'navtop') {
+                    window.LemcDebug.log('Hiding spinner due to response error');
+                    hideSpinner({}, "error", evt.detail.requestConfig?.verb || 'unknown');
+                }
+            });
+
+            document.body.addEventListener("htmx:timeout", function (evt) {
+                window.LemcDebug.log('htmx:timeout triggered', {
+                    targetId: evt.target.id,
+                    url: evt.detail.requestConfig?.path || 'unknown'
+                });
+                if (evt.target.id != 'navtop') {
+                    window.LemcDebug.log('Hiding spinner due to timeout');
+                    hideSpinner({}, "error", evt.detail.requestConfig?.verb || 'unknown');
+                }
+            });
+
+            document.body.addEventListener("htmx:sendError", function (evt) {
+                window.LemcDebug.log('htmx:sendError triggered', {
+                    targetId: evt.target.id,
+                    url: evt.detail.requestConfig?.path || 'unknown'
+                });
+                if (evt.target.id != 'navtop') {
+                    window.LemcDebug.log('Hiding spinner due to send error');
+                    hideSpinner({}, "error", evt.detail.requestConfig?.verb || 'unknown');
+                }
+            });
+
+            // Add handler for content swaps that might orphan requests
+            document.body.addEventListener("htmx:beforeSwap", function (evt) {
+                window.LemcDebug.log('htmx:beforeSwap triggered', {
+                    targetId: evt.target.id,
+                    url: evt.detail.requestConfig?.path || 'unknown'
+                });
+            });
+
+            document.body.addEventListener("htmx:afterSwap", function (evt) {
+                window.LemcDebug.log('htmx:afterSwap triggered', {
+                    targetId: evt.target.id,
+                    url: evt.detail.requestConfig?.path || 'unknown'
+                });
+                // If we have spinners after a swap to #app, they might be orphaned
+                if (evt.target.id === 'app' && lemcSpinnerQueue.length > 0) {
+                    window.LemcDebug.log('Content swapped to #app, cleaning up any remaining spinners immediately');
+                    // Clean up immediately since the content swap indicates the request completed successfully
+                    hideSpinner({}, '', 'get');
+                }
             });
 
             document.body.addEventListener("htmx:wsAfterMessage", function (evt) {
                 try {
                     var jo = JSON.parse(evt.detail.message);
                     var key = 'uuid-' + jo.UUID + '-pageid-' + jo.PageID + '-scope-' + jo.ViewType;
-                    console.log('key', key);
-                    console.log('jo', jo);
+                    window.LemcDebug.log('key', key);
+                    window.LemcDebug.log('jo', jo);
                     switch (jo.Cmd) {
                         case 'lemc.css.buffer;':
                             var _map = buffers.get('css');
@@ -126,9 +236,9 @@ templ Javascript() {
                             if (buf === undefined) {
                                 buf = '';
                             }
-                            console.log('lemc.css.buffer; buf', buf);
+                            window.LemcDebug.log('lemc.css.buffer; buf', buf);
                             var newbuf = buf + jo.Msg;
-                            console.log('lemc.css.buffer; newbuf', newbuf);
+                            window.LemcDebug.log('lemc.css.buffer; newbuf', newbuf);
                             _map.set(key, newbuf);
                             buffers.set('css', _map);
                             break;
@@ -245,7 +355,7 @@ templ Javascript() {
                             break;
                     }
                 } catch (e) {
-                    console.log('htmx:wsAfterMessage:' + evt.detail.message);
+                    window.LemcDebug.log('htmx:wsAfterMessage:' + evt.detail.message);
                 }
             });
             added = true;
@@ -260,12 +370,40 @@ templ Javascript() {
 
     let svgExclaim = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5"><path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" /></svg>';
 
-    if (typeof lemcSpinnerQueue === 'undefined') {
-        var lemcSpinnerQueue = [];
-    }
+            if (typeof lemcSpinnerQueue === 'undefined') {
+            var lemcSpinnerQueue = [];
+        }
+
+                // Failsafe: Clean up any stuck spinners after a reasonable timeout
+        function initSpinnerFailsafe() {
+            setInterval(function() {
+                if (lemcSpinnerQueue.length > 0) {
+                    window.LemcDebug.warn('Failsafe: Found stuck spinners, queue length:', lemcSpinnerQueue.length);
+                    // Check if any spinners have been active for too long (more than 5 seconds)
+                    var now = Date.now();
+                    var stuckSpinners = lemcSpinnerQueue.filter(spinner => {
+                        if (!spinner.dataset.createTime) {
+                            spinner.dataset.createTime = now;
+                            return false;
+                        }
+                        return (now - parseInt(spinner.dataset.createTime)) > 5000; // 5 seconds
+                    });
+                    
+                    if (stuckSpinners.length > 0) {
+                        window.LemcDebug.warn('Failsafe: Cleaning up', stuckSpinners.length, 'stuck spinners');
+                        hideSpinner({}, 'error', 'failsafe');
+                    }
+                }
+            }, 1000); // Check every 1 second
+        }
+
+        // Initialize failsafe
+        initSpinnerFailsafe();
 
     function showSpinner() {
+        window.LemcDebug.log('showSpinner called, current queue length:', lemcSpinnerQueue.length);
         var toastAlerts = document.querySelectorAll('div.toast-alerts');
+        window.LemcDebug.log('Found toast-alerts elements:', toastAlerts.length);
 
         requestAnimationFrame(() => {
             toastAlerts.forEach(ta => {
@@ -287,10 +425,12 @@ templ Javascript() {
                 for (let i = 0; i < ta.attributes.length; i++) {
                     var newSpinner = document.createElement('span');
                     newSpinner.classList.add('loading', 'loading-bars', 'loading-xs', 'fixed', 'bottom-4', 'right-4');
+                    newSpinner.dataset.createTime = Date.now();
                     newContainer.appendChild(newSpinner);
                     lemcSpinnerQueue.push(newSpinner);
                 }
             });
+            window.LemcDebug.log('Spinners added, new queue length:', lemcSpinnerQueue.length);
         });
     }
 
@@ -335,12 +475,19 @@ templ Javascript() {
     }
 
     function hideSpinner(obj, flashType, method) {
+        window.LemcDebug.log('hideSpinner called', {
+            queueLength: lemcSpinnerQueue.length,
+            flashType: flashType,
+            method: method,
+            obj: obj
+        });
         if (lemcSpinnerQueue.length > 0) {
             var alertIncrement = 70;
             var alertTimer = 30
 
             setTimeout(function () {
                 requestAnimationFrame(() => {
+                    window.LemcDebug.log('Removing spinners from queue, count:', lemcSpinnerQueue.length);
                     const spinnersToRemove = [...lemcSpinnerQueue];
                     lemcSpinnerQueue = [];
                     spinnersToRemove.forEach(spinner => {
@@ -348,6 +495,7 @@ templ Javascript() {
                            spinner.remove();
                         }
                     });
+                    window.LemcDebug.log('Spinners removed, resolving state');
                     resolveSpinnerState(flashType, method);
                 });
             }, 600);
@@ -362,6 +510,8 @@ templ Javascript() {
                     alertTimer += alertIncrement;
                 }
             }, 400);
+        } else {
+            window.LemcDebug.log('No spinners in queue to hide');
         }
     }
 

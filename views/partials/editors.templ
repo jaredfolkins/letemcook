@@ -136,7 +136,7 @@ templ readOnlyEditors() {
                 window.LemcGlobalEditors[element.id.toString()] = editor;
              })
             .catch( error => {
-                console.error( error );
+                window.LemcDebug && window.LemcDebug.forceError( error );
             });
     });
 
@@ -296,7 +296,7 @@ templ readwriteEditors() {
                 window.LemcGlobalEditors[element.id.toString()] = editor;
              })
             .catch( error => {
-                console.error( error );
+                window.LemcDebug && window.LemcDebug.forceError( error );
             });
     });
 
@@ -329,21 +329,38 @@ templ readwriteEditors() {
     }
 
     async function sendPostRequestFetch(url, data) {
+        let response = null;
         try {
+            window.LemcDebug && window.LemcDebug.log('sendPostRequestFetch: Starting request to', url);
             showSpinner();
-            var response = await fetch(url, {
+            response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data)
             });
+            window.LemcDebug && window.LemcDebug.log('sendPostRequestFetch: Response received', response.status);
             var result = await response.json();
         } catch (error) {
-            console.error('Error:', error);
-        } finally {
-            var errObj = JSON.parse(response.headers.get('X-Lemc-Flash-Error'));
-            var successObj = JSON.parse(response.headers.get('X-Lemc-Flash-Success'));
+            window.LemcDebug && window.LemcDebug.forceError('sendPostRequestFetch: Error occurred', error);
+            // Ensure spinner is hidden even on error
+            hideSpinner({[error.message]: error.message}, 'error', 'post');
+            return;
+        }
+        
+        // Handle response headers
+        try {
+            var errHeader = response.headers.get('X-Lemc-Flash-Error');
+            var successHeader = response.headers.get('X-Lemc-Flash-Success');
+            var errObj = errHeader ? JSON.parse(errHeader) : null;
+            var successObj = successHeader ? JSON.parse(successHeader) : null;
+            
+            window.LemcDebug && window.LemcDebug.log('sendPostRequestFetch: Processing response headers', {
+                hasError: !!errObj,
+                hasSuccess: !!successObj
+            });
+            
             if (errObj) {
                 hideSpinner(errObj, 'error', 'post');
             } else if (successObj) {
@@ -351,6 +368,9 @@ templ readwriteEditors() {
             } else {
                 hideSpinner({}, 'success', 'post');
             }
+        } catch (headerError) {
+            window.LemcDebug && window.LemcDebug.forceError('sendPostRequestFetch: Error parsing headers', headerError);
+            hideSpinner({}, 'success', 'post');
         }
     }
 </script>
