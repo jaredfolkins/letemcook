@@ -1,0 +1,972 @@
+time=2025-05-28T15:40:47.110-07:00 level=INFO msg="Successfully dumped all assets to: /Users/jf/src/jfolkins/lemc/letemcook-private/data/development/assets"
+time=2025-05-28T15:40:47.111-07:00 level=INFO msg="🚀 Connected Successfully to the Database"
+time=2025-05-28T15:40:47.112-07:00 level=INFO msg="goose: no migrations to run. current version: 18"
+time=2025-05-28T15:40:47.112-07:00 level=INFO msg="user 501 group 20"
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.12.0
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:5362
+::1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 307 0 "" "curl/8.13.0"
+time=2025-05-28T15:52:14.029-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:14.030-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:52:14.033-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET / HTTP/1.1" 307 0 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:14.037-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:14.038-07:00 level=INFO msg=redirIfAuthd
+127.0.0.1 -  [] "GET /lemc/login?squid=qa6Q&account=account%20alpha HTTP/1.1" 307 0 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:14.046-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:14.046-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app, admin_account, admin_system] on path /lemc/apps"
+time=2025-05-28T15:52:14.046-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app, admin_account, admin_system]) on path /lemc/apps"
+time=2025-05-28T15:52:14.071-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:52:14.073-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /lemc/apps HTTP/1.1" 200 60269 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:14.109-07:00 level=INFO msg="Using account-specific theme: banilla"
+127.0.0.1 -  [] "GET /themes/banilla/public/css/compiled.css?v=20250528181452 HTTP/1.1" 200 120609 "http://localhost:5362/lemc/apps" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:14.117-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:14.118-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app] on path /lemc/app/thumbnail/download/:uuid"
+time=2025-05-28T15:52:14.118-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app]) on path /lemc/app/thumbnail/download/:uuid"
+time=2025-05-28T15:52:14.118-07:00 level=INFO msg="Attempting to fetch thumbnail for app UUID: 0197149f-bd0d-7e5f-909c-9518898bf7b7, Account ID: 1"
+time=2025-05-28T15:52:14.118-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:14.120-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:14.120-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app] on path /lemc/app/thumbnail/download/:uuid"
+time=2025-05-28T15:52:14.121-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:14.121-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app]) on path /lemc/app/thumbnail/download/:uuid"
+time=2025-05-28T15:52:14.121-07:00 level=INFO msg="Attempting to fetch thumbnail for app UUID: 78ca5f7b4855f629020b77951056673e, Account ID: 1"
+time=2025-05-28T15:52:14.121-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app] on path /lemc/app/thumbnail/download/:uuid"
+time=2025-05-28T15:52:14.121-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app]) on path /lemc/app/thumbnail/download/:uuid"
+time=2025-05-28T15:52:14.121-07:00 level=INFO msg="Attempting to fetch thumbnail for app UUID: f6da78bcaaed1d622033c6722670b988, Account ID: 1"
+time=2025-05-28T15:52:14.121-07:00 level=INFO msg="Thumbnail data is empty in app YAML (AppID: 13). Serving default thumbnail."
+time=2025-05-28T15:52:14.121-07:00 level=INFO msg="Thumbnail data is empty in app YAML (AppID: 15). Serving default thumbnail."
+127.0.0.1 -  [] "GET /lemc/app/thumbnail/download/78ca5f7b4855f629020b77951056673e HTTP/1.1" 200 120030 "http://localhost:5362/lemc/apps" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+127.0.0.1 -  [] "GET /lemc/app/thumbnail/download/f6da78bcaaed1d622033c6722670b988 HTTP/1.1" 200 120030 "http://localhost:5362/lemc/apps" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:14.123-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:14.123-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:14.123-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app] on path /lemc/app/thumbnail/download/:uuid"
+time=2025-05-28T15:52:14.124-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app]) on path /lemc/app/thumbnail/download/:uuid"
+time=2025-05-28T15:52:14.124-07:00 level=INFO msg="Attempting to fetch thumbnail for app UUID: 2abb35e4d5e69e8a2c2f0890302aa773, Account ID: 1"
+time=2025-05-28T15:52:14.124-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app] on path /lemc/app/thumbnail/download/:uuid"
+time=2025-05-28T15:52:14.124-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app]) on path /lemc/app/thumbnail/download/:uuid"
+time=2025-05-28T15:52:14.124-07:00 level=INFO msg="Thumbnail data is empty in app YAML (AppID: 3). Serving default thumbnail."
+time=2025-05-28T15:52:14.124-07:00 level=INFO msg="Attempting to fetch thumbnail for app UUID: 7b2dddea3bb1a1b07b3214e71e1c3951, Account ID: 1"
+127.0.0.1 -  [] "GET /lemc/app/thumbnail/download/2abb35e4d5e69e8a2c2f0890302aa773 HTTP/1.1" 200 120030 "http://localhost:5362/lemc/apps" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:14.124-07:00 level=INFO msg="Thumbnail data is empty in app YAML (AppID: 6). Serving default thumbnail."
+127.0.0.1 -  [] "GET /lemc/app/thumbnail/download/7b2dddea3bb1a1b07b3214e71e1c3951 HTTP/1.1" 200 120030 "http://localhost:5362/lemc/apps" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:14.127-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:14.127-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app] on path /lemc/app/thumbnail/download/:uuid"
+time=2025-05-28T15:52:14.127-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:14.127-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app]) on path /lemc/app/thumbnail/download/:uuid"
+time=2025-05-28T15:52:14.127-07:00 level=INFO msg="Attempting to fetch thumbnail for app UUID: 96e7166046992d78a3b4b26debff2f2c, Account ID: 1"
+time=2025-05-28T15:52:14.127-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:14.127-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app] on path /lemc/app/thumbnail/download/:uuid"
+time=2025-05-28T15:52:14.127-07:00 level=INFO msg="Thumbnail data is empty in app YAML (AppID: 1). Serving default thumbnail."
+time=2025-05-28T15:52:14.127-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app]) on path /lemc/app/thumbnail/download/:uuid"
+time=2025-05-28T15:52:14.127-07:00 level=INFO msg="Attempting to fetch thumbnail for app UUID: 0424116a2d23c98075df9cbdc74fe1a8, Account ID: 1"
+127.0.0.1 -  [] "GET /lemc/app/thumbnail/download/96e7166046992d78a3b4b26debff2f2c HTTP/1.1" 200 120030 "http://localhost:5362/lemc/apps" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:14.127-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app] on path /lemc/app/thumbnail/download/:uuid"
+time=2025-05-28T15:52:14.127-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app]) on path /lemc/app/thumbnail/download/:uuid"
+time=2025-05-28T15:52:14.127-07:00 level=INFO msg="Attempting to fetch thumbnail for app UUID: 85e94a23932e30c3f6b6e0f372b7c1fc, Account ID: 1"
+time=2025-05-28T15:52:14.127-07:00 level=INFO msg="Thumbnail data is empty in app YAML (AppID: 8). Serving default thumbnail."
+time=2025-05-28T15:52:14.127-07:00 level=INFO msg="Thumbnail data is empty in app YAML (AppID: 7). Serving default thumbnail."
+127.0.0.1 -  [] "GET /lemc/app/thumbnail/download/0424116a2d23c98075df9cbdc74fe1a8 HTTP/1.1" 200 120030 "http://localhost:5362/lemc/apps" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:14.128-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app] on path /lemc/app/thumbnail/download/:uuid"
+time=2025-05-28T15:52:14.128-07:00 level=INFO msg="Using account-specific theme: banilla"
+127.0.0.1 -  [] "GET /lemc/app/thumbnail/download/85e94a23932e30c3f6b6e0f372b7c1fc HTTP/1.1" 200 120030 "http://localhost:5362/lemc/apps" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:14.128-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app]) on path /lemc/app/thumbnail/download/:uuid"
+time=2025-05-28T15:52:14.128-07:00 level=INFO msg="Attempting to fetch thumbnail for app UUID: 717ccd7915b78916a2626f93ff93fb08, Account ID: 1"
+time=2025-05-28T15:52:14.128-07:00 level=INFO msg="Thumbnail data is empty in app YAML (AppID: 16). Serving default thumbnail."
+127.0.0.1 -  [] "GET /lemc/app/thumbnail/download/717ccd7915b78916a2626f93ff93fb08 HTTP/1.1" 200 120030 "http://localhost:5362/lemc/apps" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:14.128-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app] on path /lemc/app/thumbnail/download/:uuid"
+time=2025-05-28T15:52:14.128-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app]) on path /lemc/app/thumbnail/download/:uuid"
+time=2025-05-28T15:52:14.128-07:00 level=INFO msg="Attempting to fetch thumbnail for app UUID: 2c71df2b4f130bc4ad4c7829c5cd7368, Account ID: 1"
+time=2025-05-28T15:52:14.128-07:00 level=INFO msg="Thumbnail data is empty in app YAML (AppID: 14). Serving default thumbnail."
+127.0.0.1 -  [] "GET /lemc/app/thumbnail/download/2c71df2b4f130bc4ad4c7829c5cd7368 HTTP/1.1" 200 120030 "http://localhost:5362/lemc/apps" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:14.177-07:00 level=INFO msg="Using account-specific theme: banilla"
+127.0.0.1 -  [] "GET /themes/banilla/public/imgs/bg-nav.png HTTP/1.1" 200 860 "http://localhost:5362/themes/banilla/public/css/compiled.css?v=20250528181452" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:14.177-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:14.178-07:00 level=INFO msg="Using account-specific theme: banilla"
+127.0.0.1 -  [] "GET /themes/banilla/public/imgs/bg.png HTTP/1.1" 200 65901 "http://localhost:5362/themes/banilla/public/css/compiled.css?v=20250528181452" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+127.0.0.1 -  [] "GET /themes/banilla/public/imgs/logo-normal.png HTTP/1.1" 200 259754 "http://localhost:5362/themes/banilla/public/css/compiled.css?v=20250528181452" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:14.204-07:00 level=INFO msg="Serving actual thumbnail for app 0197149f-bd0d-7e5f-909c-9518898bf7b7 (AppID: 17, Type: image/png)"
+127.0.0.1 -  [] "GET /lemc/app/thumbnail/download/0197149f-bd0d-7e5f-909c-9518898bf7b7 HTTP/1.1" 200 51441 "http://localhost:5362/lemc/apps" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:14.214-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:14.214-07:00 level=INFO msg="Creating websocket client for user 1"
+127.0.0.1 -  [] "GET /ws HTTP/1.1" 200 0 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:17.417-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:17.417-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:17.417-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_cookbook, admin_account, admin_system] on path /lemc/cookbooks"
+time=2025-05-28T15:52:17.417-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_cookbook' (required one of: [view_cookbook, admin_account, admin_system]) on path /lemc/cookbooks"
+time=2025-05-28T15:52:17.420-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:52:17.422-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=cookbooks&subnav= HTTP/1.1" 200 9542 "http://localhost:5362/lemc/apps" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:17.568-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:52:17.570-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /lemc/cookbooks?partial=true&section=apps&subnav=undefined HTTP/1.1" 200 12174 "http://localhost:5362/lemc/apps" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:17.600-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:17.603-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:52:17.605-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:17.605-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:17.605-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:17.605-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_cookbook, admin_account] on path /lemc/cookbook/thumbnail/download/:uuid"
+time=2025-05-28T15:52:17.605-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_cookbook' (required one of: [view_cookbook, admin_account]) on path /lemc/cookbook/thumbnail/download/:uuid"
+time=2025-05-28T15:52:17.605-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:17.605-07:00 level=INFO msg="lemon squid sid qa6Q"
+time=2025-05-28T15:52:17.605-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:17.605-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_cookbook, admin_account] on path /lemc/cookbook/thumbnail/download/:uuid"
+time=2025-05-28T15:52:17.606-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_cookbook' (required one of: [view_cookbook, admin_account]) on path /lemc/cookbook/thumbnail/download/:uuid"
+127.0.0.1 -  [] "GET /lemc/cookbook/thumbnail/download/0197149f-3928-7a19-a661-10dbd8b22155?ts=0000000000 HTTP/1.1" 200 120030 "http://localhost:5362/lemc/cookbooks" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:17.606-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_cookbook, admin_account] on path /lemc/cookbook/thumbnail/download/:uuid"
+time=2025-05-28T15:52:17.606-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_cookbook' (required one of: [view_cookbook, admin_account]) on path /lemc/cookbook/thumbnail/download/:uuid"
+time=2025-05-28T15:52:17.606-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_cookbook, admin_account] on path /lemc/cookbook/thumbnail/download/:uuid"
+time=2025-05-28T15:52:17.606-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_cookbook' (required one of: [view_cookbook, admin_account]) on path /lemc/cookbook/thumbnail/download/:uuid"
+time=2025-05-28T15:52:17.606-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_cookbook, admin_account] on path /lemc/cookbook/thumbnail/download/:uuid"
+time=2025-05-28T15:52:17.606-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_cookbook' (required one of: [view_cookbook, admin_account]) on path /lemc/cookbook/thumbnail/download/:uuid"
+127.0.0.1 -  [] "GET /lemc/cookbook/thumbnail/download/02ebe7479a8118572061666b763d7e0e?ts=0000000000 HTTP/1.1" 200 120030 "http://localhost:5362/lemc/cookbooks" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:17.607-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:17.607-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_cookbook, admin_account] on path /lemc/cookbook/thumbnail/download/:uuid"
+time=2025-05-28T15:52:17.607-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_cookbook' (required one of: [view_cookbook, admin_account]) on path /lemc/cookbook/thumbnail/download/:uuid"
+127.0.0.1 -  [] "GET /lemc/cookbook/thumbnail/download/a1239e71ff56b3e2d83aaa12e861b273?ts=0000000000 HTTP/1.1" 200 120030 "http://localhost:5362/lemc/cookbooks" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:17.609-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:17.610-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_cookbook, admin_account] on path /lemc/cookbook/thumbnail/download/:uuid"
+time=2025-05-28T15:52:17.610-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_cookbook' (required one of: [view_cookbook, admin_account]) on path /lemc/cookbook/thumbnail/download/:uuid"
+time=2025-05-28T15:52:17.610-07:00 level=INFO msg="Using account-specific theme: banilla"
+127.0.0.1 -  [] "GET /lemc/cookbook/thumbnail/download/cb35dee55ac79d660da9b49f13c8455b?ts=0000000000 HTTP/1.1" 200 120030 "http://localhost:5362/lemc/cookbooks" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:17.611-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_cookbook, admin_account] on path /lemc/cookbook/thumbnail/download/:uuid"
+time=2025-05-28T15:52:17.611-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_cookbook' (required one of: [view_cookbook, admin_account]) on path /lemc/cookbook/thumbnail/download/:uuid"
+127.0.0.1 -  [] "GET /lemc/cookbook/thumbnail/download/030dd2c4b018f2da57968d14988cd115?ts=0000000000 HTTP/1.1" 200 120030 "http://localhost:5362/lemc/cookbooks" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+127.0.0.1 -  [] "GET /lemc/cookbook/thumbnail/download/019712ce-33d2-71a9-9a8a-de6e1ee1d51e?ts=1748367203254365000 HTTP/1.1" 200 77074 "http://localhost:5362/lemc/cookbooks" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=cookbooks&subnav= HTTP/1.1" 200 9542 "http://localhost:5362/lemc/cookbooks" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:17.613-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:17.615-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_cookbook, admin_account] on path /lemc/cookbook/thumbnail/download/:uuid"
+time=2025-05-28T15:52:17.615-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_cookbook' (required one of: [view_cookbook, admin_account]) on path /lemc/cookbook/thumbnail/download/:uuid"
+time=2025-05-28T15:52:17.615-07:00 level=INFO msg="Using account-specific theme: banilla"
+127.0.0.1 -  [] "GET /lemc/cookbook/thumbnail/download/95c18902e85ccf256d1381deb20f5260?ts=0000000000 HTTP/1.1" 200 120030 "http://localhost:5362/lemc/cookbooks" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:17.616-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_cookbook, admin_account] on path /lemc/cookbook/thumbnail/download/:uuid"
+time=2025-05-28T15:52:17.616-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_cookbook' (required one of: [view_cookbook, admin_account]) on path /lemc/cookbook/thumbnail/download/:uuid"
+127.0.0.1 -  [] "GET /lemc/cookbook/thumbnail/download/a314021890ce8dc82c924cbc69cd16f4?ts=0000000000 HTTP/1.1" 200 120030 "http://localhost:5362/lemc/cookbooks" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+127.0.0.1 -  [] "GET /lemc/cookbook/thumbnail/download/0196f45f-f260-76ba-873b-61d61cdfc3a5?ts=1747875571603818000 HTTP/1.1" 200 178310 "http://localhost:5362/lemc/cookbooks" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+127.0.0.1 -  [] "GET /lemc/cookbook/thumbnail/download/0196fe96-c31a-7678-b28d-8cad0afee525?ts=1748031370320977000 HTTP/1.1" 200 51441 "http://localhost:5362/lemc/cookbooks" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:18.685-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:18.685-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:18.685-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_cookbook, admin_account] on path /lemc/cookbook/edit/individual/:uuid"
+time=2025-05-28T15:52:18.685-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_cookbook' (required one of: [view_cookbook, admin_account]) on path /lemc/cookbook/edit/individual/:uuid"
+time=2025-05-28T15:52:18.685-07:00 level=INFO msg="GetHeckle: Using account ID 1 from user context."
+time=2025-05-28T15:52:18.685-07:00 level=INFO msg="GetHeckle: User heckle setting: true"
+time=2025-05-28T15:52:18.685-07:00 level=INFO msg="GetHeckle: Heckle is enabled for account 1 (user override: true)."
+127.0.0.1 -  [] "GET /heckle HTTP/1.1" 200 1952 "http://localhost:5362/lemc/cookbooks" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:18.689-07:00 level=INFO msg="Using account-specific theme: banilla"
+127.0.0.1 -  [] "GET /heckle/public/sequel_light_is_insanely_underrated.mp3 HTTP/1.1" 206 18668 "http://localhost:5362/lemc/cookbooks" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:18.690-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:52:18.693-07:00 level=INFO msg="lemon squid sid qa6Q"
+time=2025-05-28T15:52:18.698-07:00 level=INFO msg="Using account-specific theme: banilla"
+127.0.0.1 -  [] "GET /themes/banilla/public/imgs/logo-down.png HTTP/1.1" 200 311811 "http://localhost:5362/themes/banilla/public/css/compiled.css?v=20250528181452" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:18.713-07:00 level=INFO msg="Using account-specific theme: banilla"
+127.0.0.1 -  [] "GET /themes/banilla/public/imgs/logo-up.png HTTP/1.1" 200 320187 "http://localhost:5362/themes/banilla/public/css/compiled.css?v=20250528181452" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+127.0.0.1 -  [] "GET /lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525?partial=true HTTP/1.1" 200 36248 "http://localhost:5362/lemc/cookbooks" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:18.797-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:18.800-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:52:18.802-07:00 level=INFO msg="lemon squid sid qa6Q"
+time=2025-05-28T15:52:18.804-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:18.804-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:18.805-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:18.805-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:18.805-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app, admin_account] on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:52:18.805-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app, admin_account]) on path /lemc/wiki/image/:view_type/:uuid/:filename"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=cookbooks&subnav= HTTP/1.1" 200 9542 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:18.805-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app, admin_account] on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:52:18.805-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app, admin_account]) on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:52:18.805-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:18.805-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app, admin_account] on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:52:18.806-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app, admin_account]) on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:52:18.806-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app, admin_account] on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:52:18.806-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app, admin_account]) on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:52:18.806-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app, admin_account] on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:52:18.806-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app, admin_account]) on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:52:18.806-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:18.807-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app, admin_account] on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:52:18.807-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app, admin_account]) on path /lemc/wiki/image/:view_type/:uuid/:filename"
+127.0.0.1 -  [] "GET /lemc/wiki/image/individual/0196fe96-c31a-7678-b28d-8cad0afee525/screenshot-2025-05-21-at-15-01-38-png HTTP/1.1" 200 271022 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:18.906-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:18.906-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app, admin_account] on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:52:18.906-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app, admin_account]) on path /lemc/wiki/image/:view_type/:uuid/:filename"
+127.0.0.1 -  [] "GET /lemc/wiki/image/individual/0196fe96-c31a-7678-b28d-8cad0afee525/lemc-png HTTP/1.1" 200 1640794 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+127.0.0.1 -  [] "GET /lemc/wiki/image/individual/0196fe96-c31a-7678-b28d-8cad0afee525/screenshot-2025-05-21-at-17-38-09-png HTTP/1.1" 200 199989 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:18.910-07:00 level=INFO msg="Using account-specific theme: banilla"
+127.0.0.1 -  [] "GET /lemc/wiki/image/individual/0196fe96-c31a-7678-b28d-8cad0afee525/screenshot-2025-05-21-at-13-39-42-png HTTP/1.1" 200 4983 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+127.0.0.1 -  [] "GET /lemc/wiki/image/individual/0196fe96-c31a-7678-b28d-8cad0afee525/screenshot-2025-05-21-at-13-34-16-png HTTP/1.1" 200 308999 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:18.911-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app, admin_account] on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:52:18.911-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app, admin_account]) on path /lemc/wiki/image/:view_type/:uuid/:filename"
+127.0.0.1 -  [] "GET /lemc/wiki/image/individual/0196fe96-c31a-7678-b28d-8cad0afee525/screenshot-2025-05-21-at-13-36-02-png HTTP/1.1" 200 74308 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+127.0.0.1 -  [] "GET /lemc/wiki/image/individual/0196fe96-c31a-7678-b28d-8cad0afee525/screenshot-2025-05-21-at-17-35-23-png HTTP/1.1" 200 437627 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+127.0.0.1 -  [] "GET /lemc/wiki/image/individual/0196fe96-c31a-7678-b28d-8cad0afee525/screenshot-2025-05-21-at-17-36-20-png HTTP/1.1" 200 73722 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:24.799-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:24.799-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_cookbook, admin_account] on path /lemc/cookbook/config/:view_type/:action/:uuid"
+time=2025-05-28T15:52:24.799-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_cookbook' (required one of: [view_cookbook, admin_account]) on path /lemc/cookbook/config/:view_type/:action/:uuid"
+time=2025-05-28T15:52:24.830-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:52:24.83433-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:52:24.834477-07:00","level":"-","prefix":"-","file":"job.go","line":"123","message":"DEBUG: NO NOW job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:52:24.834498-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:52:24.834559-07:00","level":"-","prefix":"-","file":"job.go","line":"142","message":"DEBUG: NO IN job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:52:24.834575-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:52:24.834632-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:52:24.834647-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: false, IN: false, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:24.841-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:24.843-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:52:24.846-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=cookbooks&subnav= HTTP/1.1" 200 9542 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+127.0.0.1 -  [] "GET /lemc/cookbook/config/individual/all/0196fe96-c31a-7678-b28d-8cad0afee525 HTTP/1.1" 200 7842 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:24.876-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:24.879-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:52:24.881-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=cookbooks&subnav= HTTP/1.1" 200 9542 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:28.407-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:28.408-07:00 level=INFO msg="GetHeckle: Using account ID 1 from user context."
+time=2025-05-28T15:52:28.408-07:00 level=INFO msg="GetHeckle: User heckle setting: true"
+time=2025-05-28T15:52:28.408-07:00 level=INFO msg="GetHeckle: Heckle is enabled for account 1 (user override: true)."
+127.0.0.1 -  [] "GET /heckle HTTP/1.1" 200 1952 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:28.412-07:00 level=INFO msg="Using account-specific theme: banilla"
+127.0.0.1 -  [] "GET /heckle/public/heh_based.mp3 HTTP/1.1" 206 10220 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:30.040-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:30.041-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [edit_cookbook, admin_account] on path /lemc/cookbook/config/:view_type/:action/:uuid"
+time=2025-05-28T15:52:30.041-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'edit_cookbook' (required one of: [edit_cookbook, admin_account]) on path /lemc/cookbook/config/:view_type/:action/:uuid"
+127.0.0.1 -  [] "POST /lemc/cookbook/config/individual/all/0196fe96-c31a-7678-b28d-8cad0afee525 HTTP/1.1" 200 22892 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:30.474-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:30.476-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:52:30.478-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=cookbooks&subnav= HTTP/1.1" 200 9542 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:30.910-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:30.910-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [edit_cookbook, admin_account] on path /lemc/cookbook/config/:view_type/:action/:uuid"
+time=2025-05-28T15:52:30.910-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'edit_cookbook' (required one of: [edit_cookbook, admin_account]) on path /lemc/cookbook/config/:view_type/:action/:uuid"
+127.0.0.1 -  [] "POST /lemc/cookbook/config/individual/all/0196fe96-c31a-7678-b28d-8cad0afee525 HTTP/1.1" 200 22892 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:31.334-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:31.337-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:52:31.339-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=cookbooks&subnav= HTTP/1.1" 200 9542 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:32.051-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:32.052-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [edit_cookbook, admin_account] on path /lemc/cookbook/config/:view_type/:action/:uuid"
+time=2025-05-28T15:52:32.052-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'edit_cookbook' (required one of: [edit_cookbook, admin_account]) on path /lemc/cookbook/config/:view_type/:action/:uuid"
+127.0.0.1 -  [] "POST /lemc/cookbook/config/individual/all/0196fe96-c31a-7678-b28d-8cad0afee525 HTTP/1.1" 200 22892 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:32.479-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:32.481-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:52:32.483-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=cookbooks&subnav= HTTP/1.1" 200 9542 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:33.520-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:33.521-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [edit_cookbook, admin_account] on path /lemc/cookbook/config/:view_type/:action/:uuid"
+time=2025-05-28T15:52:33.521-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'edit_cookbook' (required one of: [edit_cookbook, admin_account]) on path /lemc/cookbook/config/:view_type/:action/:uuid"
+127.0.0.1 -  [] "POST /lemc/cookbook/config/individual/all/0196fe96-c31a-7678-b28d-8cad0afee525 HTTP/1.1" 200 22892 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:33.943-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:33.945-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:52:33.947-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=cookbooks&subnav= HTTP/1.1" 200 9542 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:35.803-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:35.804-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [edit_cookbook, admin_account] on path /lemc/cookbook/config/:view_type/:action/:uuid"
+time=2025-05-28T15:52:35.804-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'edit_cookbook' (required one of: [edit_cookbook, admin_account]) on path /lemc/cookbook/config/:view_type/:action/:uuid"
+127.0.0.1 -  [] "POST /lemc/cookbook/config/individual/all/0196fe96-c31a-7678-b28d-8cad0afee525 HTTP/1.1" 200 22892 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:36.235-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:36.237-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:52:36.239-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=cookbooks&subnav= HTTP/1.1" 200 9542 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:39.175-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:39.322-07:00 level=INFO msg="Image exists: Found matching tag 'us-east5-docker.pkg.dev/holidayhack2025/hhc25/lemc-gcp-terraform-debian:latest' for reference 'us-east5-docker.pkg.dev/holidayhack2025/hhc25/lemc-gcp-terraform-debian:latest'"
+time=2025-05-28T15:52:39.397-07:00 level=INFO msg="Image exists: Found matching tag 'us-east5-docker.pkg.dev/holidayhack2025/hhc25/lemc-gcp-terraform-debian:latest' for reference 'us-east5-docker.pkg.dev/holidayhack2025/hhc25/lemc-gcp-terraform-debian:latest'"
+time=2025-05-28T15:52:39.473-07:00 level=INFO msg="Image exists: Found matching tag 'us-east5-docker.pkg.dev/holidayhack2025/hhc25/lemc-gcp-terraform-debian:latest' for reference 'us-east5-docker.pkg.dev/holidayhack2025/hhc25/lemc-gcp-terraform-debian:latest'"
+127.0.0.1 -  [] "PUT /lemc/cookbook/job/individual/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/recipe/delayed%20terraform%20destroy HTTP/1.1" 200 284 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:39.493-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:39.496-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:52:39.499-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=cookbooks&subnav= HTTP/1.1" 200 9542 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+INFO 2025/05/28 15:52:39 scheduler.go:587: Job [userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][group]::[cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now] exited the execution loop: trigger has expired.
+time=2025-05-28T15:52:39.576-07:00 level=INFO msg="JobRecipe: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now] "
+time=2025-05-28T15:52:42.335-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:52:42.339127-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:52:42.339255-07:00","level":"-","prefix":"-","file":"job.go","line":"123","message":"DEBUG: NO NOW job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:52:42.339277-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:52:42.339483-07:00","level":"-","prefix":"-","file":"job.go","line":"142","message":"DEBUG: NO IN job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:52:42.339519-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:52:42.339634-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:52:42.339677-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: false, IN: false, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:42.345-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:42.347-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:52:42.349-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=cookbooks&subnav= HTTP/1.1" 200 9542 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:48.342-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:52:48.346825-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:52:48.346953-07:00","level":"-","prefix":"-","file":"job.go","line":"123","message":"DEBUG: NO NOW job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:52:48.346971-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:52:48.34712-07:00","level":"-","prefix":"-","file":"job.go","line":"142","message":"DEBUG: NO IN job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:52:48.347139-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:52:48.347188-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:52:48.347202-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: false, IN: false, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:48.353-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:48.355-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:52:48.357-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=cookbooks&subnav= HTTP/1.1" 200 9542 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+INFO 2025/05/28 15:52:49 scheduler.go:587: Job [userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][group]::[cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in] exited the execution loop: trigger has expired.
+time=2025-05-28T15:52:49.578-07:00 level=INFO msg="StepJob: Execute"
+time=2025-05-28T15:52:49.578-07:00 level=INFO msg="StepJob: us-east5-docker.pkg.dev/holidayhack2025/hhc25/lemc-gcp-terraform-debian:latest 1 in.10.seconds"
+time=2025-05-28T15:52:54.347-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:52:54.351507-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:52:54.351555-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:52:54.351573-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:52:54.351589-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:52:54.351605-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:52:54.351721-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:52:54.351738-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:52:54.358-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:52:54.361-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:52:54.363-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=cookbooks&subnav= HTTP/1.1" 200 9542 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:00.353-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:53:00.357117-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:53:00.357171-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:53:00.357194-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:53:00.357215-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:53:00.357238-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:53:00.357389-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:53:00.35742-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:00.363-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:53:00.366-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:53:00.368-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=cookbooks&subnav= HTTP/1.1" 200 9542 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:06.358-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:53:06.361547-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:53:06.361601-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:53:06.361613-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:53:06.361626-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:53:06.361636-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:53:06.361731-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:53:06.361749-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:06.367-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:53:06.370-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:53:06.372-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=cookbooks&subnav= HTTP/1.1" 200 9542 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:12.361-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:53:12.364197-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:53:12.364223-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:53:12.364236-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:53:12.364247-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:53:12.364264-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:53:12.364351-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:53:12.364368-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:12.369-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:53:12.372-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:53:12.374-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=cookbooks&subnav= HTTP/1.1" 200 9542 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:18.362-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:53:18.365963-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:53:18.365986-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:53:18.365998-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:53:18.36601-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:53:18.366022-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:53:18.3661-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:53:18.366116-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:18.370-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:53:18.372-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:53:18.375-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=cookbooks&subnav= HTTP/1.1" 200 9542 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:24.365-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:53:24.368973-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:53:24.369037-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:53:24.369055-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:53:24.369072-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:53:24.369117-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:53:24.369217-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:53:24.369235-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:24.374-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:53:24.376-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:53:24.378-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=cookbooks&subnav= HTTP/1.1" 200 9542 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:28.472-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:53:28.473-07:00 level=INFO msg="GetHeckle: Using account ID 1 from user context."
+time=2025-05-28T15:53:28.473-07:00 level=INFO msg="GetHeckle: User heckle setting: true"
+time=2025-05-28T15:53:28.473-07:00 level=INFO msg="GetHeckle: Heckle is enabled for account 1 (user override: true)."
+127.0.0.1 -  [] "GET /heckle HTTP/1.1" 200 1952 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:28.477-07:00 level=INFO msg="Using account-specific theme: banilla"
+127.0.0.1 -  [] "GET /heckle/public/let_em_cook_the_safe_effective_way_to_ops_your_devs.mp3 HTTP/1.1" 206 30764 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:30.383-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:53:30.386733-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:53:30.386757-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:53:30.386769-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:53:30.38678-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:53:30.386792-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:53:30.386876-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:53:30.386908-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:30.392-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:53:30.395-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:53:30.397-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=cookbooks&subnav= HTTP/1.1" 200 9542 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:36.388-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:53:36.392859-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:53:36.392885-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:53:36.392899-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:53:36.392911-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:53:36.392923-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:53:36.392993-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:53:36.393009-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:36.398-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:53:36.401-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:53:36.403-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=cookbooks&subnav= HTTP/1.1" 200 9542 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:36.899-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:53:36.899-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_cookbook, admin_account] on path /lemc/cookbook/edit/individual/:uuid"
+time=2025-05-28T15:53:36.899-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_cookbook' (required one of: [view_cookbook, admin_account]) on path /lemc/cookbook/edit/individual/:uuid"
+time=2025-05-28T15:53:36.903-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:53:36.905-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525 HTTP/1.1" 200 78146 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:36.992-07:00 level=INFO msg="Using account-specific theme: banilla"
+127.0.0.1 -  [] "GET /themes/banilla/public/css/compiled.css?v=20250528181452 HTTP/1.1" 304 0 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:37.010-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:53:37.010-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_cookbook, admin_account] on path /lemc/cookbook/thumbnail/download/:uuid"
+time=2025-05-28T15:53:37.010-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_cookbook' (required one of: [view_cookbook, admin_account]) on path /lemc/cookbook/thumbnail/download/:uuid"
+time=2025-05-28T15:53:37.012-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:53:37.012-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app, admin_account] on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:53:37.012-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:53:37.012-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app, admin_account]) on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:53:37.012-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:53:37.013-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app, admin_account] on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:53:37.013-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app, admin_account]) on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:53:37.013-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app, admin_account] on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:53:37.013-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app, admin_account]) on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:53:37.013-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:53:37.014-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app, admin_account] on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:53:37.014-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app, admin_account]) on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:53:37.015-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:53:37.016-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app, admin_account] on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:53:37.016-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app, admin_account]) on path /lemc/wiki/image/:view_type/:uuid/:filename"
+127.0.0.1 -  [] "GET /lemc/cookbook/thumbnail/download/0196fe96-c31a-7678-b28d-8cad0afee525?ts=1748031370320977000 HTTP/1.1" 200 51441 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:37.102-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:53:37.102-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app, admin_account] on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:53:37.102-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app, admin_account]) on path /lemc/wiki/image/:view_type/:uuid/:filename"
+127.0.0.1 -  [] "GET /lemc/wiki/image/individual/0196fe96-c31a-7678-b28d-8cad0afee525/screenshot-2025-05-21-at-17-38-09-png HTTP/1.1" 200 199989 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+127.0.0.1 -  [] "GET /lemc/wiki/image/individual/0196fe96-c31a-7678-b28d-8cad0afee525/screenshot-2025-05-21-at-13-39-42-png HTTP/1.1" 200 4983 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+127.0.0.1 -  [] "GET /lemc/wiki/image/individual/0196fe96-c31a-7678-b28d-8cad0afee525/screenshot-2025-05-21-at-13-34-16-png HTTP/1.1" 200 308999 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:37.105-07:00 level=INFO msg="Using account-specific theme: banilla"
+127.0.0.1 -  [] "GET /lemc/wiki/image/individual/0196fe96-c31a-7678-b28d-8cad0afee525/lemc-png HTTP/1.1" 200 1640794 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:37.106-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app, admin_account] on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:53:37.106-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:53:37.106-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app, admin_account]) on path /lemc/wiki/image/:view_type/:uuid/:filename"
+127.0.0.1 -  [] "GET /lemc/wiki/image/individual/0196fe96-c31a-7678-b28d-8cad0afee525/screenshot-2025-05-21-at-13-36-02-png HTTP/1.1" 200 74308 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:37.106-07:00 level=INFO msg="User 1 (Account 1) attempting action requiring ONE OF permissions: [view_app, admin_account] on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:53:37.106-07:00 level=INFO msg="Permission GRANTED for user 1 (Account 1) via permission 'view_app' (required one of: [view_app, admin_account]) on path /lemc/wiki/image/:view_type/:uuid/:filename"
+time=2025-05-28T15:53:37.107-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:53:37.107-07:00 level=INFO msg="Using account-specific theme: banilla"
+127.0.0.1 -  [] "GET /themes/banilla/public/imgs/bg-nav.png HTTP/1.1" 304 0 "http://localhost:5362/themes/banilla/public/css/compiled.css?v=20250528181452" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+127.0.0.1 -  [] "GET /themes/banilla/public/imgs/logo-normal.png HTTP/1.1" 304 0 "http://localhost:5362/themes/banilla/public/css/compiled.css?v=20250528181452" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:37.108-07:00 level=INFO msg="Using account-specific theme: banilla"
+127.0.0.1 -  [] "GET /themes/banilla/public/imgs/bg.png HTTP/1.1" 304 0 "http://localhost:5362/themes/banilla/public/css/compiled.css?v=20250528181452" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+127.0.0.1 -  [] "GET /lemc/wiki/image/individual/0196fe96-c31a-7678-b28d-8cad0afee525/screenshot-2025-05-21-at-15-01-38-png HTTP/1.1" 200 271022 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+127.0.0.1 -  [] "GET /lemc/wiki/image/individual/0196fe96-c31a-7678-b28d-8cad0afee525/screenshot-2025-05-21-at-17-36-20-png HTTP/1.1" 200 73722 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+127.0.0.1 -  [] "GET /lemc/wiki/image/individual/0196fe96-c31a-7678-b28d-8cad0afee525/screenshot-2025-05-21-at-17-35-23-png HTTP/1.1" 200 437627 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:37.336-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:53:37.336-07:00 level=INFO msg="Creating websocket client for user 1"
+127.0.0.1 -  [] "GET /ws HTTP/1.1" 200 0 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:43.346-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:53:43.350211-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:53:43.350258-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:53:43.350272-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:53:43.350284-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:53:43.350296-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:53:43.35043-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:53:43.350451-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:43.358-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:53:43.362-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:53:43.364-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:49.353-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:53:49.356408-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:53:49.356451-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:53:49.356468-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:53:49.356481-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:53:49.356495-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:53:49.356603-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:53:49.356624-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:49.362-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:53:49.365-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:53:49.368-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:55.361-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:53:55.364591-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:53:55.364631-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:53:55.364649-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:53:55.364665-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:53:55.364682-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:53:55.364786-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:53:55.364809-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:53:55.371-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:53:55.374-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:53:55.377-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:01.368-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:54:01.372611-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:54:01.372662-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:54:01.37268-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:54:01.372697-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:54:01.372717-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:54:01.372829-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:54:01.372851-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:01.380-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:54:01.382-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:54:01.384-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:07.374-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:54:07.379812-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:54:07.379972-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:54:07.380012-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:54:07.380034-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:54:07.380058-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:54:07.38016-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:54:07.380184-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:07.385-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:54:07.388-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:54:07.391-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:13.381-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:54:13.38627-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:54:13.386331-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:54:13.386353-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:54:13.38637-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:54:13.386389-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:54:13.386488-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:54:13.386511-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:13.392-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:54:13.394-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:54:13.397-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:19.386-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:54:19.390116-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:54:19.390164-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:54:19.390179-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:54:19.390193-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:54:19.390207-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:54:19.390294-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:54:19.390313-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:19.394-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:54:19.396-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:54:19.398-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:25.388-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:54:25.392352-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:54:25.392422-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:54:25.392456-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:54:25.392483-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:54:25.392501-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:54:25.392597-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:54:25.392619-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:25.397-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:54:25.400-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:54:25.403-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:31.392-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:54:31.398178-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:54:31.398232-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:54:31.39825-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:54:31.398267-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:54:31.398284-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:54:31.398396-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:54:31.398418-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:31.405-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:54:31.408-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:54:31.410-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:37.397-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:54:37.401065-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:54:37.401104-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:54:37.401122-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:54:37.401142-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:54:37.401161-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:54:37.401265-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:54:37.401289-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:37.408-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:54:37.411-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:54:37.414-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:43.403-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:54:43.407356-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:54:43.407401-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:54:43.407417-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:54:43.407432-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:54:43.407447-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:54:43.407526-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:54:43.407545-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:43.413-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:54:43.415-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:54:43.417-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+127.0.0.1 -  [] "GET /lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525 HTTP/1.1" 307 0 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:49.416-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:54:49.420209-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:54:49.420257-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:54:49.420273-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:54:49.420288-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:54:49.420303-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:54:49.420394-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:54:49.420413-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:49.430-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:54:49.432-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:54:49.434-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:49.738-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:54:49.738-07:00 level=INFO msg="GetHeckle: Using account ID 1 from user context."
+time=2025-05-28T15:54:49.738-07:00 level=INFO msg="GetHeckle: User heckle setting: true"
+time=2025-05-28T15:54:49.738-07:00 level=INFO msg="GetHeckle: Heckle is enabled for account 1 (user override: true)."
+127.0.0.1 -  [] "GET /heckle HTTP/1.1" 200 1952 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:49.745-07:00 level=INFO msg="Using account-specific theme: banilla"
+127.0.0.1 -  [] "GET /heckle/public/Letem_Cook_takes_backed_up_Bee_Els_and_transforms_them_into_gloooooorious_Bee_Ems_Boring_Business_Logic_converted_into_absolute_Business_Magic.mp3 HTTP/1.1" 206 185618 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:49.752-07:00 level=INFO msg="Using account-specific theme: banilla"
+127.0.0.1 -  [] "GET /themes/banilla/public/imgs/logo-down.png HTTP/1.1" 304 0 "http://localhost:5362/themes/banilla/public/css/compiled.css?v=20250528181452" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:49.766-07:00 level=INFO msg="Using account-specific theme: banilla"
+127.0.0.1 -  [] "GET /themes/banilla/public/imgs/logo-up.png HTTP/1.1" 304 0 "http://localhost:5362/themes/banilla/public/css/compiled.css?v=20250528181452" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:55.412-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:54:55.415538-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:54:55.415582-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:54:55.415599-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:54:55.415619-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:54:55.415636-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:54:55.415738-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:54:55.415766-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:54:55.427-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:54:55.430-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:54:55.432-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:55:01.419-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:55:01.423069-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:55:01.423118-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:55:01.423134-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:55:01.423148-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:55:01.423165-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:55:01.423264-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:55:01.423286-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:55:01.432-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:55:01.434-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:55:01.436-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:55:07.423-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:55:07.427842-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:55:07.427897-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:55:07.427917-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:55:07.427934-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:55:07.427951-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:55:07.428064-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:55:07.428088-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:55:07.439-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:55:07.442-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:55:07.445-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:55:13.428-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:55:13.432204-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:55:13.432263-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:55:13.432283-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:55:13.432301-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:55:13.432319-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:55:13.432427-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:55:13.432452-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:55:13.445-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:55:13.448-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:55:13.450-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:55:19.431-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:55:19.43563-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:55:19.435686-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:55:19.435708-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:55:19.435725-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:55:19.435741-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:55:19.435843-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:55:19.435867-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:55:19.446-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:55:19.449-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:55:19.451-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:55:25.436-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:55:25.44133-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:55:25.441402-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:55:25.441435-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:55:25.441458-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:55:25.441477-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:55:25.441576-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:55:25.441599-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:55:25.451-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:55:25.453-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:55:25.455-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:55:31.443-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:55:31.447043-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:55:31.447091-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:55:31.44711-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:55:31.44713-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:55:31.447147-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:55:31.447242-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:55:31.447265-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:55:31.456-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:55:31.459-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:55:31.461-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:55:37.450-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:55:37.45479-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:55:37.45484-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:55:37.454858-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:55:37.454875-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:55:37.454891-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:55:37.454983-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:55:37.455006-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:55:37.464-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:55:37.467-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:55:37.469-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:55:43.459-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:55:43.463361-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:55:43.463462-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:55:43.463613-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:55:43.463649-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:55:43.463667-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:55:43.463773-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:55:43.463795-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:55:43.474-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:55:43.477-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:55:43.479-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:55:49.464-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:55:49.468639-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:55:49.468695-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:55:49.468716-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:55:49.468734-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:55:49.468754-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:55:49.468857-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:55:49.468885-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:55:49.479-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:55:49.482-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:55:49.484-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:55:55.469-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:55:55.473311-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:55:55.473356-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:55:55.473377-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:55:55.473395-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:55:55.473416-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:55:55.473533-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:55:55.473559-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:55:55.482-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:55:55.485-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:55:55.488-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:56:01.476-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:56:01.480995-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:56:01.481051-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:56:01.481075-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:56:01.481093-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:56:01.481112-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:56:01.48121-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:56:01.481233-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:56:01.490-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:56:01.493-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:56:01.495-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:56:07.480-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:56:07.485535-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:56:07.485718-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:56:07.485758-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:56:07.485779-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:56:07.485802-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:56:07.485906-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:56:07.48593-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:56:07.496-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:56:07.498-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:56:07.501-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:56:13.484-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:56:13.488926-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:56:13.488983-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:56:13.489004-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:56:13.489024-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:56:13.489047-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:56:13.489153-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:56:13.489178-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:56:13.501-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:56:13.504-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:56:13.506-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:56:19.486-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:56:19.491241-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:56:19.491401-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:56:19.491438-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:56:19.49146-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:56:19.491481-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:56:19.491585-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:56:19.491609-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:56:19.502-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:56:19.505-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:56:19.507-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:56:25.493-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:56:25.496989-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:56:25.497037-07:00","level":"-","prefix":"-","file":"job.go","line":"114","message":"DEBUG: NOW job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:56:25.497056-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:56:25.497074-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:56:25.497091-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:56:25.497185-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:56:25.497209-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: true, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:56:25.507-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:56:25.509-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:56:25.512-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:56:31.498-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:56:31.501503-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:56:31.501607-07:00","level":"-","prefix":"-","file":"job.go","line":"123","message":"DEBUG: NO NOW job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:56:31.501633-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:56:31.501651-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:56:31.501669-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:56:31.501733-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:56:31.501755-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: false, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:56:31.511-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:56:31.515-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:56:31.517-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:56:37.502-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:56:37.506685-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:56:37.506817-07:00","level":"-","prefix":"-","file":"job.go","line":"123","message":"DEBUG: NO NOW job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:56:37.506845-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:56:37.506864-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:56:37.506883-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:56:37.506947-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:56:37.506969-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: false, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:56:37.516-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:56:37.519-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:56:37.521-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:56:43.511-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:56:43.514744-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:56:43.514871-07:00","level":"-","prefix":"-","file":"job.go","line":"123","message":"DEBUG: NO NOW job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:56:43.514899-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:56:43.514925-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:56:43.51496-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:56:43.515065-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:56:43.515103-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: false, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:56:43.525-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:56:43.528-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:56:43.530-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:56:49.516-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:56:49.520449-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:56:49.520581-07:00","level":"-","prefix":"-","file":"job.go","line":"123","message":"DEBUG: NO NOW job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:56:49.520608-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:56:49.520625-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:56:49.52065-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:56:49.520721-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:56:49.520744-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: false, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:56:49.529-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:56:49.532-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:56:49.534-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:56:55.520-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:56:55.524375-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:56:55.524505-07:00","level":"-","prefix":"-","file":"job.go","line":"123","message":"DEBUG: NO NOW job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:56:55.524533-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:56:55.524554-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:56:55.524586-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:56:55.524664-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:56:55.524686-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: false, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:56:55.533-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:56:55.536-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:56:55.538-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:57:01.525-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:57:01.52884-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:57:01.528968-07:00","level":"-","prefix":"-","file":"job.go","line":"123","message":"DEBUG: NO NOW job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:57:01.528997-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:57:01.529018-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:57:01.529035-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:57:01.529104-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:57:01.529127-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: false, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:57:01.539-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:57:01.542-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:57:01.544-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:57:07.531-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:57:07.534818-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:57:07.534949-07:00","level":"-","prefix":"-","file":"job.go","line":"123","message":"DEBUG: NO NOW job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:57:07.534977-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:57:07.534996-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:57:07.535016-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:57:07.535085-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:57:07.535108-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: false, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:57:07.544-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:57:07.547-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:57:07.549-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:57:13.533-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:57:13.537243-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:57:13.537363-07:00","level":"-","prefix":"-","file":"job.go","line":"123","message":"DEBUG: NO NOW job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:57:13.537386-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:57:13.537403-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:57:13.537419-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:57:13.53748-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:57:13.5375-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: false, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:57:13.546-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:57:13.549-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:57:13.551-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:57:19.541-07:00 level=INFO msg="Using account-specific theme: banilla"
+{"time":"2025-05-28T15:57:19.545345-07:00","level":"-","prefix":"-","file":"job.go","line":"112","message":"DEBUG: Checking NOW job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:now]"}
+{"time":"2025-05-28T15:57:19.545499-07:00","level":"-","prefix":"-","file":"job.go","line":"123","message":"DEBUG: NO NOW job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:57:19.545525-07:00","level":"-","prefix":"-","file":"job.go","line":"131","message":"DEBUG: Checking IN job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:57:19.545542-07:00","level":"-","prefix":"-","file":"job.go","line":"133","message":"DEBUG: IN job is running: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:in]"}
+{"time":"2025-05-28T15:57:19.545557-07:00","level":"-","prefix":"-","file":"job.go","line":"150","message":"DEBUG: Checking EVERY job with key: [cookbook][individual][userid:1][page:1][uuid:0196fe96-c31a-7678-b28d-8cad0afee525][queue:every]"}
+{"time":"2025-05-28T15:57:19.54564-07:00","level":"-","prefix":"-","file":"job.go","line":"161","message":"DEBUG: NO EVERY job found - error: no jobs found, job: <nil>"}
+{"time":"2025-05-28T15:57:19.54566-07:00","level":"-","prefix":"-","file":"job.go","line":"167","message":"DEBUG: JobStatus result - NOW: false, IN: true, EVERY: false"}
+127.0.0.1 -  [] "GET /lemc/cookbook/job/status/uuid/0196fe96-c31a-7678-b28d-8cad0afee525/page/1/scope/individual HTTP/1.1" 200 2324 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+time=2025-05-28T15:57:19.556-07:00 level=INFO msg="Using account-specific theme: banilla"
+time=2025-05-28T15:57:19.559-07:00 level=INFO msg="lemon squid alphabet Ed0zNu7pLywGHfMFicWIskmRZvV8elUoCPDX5JOqa249hKjgtQn1YbBx63TASr"
+time=2025-05-28T15:57:19.562-07:00 level=INFO msg="lemon squid sid qa6Q"
+127.0.0.1 -  [] "GET /navtop?squid=qa6Q&account=account%20alpha&section=&subnav=undefined HTTP/1.1" 200 9530 "http://localhost:5362/lemc/cookbook/edit/individual/0196fe96-c31a-7678-b28d-8cad0afee525" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0"
+signal: killed

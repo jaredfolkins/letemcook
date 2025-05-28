@@ -4,7 +4,7 @@ import (
     "fmt"
 )
 
-templ JobStatusView(uuid string, pageid string, scope string, now, in, every bool) {
+templ JobStatusView(uuid string, pageid string, scope string, nowRunning, nowQueued, inRunning, inQueued, everyRunning, everyQueued int) {
     <div class="flex mb-4">
 
             <div class="w-1/3 p-4 rounded-none badge badge-lg p-4 border-none">
@@ -17,11 +17,7 @@ templ JobStatusView(uuid string, pageid string, scope string, now, in, every boo
                 <div id={ string(fmt.Sprintf("lemc-cpu-int-%s-%s-%s", uuid, pageid, scope)) } class="text-sm">
                     <div class="indicator p-2">
                       <span class="indicator-item indicator-end indicator-middle badge">
-                          if (now) {
-                            1
-                          } else {
-                            0
-                          }
+                          { fmt.Sprintf("%d", nowRunning + nowQueued) }
                       </span>
                     </div>
                 </div>
@@ -39,11 +35,7 @@ templ JobStatusView(uuid string, pageid string, scope string, now, in, every boo
                 <div id={ string(fmt.Sprintf("lemc-clock-int-%s-%s-%s", uuid, pageid, scope)) } class="text-sm">
                     <div class="indicator p-2">
                       <span class="indicator-item indicator-middle indicator-end badge">
-                          if (in) {
-                            1
-                          } else {
-                            0
-                          }
+                          { fmt.Sprintf("%d", inRunning + inQueued) }
                       </span>
                     </div>
                 </div>
@@ -61,11 +53,7 @@ templ JobStatusView(uuid string, pageid string, scope string, now, in, every boo
                 <div id={ string(fmt.Sprintf("lemc-cron-int-%s-%s-%s", uuid, pageid, scope)) } class="text-sm">
                     <div class="indicator p-2">
                       <span class="indicator-item indicator-end indicator-middle badge">
-                          if (every) {
-                            1
-                          } else {
-                            0
-                          }
+                          { fmt.Sprintf("%d", everyRunning + everyQueued) }
                       </span>
                     </div>
                 </div>

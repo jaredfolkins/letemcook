@@ -38,7 +38,7 @@ templ App(v models.CoreView) {
                     hx-trigger="every 6s"
                     hx-swap="innerHTML"
                     id={ string(fmt.Sprintf("job-status-page-%d-scope-%s", e.PageID, v.ViewType)) }>
-                    @JobStatusView(v.YamlDefault.UUID, fmt.Sprintf("%d", e.PageID), v.ViewType, false, false, false)
+                    @JobStatusView(v.YamlDefault.UUID, fmt.Sprintf("%d", e.PageID), v.ViewType, 0, 0, 0, 0, 0, 0)
                 </div>
                 <div class="grid grid-cols-3 gap-12">
                     <div class="col-span-2 mt-2 lemc-max-editor-height">

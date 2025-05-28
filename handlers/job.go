@@ -42,11 +42,18 @@ func GetAppJobStatus(c LemcContext) error {
 	scope := c.Param("scope")
 	userid := strconv.FormatInt(c.UserContext().ActingAs.Account.ID, 10)
 
+	log.Printf("GetAppJobStatus called - UUID: %s, PageID: %s, Scope: %s, UserID: %s",
+		uuid, pageid, scope, userid)
+
 	app, err := models.AppByUUIDAndAccountID(uuid, c.UserContext().ActingAs.Account.ID)
 	if err != nil {
+		log.Printf("ERROR: app not found or permission denied for UUID %s, Account ID %d: %v",
+			uuid, c.UserContext().ActingAs.Account.ID, err)
 		c.AddErrorFlash("error", "app not found or permission denied")
 		return c.NoContent(http.StatusNotFound)
 	}
+
+	log.Printf("App found: ID=%d, Name=%s", app.ID, app.Name)
 
 	jr := &yeschef.JobRecipe{
 		JobType:  yeschef.JOB_TYPE_APP,
@@ -57,9 +64,16 @@ func GetAppJobStatus(c LemcContext) error {
 		Username: c.UserContext().ActingAs.Username,
 		AppID:    fmt.Sprintf("%d", app.ID),
 	}
-	js := NewJobStatus(jr)
-	jsView := partials.JobStatusView(uuid, pageid, scope, js.NowRunning, js.InRunning, js.EveryRunning)
 
+	log.Printf("Created JobRecipe for app status check: %+v", jr)
+
+	js := NewJobStatus(jr)
+	log.Printf("App job status returned: NOW Running=%d Queued=%d, IN Running=%d Queued=%d, EVERY Running=%d Queued=%d",
+		js.NowRunning, js.NowQueued, js.InRunning, js.InQueued, js.EveryRunning, js.EveryQueued)
+
+	jsView := partials.JobStatusView(uuid, pageid, scope, js.NowRunning, js.NowQueued, js.InRunning, js.InQueued, js.EveryRunning, js.EveryQueued)
+
+	log.Printf("Returning app job status HTML for UUID %s, PageID %s, Scope %s", uuid, pageid, scope)
 	return HTML(c, jsView)
 }
 
@@ -69,12 +83,19 @@ func GetCookbookJobStatus(c LemcContext) error {
 	scope := strings.TrimSpace(c.Param("scope"))
 	userid := strconv.FormatInt(c.UserContext().ActingAs.Account.ID, 10)
 
+	log.Printf("GetCookbookJobStatus called - UUID: %s, PageID: %s, Scope: %s, UserID: %s",
+		uuid, pageid, scope, userid)
+
 	cb := models.Cookbook{}
 	err := cb.ByUUIDAndAccountID(uuid, c.UserContext().ActingAs.Account.ID)
 	if err != nil {
+		log.Printf("ERROR: cookbook not found or permission denied for UUID %s, Account ID %d: %v",
+			uuid, c.UserContext().ActingAs.Account.ID, err)
 		c.AddErrorFlash("error", "cookbook not found or permission denied: "+err.Error())
 		return c.NoContent(http.StatusNotFound)
 	}
+
+	log.Printf("Cookbook found: ID=%d, Name=%s", cb.ID, cb.Name)
 
 	jr := &yeschef.JobRecipe{
 		JobType:    yeschef.JOB_TYPE_COOKBOOK,
@@ -86,62 +107,108 @@ func GetCookbookJobStatus(c LemcContext) error {
 		CookbookID: fmt.Sprintf("%d", cb.ID),
 	}
 
-	js := NewJobStatus(jr)
-	jsView := partials.JobStatusView(uuid, pageid, scope, js.NowRunning, js.InRunning, js.EveryRunning)
+	log.Printf("Created JobRecipe for status check: %+v", jr)
 
+	js := NewJobStatus(jr)
+	log.Printf("Job status returned: NOW Running=%d Queued=%d, IN Running=%d Queued=%d, EVERY Running=%d Queued=%d",
+		js.NowRunning, js.NowQueued, js.InRunning, js.InQueued, js.EveryRunning, js.EveryQueued)
+
+	jsView := partials.JobStatusView(uuid, pageid, scope, js.NowRunning, js.NowQueued, js.InRunning, js.InQueued, js.EveryRunning, js.EveryQueued)
+
+	log.Printf("Returning job status HTML for UUID %s, PageID %s, Scope %s", uuid, pageid, scope)
 	return HTML(c, jsView)
 }
 
 type JobStatus struct {
-	NowRunning   bool
-	InRunning    bool
-	EveryRunning bool
+	NowRunning   int // Count of running NOW jobs
+	NowQueued    int // Count of queued NOW jobs
+	InRunning    int // Count of running IN jobs
+	InQueued     int // Count of queued IN jobs
+	EveryRunning int // Count of running EVERY jobs
+	EveryQueued  int // Count of queued EVERY jobs
 }
 
 func NewJobStatus(jr *yeschef.JobRecipe) *JobStatus {
 	js := &JobStatus{}
 
+	log.Printf("NewJobStatus called with JobRecipe: UUID=%s, PageID=%s, UserID=%s, Scope=%s",
+		jr.UUID, jr.PageID, jr.UserID, jr.Scope)
+
 	// Check if XoxoX is initialized
-	if yeschef.XoxoX == nil || yeschef.XoxoX.RunningMan == nil {
+	if yeschef.XoxoX == nil {
+		log.Printf("WARNING: yeschef.XoxoX is nil - job status will show all zeros")
 		return js
 	}
 
-	// Check NOW jobs - both running and scheduled
+	if yeschef.XoxoX.RunningMan == nil {
+		log.Printf("WARNING: yeschef.XoxoX.RunningMan is nil - job status will show all zeros")
+		return js
+	}
+
+	log.Printf("XoxoX is initialized properly")
+
+	// Check NOW jobs
 	nowKey := yeschef.LemcJobKey(jr, yeschef.NOW_QUEUE)
+	log.Printf("Checking NOW jobs with key: %s", nowKey)
+
 	if yeschef.XoxoX.RunningMan.IsRunning(nowKey) {
-		js.NowRunning = true
+		log.Printf("NOW job is currently running: %s", nowKey)
+		js.NowRunning = 1
 	} else if yeschef.XoxoX.NowQueue != nil {
 		// Check if there's a scheduled NOW job
 		jobKey := quartz.NewJobKey(nowKey)
 		if job, err := yeschef.XoxoX.NowQueue.Get(jobKey); err == nil && job != nil {
-			js.NowRunning = true
+			log.Printf("NOW job is scheduled: %s", nowKey)
+			js.NowQueued = 1
+		} else {
+			log.Printf("No scheduled NOW job found: %s (err: %v)", nowKey, err)
 		}
+	} else {
+		log.Printf("WARNING: yeschef.XoxoX.NowQueue is nil")
 	}
 
-	// Check IN jobs - both running and scheduled
+	// Check IN jobs
 	inKey := yeschef.LemcJobKey(jr, yeschef.IN_QUEUE)
+	log.Printf("Checking IN jobs with key: %s", inKey)
+
 	if yeschef.XoxoX.RunningMan.IsRunning(inKey) {
-		js.InRunning = true
+		log.Printf("IN job is currently running: %s", inKey)
+		js.InRunning = 1
 	} else if yeschef.XoxoX.InQueue != nil {
 		// Check if there's a scheduled IN job
 		jobKey := quartz.NewJobKey(inKey)
 		if job, err := yeschef.XoxoX.InQueue.Get(jobKey); err == nil && job != nil {
-			js.InRunning = true
+			log.Printf("IN job is scheduled: %s", inKey)
+			js.InQueued = 1
+		} else {
+			log.Printf("No scheduled IN job found: %s (err: %v)", inKey, err)
 		}
+	} else {
+		log.Printf("WARNING: yeschef.XoxoX.InQueue is nil")
 	}
 
-	// Check EVERY jobs - both running and scheduled
+	// Check EVERY jobs
 	everyKey := yeschef.LemcJobKey(jr, yeschef.EVERY_QUEUE)
+	log.Printf("Checking EVERY jobs with key: %s", everyKey)
+
 	if yeschef.XoxoX.RunningMan.IsRunning(everyKey) {
-		js.EveryRunning = true
+		log.Printf("EVERY job is currently running: %s", everyKey)
+		js.EveryRunning = 1
 	} else if yeschef.XoxoX.EveryQueue != nil {
 		// Check if there's a scheduled EVERY job
 		jobKey := quartz.NewJobKey(everyKey)
 		if job, err := yeschef.XoxoX.EveryQueue.Get(jobKey); err == nil && job != nil {
-			js.EveryRunning = true
+			log.Printf("EVERY job is scheduled: %s", everyKey)
+			js.EveryQueued = 1
+		} else {
+			log.Printf("No scheduled EVERY job found: %s (err: %v)", everyKey, err)
 		}
+	} else {
+		log.Printf("WARNING: yeschef.XoxoX.EveryQueue is nil")
 	}
 
+	log.Printf("Final JobStatus: NOW Running=%d Queued=%d, IN Running=%d Queued=%d, EVERY Running=%d Queued=%d",
+		js.NowRunning, js.NowQueued, js.InRunning, js.InQueued, js.EveryRunning, js.EveryQueued)
 	return js
 }
 
