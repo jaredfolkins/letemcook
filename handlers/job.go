@@ -158,8 +158,14 @@ func NewJobStatus(jr *yeschef.JobRecipe) *JobStatus {
 		// Check if there's a scheduled NOW job
 		jobKey := quartz.NewJobKey(nowKey)
 		if job, err := yeschef.XoxoX.NowQueue.Get(jobKey); err == nil && job != nil {
-			log.Printf("NOW job is scheduled: %s", nowKey)
-			js.NowQueued = 1
+			// Check if the job trigger is expired
+			trigger := job.Trigger()
+			if runOnceTrigger, ok := trigger.(*quartz.RunOnceTrigger); ok && runOnceTrigger.Expired {
+				log.Printf("NOW job found but trigger is expired: %s", nowKey)
+			} else {
+				log.Printf("NOW job is scheduled: %s", nowKey)
+				js.NowQueued = 1
+			}
 		} else {
 			log.Printf("No scheduled NOW job found: %s (err: %v)", nowKey, err)
 		}
@@ -178,8 +184,14 @@ func NewJobStatus(jr *yeschef.JobRecipe) *JobStatus {
 		// Check if there's a scheduled IN job
 		jobKey := quartz.NewJobKey(inKey)
 		if job, err := yeschef.XoxoX.InQueue.Get(jobKey); err == nil && job != nil {
-			log.Printf("IN job is scheduled: %s", inKey)
-			js.InQueued = 1
+			// Check if the job trigger is expired
+			trigger := job.Trigger()
+			if runOnceTrigger, ok := trigger.(*quartz.RunOnceTrigger); ok && runOnceTrigger.Expired {
+				log.Printf("IN job found but trigger is expired: %s", inKey)
+			} else {
+				log.Printf("IN job is scheduled: %s", inKey)
+				js.InQueued = 1
+			}
 		} else {
 			log.Printf("No scheduled IN job found: %s (err: %v)", inKey, err)
 		}
@@ -198,8 +210,14 @@ func NewJobStatus(jr *yeschef.JobRecipe) *JobStatus {
 		// Check if there's a scheduled EVERY job
 		jobKey := quartz.NewJobKey(everyKey)
 		if job, err := yeschef.XoxoX.EveryQueue.Get(jobKey); err == nil && job != nil {
-			log.Printf("EVERY job is scheduled: %s", everyKey)
-			js.EveryQueued = 1
+			// EVERY jobs use SimpleTrigger which doesn't expire, but check for RunOnceTrigger just in case
+			trigger := job.Trigger()
+			if runOnceTrigger, ok := trigger.(*quartz.RunOnceTrigger); ok && runOnceTrigger.Expired {
+				log.Printf("EVERY job found but trigger is expired: %s", everyKey)
+			} else {
+				log.Printf("EVERY job is scheduled: %s", everyKey)
+				js.EveryQueued = 1
+			}
 		} else {
 			log.Printf("No scheduled EVERY job found: %s (err: %v)", everyKey, err)
 		}
