@@ -1,25 +1,28 @@
-package main_test
+package integration_test
 
 import (
-	"flag"
+	"fmt"
+	"log"
 	"os"
 	"testing"
-
-	"github.com/jaredfolkins/letemcook/tests/testutil"
 )
 
 func TestMain(m *testing.M) {
-	flag.Parse()
-	if testing.Short() {
-		os.Exit(m.Run())
-	}
+	// No longer need shared server setup - each test creates its own instance
+	log.Println("Starting integration tests with parallel infrastructure")
 
-	shutdown, err := testutil.StartTestServer()
-	if err != nil {
-		panic(err)
-	}
-
+	// Run tests
 	code := m.Run()
-	shutdown()
+
+	if code != 0 {
+		log.Printf("Integration tests failed with exit code %d", code)
+	} else {
+		log.Println("All integration tests completed successfully")
+	}
+
 	os.Exit(code)
+}
+
+func init() {
+	fmt.Println("Initializing integration test package with parallel infrastructure")
 }

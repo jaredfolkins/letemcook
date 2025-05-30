@@ -125,6 +125,11 @@ templ Apps(v models.AppsView) {
 	<div id="apps-list" class="bg-base-100 p-9 edges gap-12 mx-12 my-4">
 		@AppsList(v)
 	</div>
+	<script>
+		// Set body dataset values for navbar active state
+		document.body.dataset.activeNav = 'apps';
+		document.body.dataset.activeSubNav = '';
+	</script>
 }
 
 templ AppsList(v models.AppsView) {

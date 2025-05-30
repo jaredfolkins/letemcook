@@ -83,6 +83,11 @@ templ Cookbooks(v models.CookbooksView) {
 	<div id="cookbooks-list" class="bg-base-100 p-9 edges gap-12 mx-12 my-4">
 		@CookbooksList(v)
 	</div>
+	<script>
+		// Set body dataset values for navbar active state
+		document.body.dataset.activeNav = 'cookbooks';
+		document.body.dataset.activeSubNav = '';
+	</script>
 }
 
 templ CookbooksList(v models.CookbooksView) {

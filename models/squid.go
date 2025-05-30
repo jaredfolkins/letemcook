@@ -3,7 +3,6 @@ package models
 import (
 	"log"
 	"os"
-	"strings"
 
 	"github.com/jaredfolkins/letemcook/db"
 	"github.com/sqids/sqids-go"
@@ -49,5 +48,5 @@ func SquidAndNameByAccountID(id int64) (string, string, error) {
 		return "", "", err
 	}
 
-	return sid, strings.ToLower(account.Name), nil
+	return sid, account.Name, nil
 }

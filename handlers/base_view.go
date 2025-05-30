@@ -166,6 +166,7 @@ func NewBaseViewWithSquidAndAccountName(c LemcContext, squid string, name string
 	return models.BaseView{
 		AccountSquid:        squid,
 		AccountName:         name,
+		Title:               name,
 		Theme:               c.Theme(),
 		CacheBuster:         c.CacheBuster(),
 		UserContext:         userCtx,

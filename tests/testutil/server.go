@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"sync"
+	"syscall"
 	"time"
 )
 
@@ -70,16 +71,16 @@ func StartTestServer() (func(), error) {
 		return nil, fmt.Errorf("server not ready: %w", err)
 	}
 
-	// Return cleanup function
+	// Return enhanced cleanup function
 	return func() {
 		serverMu.Lock()
 		defer serverMu.Unlock()
 
 		if serverCmd != nil && serverCmd.Process != nil {
-			// Try graceful shutdown first
-			serverCmd.Process.Signal(os.Interrupt)
+			// First, try SIGTERM for graceful shutdown
+			serverCmd.Process.Signal(syscall.SIGTERM)
 
-			// Wait a moment for graceful shutdown
+			// Wait a short time for graceful shutdown
 			done := make(chan error, 1)
 			go func() {
 				done <- serverCmd.Wait()
@@ -88,18 +89,39 @@ func StartTestServer() (func(), error) {
 			select {
 			case <-done:
 				// Graceful shutdown succeeded
-			case <-time.After(3 * time.Second):
-				// Force kill if graceful shutdown takes too long
-				serverCmd.Process.Kill()
-				<-done // Wait for the process to actually exit
+			case <-time.After(2 * time.Second):
+				// Send SIGINT as a stronger signal
+				serverCmd.Process.Signal(syscall.SIGINT)
+
+				select {
+				case <-done:
+					// SIGINT worked
+				case <-time.After(1 * time.Second):
+					// Force kill if nothing else works
+					serverCmd.Process.Kill()
+					<-done // Wait for the process to actually exit
+				}
 			}
 
 			serverCmd = nil
 		}
 
+		// Give a moment for any remaining connections to close
+		time.Sleep(200 * time.Millisecond)
+
 		// Clean up test data
 		_ = os.RemoveAll(testDataPath)
+
+		// Extra cleanup - force close any remaining network connections
+		CloseAnyHangingConnections()
 	}, nil
+}
+
+// CloseAnyHangingConnections attempts to clean up any hanging network connections
+func CloseAnyHangingConnections() {
+	// This function can be used to perform additional cleanup if needed
+	// For now, just a small delay to let the OS clean up
+	time.Sleep(100 * time.Millisecond)
 }
 
 // WaitForServerReady waits for the server to be ready to accept requests

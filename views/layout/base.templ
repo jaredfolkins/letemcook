@@ -45,6 +45,7 @@ templ Base(v models.BaseView) {
 			hx-boost="true"
 			hx-ext="ws"
                         data-active-nav={ v.ActiveNav }
+                        data-active-subnav={ v.ActiveSubNav }
 			if v.UserContext.IsAuthenticated() { ws-connect={ paths.WebSocketPattern } } >
             // bug: no empty src="" or the browser hates you
             <audio hx-preserve id="audioPlayer"></audio>

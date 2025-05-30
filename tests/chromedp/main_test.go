@@ -1,8 +1,8 @@
 package main_test
 
 import (
-	"flag"
 	"fmt"
+	"log"
 	"os"
 	"testing"
 
@@ -10,20 +10,27 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	flag.Parse()
-	if testing.Short() {
-		os.Exit(m.Run())
-	}
+	// No longer need shared server setup - each test creates its own instance
+	log.Println("Starting ChromeDP tests with parallel infrastructure")
 
-	shutdown, err := testutil.StartTestServer()
-	if err != nil {
-		// If the server can't start (e.g. missing dependencies), skip
-		// the integration tests instead of failing.
-		fmt.Fprintf(os.Stderr, "skipping chromedp tests: %v\n", err)
-		os.Exit(0)
-	}
+	// Ensure we have a clean environment
+	testutil.ForceCleanupChrome()
 
+	// Run tests
 	code := m.Run()
-	shutdown()
+
+	// Final cleanup
+	testutil.ForceCleanupChrome()
+
+	if code != 0 {
+		log.Printf("Tests failed with exit code %d", code)
+	} else {
+		log.Println("All ChromeDP tests completed successfully")
+	}
+
 	os.Exit(code)
+}
+
+func init() {
+	fmt.Println("Initializing ChromeDP test package with parallel infrastructure")
 }
