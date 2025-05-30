@@ -41,6 +41,7 @@ func setupTestEnv(t *testing.T) func() {
 
 // testContextWithAccount creates a test context with a user belonging to given account ID
 func testContextWithAccount(t *testing.T, accountID int64) LemcContext {
+	t.Helper()
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	rec := httptest.NewRecorder()

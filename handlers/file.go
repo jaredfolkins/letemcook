@@ -6,7 +6,6 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -117,7 +116,7 @@ func GetYamlDownload(c LemcContext) error {
 	}
 
 	filename := fmt.Sprintf("%s-%s.yaml", uuid, userOrAdmin)
-	tmpFile, err := ioutil.TempFile("", filename)
+	tmpFile, err := os.CreateTemp("", filename)
 	if err != nil {
 		return err
 	}
