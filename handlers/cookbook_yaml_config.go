@@ -126,8 +126,8 @@ func saveYamlToCookbook(cb *models.Cookbook, yamlDefault *models.YamlDefault, vi
 func processPages(yamlDefault *models.YamlDefault, cb *models.Cookbook, viewType string, userContext *models.UserContext, isAdmin bool) error {
 	yamlDefault.UUID = cb.UUID
 
-	for _, page := range yamlDefault.Cookbook.Pages {
-		if err := processPage(page, cb, viewType, userContext, isAdmin); err != nil {
+	for i := range yamlDefault.Cookbook.Pages {
+		if err := processPage(&yamlDefault.Cookbook.Pages[i], cb, viewType, userContext, isAdmin); err != nil {
 			return err
 		}
 	}
@@ -136,7 +136,7 @@ func processPages(yamlDefault *models.YamlDefault, cb *models.Cookbook, viewType
 }
 
 // Helper function to process individual page
-func processPage(page models.Page, cb *models.Cookbook, viewType string, userContext *models.UserContext, isAdmin bool) error {
+func processPage(page *models.Page, cb *models.Cookbook, viewType string, userContext *models.UserContext, isAdmin bool) error {
 	jm := &util.JobMeta{
 		UUID:     cb.UUID,
 		PageID:   strconv.Itoa(page.PageID),
