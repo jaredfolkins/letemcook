@@ -69,7 +69,10 @@ func GetAppIndexIndividualHandler(c LemcContext) error {
 	v.ViewType = "individual"
 	v.YamlDefault.UUID = cb.UUID // Ensure UUID is set even if YAML unmarshal didn't happen
 
-	for _, page := range v.YamlDefault.Cookbook.Pages {
+	// Reorder pages sequentially if needed
+	v.YamlDefault.Cookbook.Pages = models.ReorderPagesSequentially(v.YamlDefault.Cookbook.Pages)
+
+	for i, page := range v.YamlDefault.Cookbook.Pages {
 		jm := &util.JobMeta{
 			UUID:     v.YamlDefault.UUID,
 			PageID:   strconv.Itoa(page.PageID),
@@ -106,7 +109,7 @@ func GetAppIndexIndividualHandler(c LemcContext) error {
 		}
 		page.JsCache = fmt.Sprintf("<script id='uuid-%s-pageid-%d-scope-%s-script'>%s</script>", cb.UUID, page.PageID, v.ViewType, js)
 
-		v.YamlDefault.Cookbook.Pages[page.PageID-1] = page
+		v.YamlDefault.Cookbook.Pages[i] = page
 	}
 
 	for _, wiki := range v.YamlDefault.Cookbook.Storage.Wikis {
@@ -243,7 +246,10 @@ func GetAppIndexSharedHandler(c LemcContext) error {
 	isAdmin = true
 	v.YamlDefault.UUID = cb.UUID // Ensure UUID is set even if YAML unmarshal didn't happen
 
-	for _, page := range v.YamlDefault.Cookbook.Pages {
+	// Reorder pages sequentially if needed
+	v.YamlDefault.Cookbook.Pages = models.ReorderPagesSequentially(v.YamlDefault.Cookbook.Pages)
+
+	for i, page := range v.YamlDefault.Cookbook.Pages {
 		jm := &util.JobMeta{
 			UUID:     v.YamlDefault.UUID,
 			PageID:   strconv.Itoa(page.PageID),
@@ -280,7 +286,7 @@ func GetAppIndexSharedHandler(c LemcContext) error {
 		}
 		page.JsCache = fmt.Sprintf("<script id='uuid-%s-pageid-%d-scope-%s-script'>%s</script>", cb.UUID, page.PageID, v.ViewType, js)
 
-		v.YamlDefault.Cookbook.Pages[page.PageID-1] = page
+		v.YamlDefault.Cookbook.Pages[i] = page
 	}
 
 	appView := pages.AppGo(v)

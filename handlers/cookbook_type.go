@@ -54,6 +54,9 @@ func PostCookbookWikiSaveHandler(c LemcContext) error {
 		return fmt.Errorf("view_type not found")
 	}
 
+	// Reorder pages sequentially if needed
+	v.YamlDefault.Cookbook.Pages = models.ReorderPagesSequentially(v.YamlDefault.Cookbook.Pages)
+
 	pageid, err := strconv.Atoi(data.PageID)
 	if err != nil {
 		return err
@@ -141,6 +144,10 @@ func GetCookbookEditView(c LemcContext) error {
 		}
 	case "acls":
 		yaml.Unmarshal([]byte(cb.YamlIndividual), &v.YamlDefault)
+
+		// Reorder pages sequentially if needed
+		v.YamlDefault.Cookbook.Pages = models.ReorderPagesSequentially(v.YamlDefault.Cookbook.Pages)
+
 		cba, err := models.CookbookAclsUsers(c.UserContext().ActingAs.Account.ID, cb.ID)
 		if err != nil {
 			return err
@@ -168,7 +175,10 @@ func GetCookbookEditView(c LemcContext) error {
 }
 
 func preparePages(c LemcContext, v *models.CoreView, uuid string, isAdmin bool) error {
-	for _, page := range v.YamlDefault.Cookbook.Pages {
+	// Reorder pages sequentially if needed
+	v.YamlDefault.Cookbook.Pages = models.ReorderPagesSequentially(v.YamlDefault.Cookbook.Pages)
+
+	for i, page := range v.YamlDefault.Cookbook.Pages {
 		jm := &util.JobMeta{
 			UUID:     v.YamlDefault.UUID,
 			PageID:   strconv.Itoa(page.PageID),
@@ -205,7 +215,7 @@ func preparePages(c LemcContext, v *models.CoreView, uuid string, isAdmin bool) 
 		}
 		page.JsCache = fmt.Sprintf("<script id='uuid-%s-pageid-%d-scope-%s-script'>%s</script>", uuid, page.PageID, v.ViewType, js)
 
-		v.YamlDefault.Cookbook.Pages[page.PageID-1] = page
+		v.YamlDefault.Cookbook.Pages[i] = page
 	}
 
 	return nil
@@ -409,6 +419,10 @@ func GetCookbookEditAclsView(c LemcContext) error {
 	}
 
 	yaml.Unmarshal([]byte(cb.YamlIndividual), &v.YamlDefault)
+
+	// Reorder pages sequentially if needed
+	v.YamlDefault.Cookbook.Pages = models.ReorderPagesSequentially(v.YamlDefault.Cookbook.Pages)
+
 	cba, err := models.CookbookAclsUsers(c.UserContext().ActingAs.Account.ID, cb.ID)
 	if err != nil {
 		return err

@@ -40,6 +40,9 @@ func GetCookbookYamlConfigHandler(c LemcContext) error {
 		return fmt.Errorf("view_type not found")
 	}
 
+	// Reorder pages sequentially if needed
+	yaml_default.Cookbook.Pages = models.ReorderPagesSequentially(yaml_default.Cookbook.Pages)
+
 	yaml_default_no_storage.Cookbook.Pages = yaml_default.Cookbook.Pages
 	yaml_default_no_storage.Cookbook.Environment = yaml_default.Cookbook.Environment
 
@@ -209,6 +212,9 @@ func PostCookbookYamlConfigHandler(c LemcContext) error {
 	// Update YAML data
 	yamlDefault.Cookbook.Pages = yamlNoStorage.Cookbook.Pages
 	yamlDefault.Cookbook.Environment = yamlNoStorage.Cookbook.Environment
+
+	// Reorder pages sequentially if needed
+	yamlDefault.Cookbook.Pages = models.ReorderPagesSequentially(yamlDefault.Cookbook.Pages)
 
 	// Save YAML back to cookbook
 	isAdmin, err := saveYamlToCookbook(cb, yamlDefault, viewType)
