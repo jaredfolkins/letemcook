@@ -77,10 +77,7 @@ func GetAllUsers(c LemcContext) error {
 		return c.String(http.StatusInternalServerError, "Failed to retrieve users")
 	}
 
-	baseView := NewBaseView(c)
-	baseView.ActiveNav = "account"
-	baseView.ActiveSubNav = paths.AccountUsers
-	baseView.ActiveSubNav = paths.AccountUsers
+	baseView := NewBaseView(c, WithNavigation("account", paths.AccountUsers))
 	v := models.UsersView{
 		BaseView:    baseView,
 		Users:       users,
@@ -112,14 +109,10 @@ func GetUserHandler(c LemcContext) error {
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			log.Printf("User %d not found in account %d", userID, loggedInUserAccountID)
-			baseView := NewBaseView(c)
-			baseView.Title = "Not Found"
 			return c.String(http.StatusNotFound, "User not found")
 
 		}
 		log.Printf("Error fetching user %d for account %d: %v", userID, loggedInUserAccountID, err)
-		baseView := NewBaseView(c)
-		baseView.Title = "Server Error"
 		return c.String(http.StatusInternalServerError, "Failed to retrieve user information")
 	}
 
@@ -155,10 +148,9 @@ func GetUserHandler(c LemcContext) error {
 		// return c.String(http.StatusInternalServerError, "Failed to retrieve user permissions")
 	}
 
-	baseView := NewBaseView(c)
-	baseView.Title = "User: " + user.Username // Set a specific title
-	baseView.ActiveNav = "account"
-	baseView.ActiveSubNav = paths.AccountUsers
+	baseView := NewBaseView(c,
+		WithTitle("User: "+user.Username),
+		WithNavigation("account", paths.AccountUsers))
 	v := models.UserDetailView{
 		BaseView:    baseView,
 		User:        *user,
@@ -171,141 +163,116 @@ func GetUserHandler(c LemcContext) error {
 	return HTML(c, userDetailComponent)
 }
 
-func CreateUserHandler(c LemcContext) error {
-	actingUser := c.UserContext().ActingAs
-	if !actingUser.CanAdministerAccount() {
-		log.Printf("User %d attempted to create user without permission in account %d", actingUser.ID, actingUser.Account.ID)
-		setFlashHeader(c, "error", "You do not have permission to create users.")
-		return c.String(http.StatusForbidden, "Forbidden")
-	}
-
-	username := util.Sanitize(c.FormValue("username"))
-	email := util.Sanitize(c.FormValue("email"))
-	password := c.FormValue("password")
-
-	if username == "" || email == "" || password == "" {
-		log.Printf("Attempt to create user with missing fields by user %d", actingUser.ID)
-		setFlashHeader(c, "error", "Username, email, and password cannot be empty.")
-		// Re-render the current user list (or an empty list) to show the error
-		// We need the current pagination info to fetch the correct list
-		pageStr := c.QueryParam("page") // Or default to 1 if not submitting from a paginated view
-		limitStr := c.QueryParam("limit")
-		page, _ := strconv.Atoi(pageStr)
-		if page < 1 {
-			page = 1
-		}
-		limit, _ := strconv.Atoi(limitStr)
-		if limit < 1 {
-			limit = DefaultUserLimit
-		}
-		users, _ := models.GetUsersByAccountID(actingUser.Account.ID, page, limit) // Ignoring error for simplicity here
-		totalUsers, _ := models.CountUsersByAccountID(actingUser.Account.ID)
-		totalPages := 0
-		if totalUsers > 0 {
-			totalPages = int(math.Ceil(float64(totalUsers) / float64(limit)))
-		}
-		baseView := NewBaseView(c)
-		baseView.ActiveNav = "account"
-		baseView.ActiveSubNav = paths.AccountUsers
-		v := models.UsersView{
-			BaseView:    baseView,
-			Users:       users,
-			CurrentPage: page,
-			TotalPages:  totalPages,
-			Limit:       limit,
-		}
-		return HTML(c, pages.UsersPartial(v)) // Return the partial component with the flash message header
-	}
-
-	// Call the model function to create the user
-	_, err := models.CreateUser(username, email, password, actingUser.Account.ID)
-	if err != nil {
-		log.Printf("Error creating user by %d: %v", actingUser.ID, err)
-		errMsg := "Failed to create user. Please try again."
-		if strings.Contains(err.Error(), "UNIQUE constraint failed: users.email") {
-			errMsg = "Email address is already in use."
-		} else if strings.Contains(err.Error(), "UNIQUE constraint failed: users.username") {
-			errMsg = "Username is already taken."
-		}
-		setFlashHeader(c, "error", errMsg)
-		// Fetch and return the current list again to show the error
-		pageStr := c.QueryParam("page")
-		limitStr := c.QueryParam("limit")
-		page, _ := strconv.Atoi(pageStr)
-		if page < 1 {
-			page = 1
-		}
-		limit, _ := strconv.Atoi(limitStr)
-		if limit < 1 {
-			limit = DefaultUserLimit
-		}
-		users, _ := models.GetUsersByAccountID(actingUser.Account.ID, page, limit)
-		totalUsers, _ := models.CountUsersByAccountID(actingUser.Account.ID)
-		totalPages := 0
-		if totalUsers > 0 {
-			totalPages = int(math.Ceil(float64(totalUsers) / float64(limit)))
-		}
-		baseView := NewBaseView(c)
-		baseView.ActiveNav = "account"
-		baseView.ActiveSubNav = paths.AccountUsers
-		v := models.UsersView{
-			BaseView:    baseView,
-			Users:       users,
-			CurrentPage: page,
-			TotalPages:  totalPages,
-			Limit:       limit,
-		}
-		return HTML(c, pages.UsersPartial(v))
-	}
-
-	// Success!
-	setFlashHeader(c, "success", fmt.Sprintf("User '%s' created successfully.", username))
-
-	// Fetch the updated list of users for the current/last page
-	// Determine the page the new user will be on (usually the last page)
-	pageStr := c.QueryParam("page") // Get current page if provided
+// Helper function to parse pagination parameters
+func parsePaginationParams(c LemcContext) (page int, limit int) {
+	pageStr := c.QueryParam("page")
 	limitStr := c.QueryParam("limit")
-	page, _ := strconv.Atoi(pageStr)
+
+	page, _ = strconv.Atoi(pageStr)
 	if page < 1 {
-		page = 1 // Default to first page if not specified
+		page = 1
 	}
-	limit, _ := strconv.Atoi(limitStr)
+
+	limit, _ = strconv.Atoi(limitStr)
 	if limit < 1 {
 		limit = DefaultUserLimit
 	}
 
-	totalUsers, err := models.CountUsersByAccountID(actingUser.Account.ID)
-	if err != nil {
-		log.Printf("Error counting users after creation: %v", err)
-		// Handle error, maybe redirect or show a generic message
-		return c.String(http.StatusInternalServerError, "Error retrieving updated user list")
-	}
+	return page, limit
+}
+
+// Helper function to build users view for pagination
+func buildUsersView(c LemcContext, users []models.User, totalUsers int, page, limit int) models.UsersView {
 	totalPages := 0
 	if totalUsers > 0 {
 		totalPages = int(math.Ceil(float64(totalUsers) / float64(limit)))
 	}
 
-	// Optionally, redirect to the last page to see the new user
-	// page = totalPages
-
-	users, err := models.GetUsersByAccountID(actingUser.Account.ID, page, limit)
-	if err != nil {
-		log.Printf("Error fetching users after creation: %v", err)
-		// Handle error
-		return c.String(http.StatusInternalServerError, "Error retrieving updated user list")
-	}
-
-	baseView := NewBaseView(c)
-	baseView.ActiveNav = "account"
-	baseView.ActiveSubNav = paths.AccountUsers
-	v := models.UsersView{
+	baseView := NewBaseView(c, WithNavigation("account", paths.AccountUsers))
+	return models.UsersView{
 		BaseView:    baseView,
 		Users:       users,
 		CurrentPage: page,
 		TotalPages:  totalPages,
 		Limit:       limit,
 	}
+}
 
-	// Return only the updated user list partial
+// Helper function to handle validation error response
+func handleValidationError(c LemcContext, message string, actingUser *models.User) error {
+	setFlashHeader(c, "error", message)
+
+	page, limit := parsePaginationParams(c)
+	users, _ := models.GetUsersByAccountID(actingUser.Account.ID, page, limit)
+	totalUsers, _ := models.CountUsersByAccountID(actingUser.Account.ID)
+
+	v := buildUsersView(c, users, totalUsers, page, limit)
 	return HTML(c, pages.UsersPartial(v))
+}
+
+// Helper function to handle creation error response
+func handleCreationError(c LemcContext, err error, actingUser *models.User) error {
+	log.Printf("Error creating user by %d: %v", actingUser.ID, err)
+
+	errMsg := "Failed to create user. Please try again."
+	if strings.Contains(err.Error(), "UNIQUE constraint failed: users.email") {
+		errMsg = "Email address is already in use."
+	} else if strings.Contains(err.Error(), "UNIQUE constraint failed: users.username") {
+		errMsg = "Username is already taken."
+	}
+
+	return handleValidationError(c, errMsg, actingUser)
+}
+
+// Helper function to build success response
+func buildSuccessResponse(c LemcContext, username string, actingUser *models.User) error {
+	setFlashHeader(c, "success", fmt.Sprintf("User '%s' created successfully.", username))
+
+	page, limit := parsePaginationParams(c)
+
+	totalUsers, err := models.CountUsersByAccountID(actingUser.Account.ID)
+	if err != nil {
+		log.Printf("Error counting users after creation: %v", err)
+		return c.String(http.StatusInternalServerError, "Error retrieving updated user list")
+	}
+
+	users, err := models.GetUsersByAccountID(actingUser.Account.ID, page, limit)
+	if err != nil {
+		log.Printf("Error fetching users after creation: %v", err)
+		return c.String(http.StatusInternalServerError, "Error retrieving updated user list")
+	}
+
+	v := buildUsersView(c, users, totalUsers, page, limit)
+	return HTML(c, pages.UsersPartial(v))
+}
+
+func CreateUserHandler(c LemcContext) error {
+	actingUser := c.UserContext().ActingAs
+
+	// Check permission first
+	if !actingUser.CanAdministerAccount() {
+		log.Printf("User %d attempted to create user without permission in account %d", actingUser.ID, actingUser.Account.ID)
+		setFlashHeader(c, "error", "You do not have permission to create users.")
+		return c.String(http.StatusForbidden, "Forbidden")
+	}
+
+	// Extract and validate form values
+	username := util.Sanitize(c.FormValue("username"))
+	email := util.Sanitize(c.FormValue("email"))
+	password := c.FormValue("password")
+
+	// Validate required fields
+	if username == "" || email == "" || password == "" {
+		log.Printf("Attempt to create user with missing fields by user %d", actingUser.ID)
+		return handleValidationError(c, "Username, email, and password cannot be empty.", actingUser)
+	}
+
+	// Attempt to create user
+	_, err := models.CreateUser(username, email, password, actingUser.Account.ID)
+	if err != nil {
+		return handleCreationError(c, err, actingUser)
+	}
+
+	// Handle success
+	return buildSuccessResponse(c, username, actingUser)
 }
