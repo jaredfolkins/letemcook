@@ -47,9 +47,9 @@ func PostCookbookWikiSaveHandler(c LemcContext) error {
 	v := models.CoreView{Cookbook: cb}
 	switch data.ViewType {
 	case SCOPE_YAML_TYPE_INDIVIDUAL:
-		yaml.Unmarshal([]byte(cb.YamlIndividual), &v.YamlDefault)
+		yaml.Unmarshal([]byte(v.Cookbook.YamlIndividual), &v.YamlDefault)
 	case SCOPE_YAML_TYPE_SHARED:
-		yaml.Unmarshal([]byte(cb.YamlShared), &v.YamlDefault)
+		yaml.Unmarshal([]byte(v.Cookbook.YamlShared), &v.YamlDefault)
 	default:
 		return fmt.Errorf("view_type not found")
 	}
