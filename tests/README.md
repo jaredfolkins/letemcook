@@ -1,6 +1,6 @@
 # Consolidated Tests
 
-This directory contains all tests for the letemcook application, consolidated from the previous separate `tests/chromedp`, `tests/integration`, and `tests/testutil` directories.
+This directory contains all tests for the letemcook application, consolidated from the previous separate `tests/chromedp`, `tests/integration`, and `tests` directories.
 
 ## Structure
 
@@ -28,7 +28,7 @@ All tests are now in a single `tests` package with the following components:
 ## Key Changes
 
 1. **Single Package**: All code is now in the `tests` package instead of separate packages
-2. **No Import Dependencies**: Removed all `testutil` imports since everything is in the same package
+2. **No Import Dependencies**: Removed all `tests` imports since everything is in the same package
 3. **Consolidated Functions**: All utility functions are directly accessible without package prefixes
 4. **Fixed Path Resolution**: Updated `RepoRoot()` function to work with the new directory structure
 5. **Unified TestMain**: Single TestMain function handles all cleanup and initialization

@@ -11,11 +11,11 @@ import (
 	"testing"
 	"time"
 
+	"github.com/jaredfolkins/letemcook/tests"
 	"github.com/jaredfolkins/letemcook/util"
 
 	"github.com/jaredfolkins/letemcook/middleware"
 	"github.com/jaredfolkins/letemcook/models"
-	"github.com/jaredfolkins/letemcook/tests/testutil"
 	"github.com/labstack/echo/v4"
 )
 
@@ -34,7 +34,7 @@ func testCleanup(t *testing.T) {
 func setupTestEnv(t *testing.T) func() {
 	t.Helper()
 	os.Setenv("LEMC_ENV", "test")
-	os.Setenv("LEMC_DATA", testutil.DataRoot())
+	os.Setenv("LEMC_DATA", tests.DataRoot())
 	testCleanup(t) // Clean up any existing data
 	return func() { testCleanup(t) }
 }

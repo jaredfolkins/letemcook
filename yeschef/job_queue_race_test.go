@@ -14,7 +14,7 @@ import (
 	"github.com/docker/docker/api/types/image"
 	"github.com/docker/docker/client"
 	"github.com/jaredfolkins/letemcook/models"
-	"github.com/jaredfolkins/letemcook/tests/testutil"
+	"github.com/jaredfolkins/letemcook/tests"
 	"github.com/jaredfolkins/letemcook/util"
 	"github.com/joho/godotenv"
 	"github.com/reugn/go-quartz/quartz"
@@ -133,7 +133,7 @@ func setupRaceTest(t *testing.T) (string, func()) {
 	var err error
 
 	if _, err = os.Stat(queuesPath); os.IsNotExist(err) {
-		tmpDir = testutil.DataRoot()
+		tmpDir = tests.DataRoot()
 		os.Setenv("LEMC_ENV", "test")
 		os.Setenv("LEMC_DATA", tmpDir)
 		queuesPath = util.QueuesPath()

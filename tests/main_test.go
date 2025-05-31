@@ -18,11 +18,13 @@ func TestMain(m *testing.M) {
 	// Run tests
 	code := m.Run()
 
-	if code != 0 {
-		log.Printf("Integration tests failed with exit code %d", code)
-	} else {
-		log.Println("All integration tests completed successfully")
-	}
+	/*
+		if code != 0 {
+			log.Printf("Integration tests failed with exit code %d", code)
+		} else {
+			log.Println("All integration tests completed successfully")
+		}
+	*/
 
 	// Mark test package as complete to trigger final cleanup
 	MarkTestPackageComplete()
@@ -76,7 +78,7 @@ func cleanupTestGoProcesses() {
 	wd, err := os.Getwd()
 	if err == nil {
 		// Only kill go run processes in our specific test directory path
-		repoPath := strings.TrimSuffix(wd, "/tests/integration")
+		repoPath := strings.TrimSuffix(wd, "/tests")
 		if strings.Contains(repoPath, "letemcook") {
 			exec.Command("pkill", "-f", "go run.*"+repoPath).Run()
 		}

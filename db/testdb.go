@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/jaredfolkins/letemcook/embedded"
-	"github.com/jaredfolkins/letemcook/tests/testutil"
+	"github.com/jaredfolkins/letemcook/tests"
 	"github.com/pressly/goose/v3"
 )
 
@@ -18,7 +18,7 @@ func SetupTestDB(t *testing.T) func() {
 	os.Setenv("LEMC_ENV", "test")
 	os.Setenv("LEMC_SQUID_ALPHABET", "abcdefghijklmnopqrstuvwxyz0123456789")
 
-	dataRoot := testutil.DataRoot()
+	dataRoot := tests.DataRoot()
 	os.Setenv("LEMC_DATA", dataRoot)
 
 	envDir := filepath.Join(dataRoot, "test")
