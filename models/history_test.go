@@ -7,7 +7,7 @@ import (
 
 	"github.com/jaredfolkins/letemcook/db"
 	"github.com/jaredfolkins/letemcook/embedded"
-	"github.com/jaredfolkins/letemcook/tests"
+	"github.com/jaredfolkins/letemcook/util"
 	"github.com/jmoiron/sqlx"
 	"github.com/pressly/goose/v3"
 )
@@ -15,7 +15,7 @@ import (
 var historyTestDB *sqlx.DB
 
 func TestMain(m *testing.M) {
-	dataRoot := tests.DataRoot()
+	dataRoot := util.TestDataRoot()
 	os.Setenv("LEMC_ENV", "test")
 	os.Setenv("LEMC_DATA", dataRoot)
 	envDir := filepath.Join(dataRoot, "test")

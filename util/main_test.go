@@ -4,12 +4,10 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
-
-	"github.com/jaredfolkins/letemcook/tests"
 )
 
 func TestMain(m *testing.M) {
-	dataRoot := tests.DataRoot()
+	dataRoot := TestDataRoot()
 	os.Setenv("LEMC_ENV", "test")
 	os.Setenv("LEMC_DATA", dataRoot)
 	envDir := filepath.Join(dataRoot, "test")
