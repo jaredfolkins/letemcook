@@ -1,10 +1,8 @@
-package main_test
+package tests
 
 import (
 	"os"
 	"testing"
-
-	"github.com/jaredfolkins/letemcook/tests/testutil"
 )
 
 func TestCleanupDemo(t *testing.T) {
@@ -12,9 +10,9 @@ func TestCleanupDemo(t *testing.T) {
 		t.Skip("Skipping integration test in short mode")
 	}
 
-	t.Parallel()
+	// Removed t.Parallel() - now running in series for better PID tracking
 
-	testutil.SimpleTestWrapper(t, func(t *testing.T, instance *testutil.TestInstance) {
+	SimpleTestWrapper(t, func(t *testing.T, instance *TestInstance) {
 		t.Logf("Test instance %s created with data dir: %s", instance.ID, instance.DataDir)
 
 		// Verify the data directory exists during the test

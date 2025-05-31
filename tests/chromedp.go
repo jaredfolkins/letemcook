@@ -1,8 +1,9 @@
-package testutil
+package tests
 
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -39,6 +40,8 @@ const (
 var (
 	chromeDPCleanupMutex sync.Mutex
 	activeContexts       []*chromeDPContext
+	testPackageComplete  = make(chan struct{})
+	cleanupOnce          sync.Once
 )
 
 type chromeDPContext struct {
@@ -46,6 +49,32 @@ type chromeDPContext struct {
 	allocCancel context.CancelFunc
 	ctx         context.Context
 	cancel      context.CancelFunc
+}
+
+// init sets up package-level cleanup
+func init() {
+	// Start a goroutine that will force cleanup when tests are done
+	go func() {
+		<-testPackageComplete
+		time.Sleep(500 * time.Millisecond) // Give normal cleanup a chance
+
+		// Force cleanup everything
+		ForceCleanupChrome()
+
+		// Force garbage collection
+		runtime.GC()
+		runtime.GC()
+
+		// Give a final moment for cleanup
+		time.Sleep(200 * time.Millisecond)
+	}()
+}
+
+// MarkTestPackageComplete should be called when all tests are done
+func MarkTestPackageComplete() {
+	cleanupOnce.Do(func() {
+		close(testPackageComplete)
+	})
 }
 
 // LoadTestEnv loads the test environment file and returns the squid values
@@ -95,8 +124,8 @@ func GetBaseURL() string {
 	return "http://localhost:" + port
 }
 
-// CreateHeadlessContext creates a headless Chrome context for testing with proper cleanup
-func CreateHeadlessContext() (context.Context, context.CancelFunc) {
+// createHeadlessContext creates a headless Chrome context for testing with proper cleanup
+func createHeadlessContext() (context.Context, context.CancelFunc) {
 	chromeDPCleanupMutex.Lock()
 	defer chromeDPCleanupMutex.Unlock()
 
@@ -117,12 +146,10 @@ func CreateHeadlessContext() (context.Context, context.CancelFunc) {
 		chromedp.Flag("disable-sync", true),
 		chromedp.Flag("disable-translate", true),
 		chromedp.Flag("disable-ipc-flooding-protection", true),
-		// Add aggressive cleanup flags
 		chromedp.Flag("disable-hang-monitor", true),
 		chromedp.Flag("disable-prompt-on-repost", true),
 		chromedp.Flag("disable-client-side-phishing-detection", true),
 		chromedp.Flag("disable-component-update", true),
-		chromedp.Flag("disable-default-apps", true),
 		chromedp.Flag("disable-domain-reliability", true),
 		chromedp.Flag("no-first-run", true),
 		chromedp.Flag("no-default-browser-check", true),
@@ -207,34 +234,9 @@ func ForceCleanupChrome() {
 	runtime.GC() // Call twice to be thorough
 }
 
-// ChromeDPTestWrapper provides a wrapper for ChromeDP tests with proper cleanup
-func ChromeDPTestWrapper(t interface {
-	Fatalf(format string, args ...interface{})
-}, testFunc func(context.Context)) {
-	ctx, cancel := CreateHeadlessContext()
-
-	// Ensure cleanup happens even if test panics
-	defer func() {
-		if r := recover(); r != nil {
-			cancel()
-			time.Sleep(100 * time.Millisecond)
-			panic(r)
-		}
-		cancel()
-		// Extra cleanup time to ensure Chrome shuts down
-		time.Sleep(150 * time.Millisecond)
-	}()
-
-	// Add test timeout - shorter to force faster completion
-	ctx, cancelTimeout := context.WithTimeout(ctx, 25*time.Second)
-	defer cancelTimeout()
-
-	testFunc(ctx)
-}
-
 // ChromeDPTestWrapperWithInstance provides a wrapper for ChromeDP tests with a specific test instance
 func ChromeDPTestWrapperWithInstance(t *testing.T, instance *TestInstance, testFunc func(context.Context)) {
-	ctx, cancel := CreateHeadlessContext()
+	ctx, cancel := createHeadlessContext()
 
 	// Ensure cleanup happens even if test panics
 	defer func() {
@@ -263,4 +265,52 @@ func LoadTestEnvForInstance(instance *TestInstance) (alphaSquid, bravoSquid stri
 // GetBaseURLForInstance returns the base URL for a test instance (convenience wrapper)
 func GetBaseURLForInstance(instance *TestInstance) string {
 	return instance.GetTestInstanceBaseURL()
+}
+
+// LoginToAlphaAccount performs a standard login to the Alpha account with ChromeDP
+func LoginToAlphaAccount(ctx context.Context, instance *TestInstance) error {
+	alphaSquid, _, err := LoadTestEnvForInstance(instance)
+	if err != nil {
+		return fmt.Errorf("load test environment: %w", err)
+	}
+
+	loginVals := url.Values{}
+	loginVals.Set("squid", alphaSquid)
+	loginVals.Set("account", AlphaAccountName)
+
+	baseURL := GetBaseURLForInstance(instance)
+	loginURL := baseURL + "/lemc/login?" + loginVals.Encode()
+
+	return chromedp.Run(ctx,
+		chromedp.Navigate(loginURL),
+		chromedp.WaitVisible(UsernameSelector, chromedp.ByQuery),
+		chromedp.SendKeys(UsernameSelector, AlphaOwnerUsername, chromedp.ByQuery),
+		chromedp.SendKeys(PasswordSelector, TestPassword, chromedp.ByQuery),
+		chromedp.Click(LoginButtonSelector, chromedp.ByQuery),
+		chromedp.Sleep(3*time.Second), // Wait for login to complete
+	)
+}
+
+// LoginToBravoAccount performs a standard login to the Bravo account with ChromeDP
+func LoginToBravoAccount(ctx context.Context, instance *TestInstance) error {
+	_, bravoSquid, err := LoadTestEnvForInstance(instance)
+	if err != nil {
+		return fmt.Errorf("load test environment: %w", err)
+	}
+
+	loginVals := url.Values{}
+	loginVals.Set("squid", bravoSquid)
+	loginVals.Set("account", BravoAccountName)
+
+	baseURL := GetBaseURLForInstance(instance)
+	loginURL := baseURL + "/lemc/login?" + loginVals.Encode()
+
+	return chromedp.Run(ctx,
+		chromedp.Navigate(loginURL),
+		chromedp.WaitVisible(UsernameSelector, chromedp.ByQuery),
+		chromedp.SendKeys(UsernameSelector, BravoOwnerUsername, chromedp.ByQuery),
+		chromedp.SendKeys(PasswordSelector, TestPassword, chromedp.ByQuery),
+		chromedp.Click(LoginButtonSelector, chromedp.ByQuery),
+		chromedp.Sleep(3*time.Second), // Wait for login to complete
+	)
 }

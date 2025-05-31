@@ -1,4 +1,4 @@
-package testutil
+package tests
 
 import (
 	"context"
@@ -107,12 +107,12 @@ func containsAny(s string, substrings []string) bool {
 	return false
 }
 
-// ParallelTestWrapper wraps a test with dynamic timeout and always cleanup
-func ParallelTestWrapper(t *testing.T, testFunc func(*testing.T, *TestInstance)) {
+// SimpleTestWrapper for non-parallel tests with dynamic timeout and always cleanup
+func SimpleTestWrapper(t *testing.T, testFunc func(*testing.T, *TestInstance)) {
 	config := LoadDynamicTestConfigFromEnv()
 
 	// Calculate dynamic timeout based on test characteristics
-	timeout := config.CalculateDynamicTimeout(t.Name(), true)
+	timeout := config.CalculateDynamicTimeout(t.Name(), false)
 
 	t.Logf("Test %s: calculated timeout %v", t.Name(), timeout)
 
@@ -144,6 +144,12 @@ func ParallelTestWrapper(t *testing.T, testFunc func(*testing.T, *TestInstance))
 
 		t.Logf("Test %s: cleaning up (failed=%v)", t.Name(), testFailed)
 		serverCleanup(testFailed) // Always cleanup regardless of success/failure
+
+		// Force cleanup any remaining ChromeDP contexts
+		ForceCleanupChrome()
+
+		// Give a moment for cleanup to complete
+		time.Sleep(200 * time.Millisecond)
 	}()
 
 	// Create test timeout context
@@ -152,8 +158,11 @@ func ParallelTestWrapper(t *testing.T, testFunc func(*testing.T, *TestInstance))
 
 	// Run test in goroutine to handle timeout
 	done := make(chan bool, 1)
+	testGoroutine := make(chan struct{})
+
 	go func() {
 		defer func() {
+			close(testGoroutine) // Signal goroutine is done
 			if r := recover(); r != nil {
 				testFailed = true
 				t.Errorf("Test function panicked: %v", r)
@@ -177,64 +186,19 @@ func ParallelTestWrapper(t *testing.T, testFunc func(*testing.T, *TestInstance))
 		testFailed = true
 		t.Errorf("Test %s: timeout after %v", t.Name(), timeout)
 	}
+
+	// Ensure test goroutine is properly terminated
+	select {
+	case <-testGoroutine:
+		// Goroutine finished normally
+	case <-time.After(100 * time.Millisecond):
+		// Goroutine didn't finish, but we'll continue anyway
+		t.Logf("Test %s: goroutine cleanup timeout", t.Name())
+	}
 }
 
-// SimpleTestWrapper for non-parallel tests with dynamic timeout and always cleanup
-func SimpleTestWrapper(t *testing.T, testFunc func(*testing.T, *TestInstance)) {
-	config := LoadDynamicTestConfigFromEnv()
-
-	// Calculate timeout for non-parallel test
-	timeout := config.CalculateDynamicTimeout(t.Name(), false)
-
-	t.Logf("Test %s: calculated timeout %v", t.Name(), timeout)
-
-	// Create test instance
-	instance, err := CreateTestInstance()
-	if err != nil {
-		t.Fatalf("Failed to create test instance: %v", err)
-	}
-
-	// Start server
-	serverCleanup, err := instance.StartTestServer()
-	if err != nil {
-		serverCleanup(true)
-		t.Fatalf("Failed to start test server: %v", err)
-	}
-
-	testFailed := false
-	defer func() {
-		if r := recover(); r != nil {
-			testFailed = true
-			t.Errorf("Test panicked: %v", r)
-		}
-		serverCleanup(testFailed) // Always cleanup regardless of success/failure
-	}()
-
-	// Create timeout context
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
-	defer cancel()
-
-	// Run test with timeout
-	done := make(chan bool, 1)
-	go func() {
-		defer func() {
-			if r := recover(); r != nil {
-				testFailed = true
-				t.Errorf("Test function panicked: %v", r)
-			}
-			done <- true
-		}()
-
-		testFunc(t, instance)
-	}()
-
-	select {
-	case <-done:
-		if t.Failed() {
-			testFailed = true
-		}
-	case <-ctx.Done():
-		testFailed = true
-		t.Errorf("Test timeout after %v", timeout)
-	}
+// SeriesTestWrapper for series tests (non-parallel) with dynamic timeout and always cleanup
+func SeriesTestWrapper(t *testing.T, testFunc func(*testing.T, *TestInstance)) {
+	// Just call SimpleTestWrapper since they're essentially the same for series tests
+	SimpleTestWrapper(t, testFunc)
 }

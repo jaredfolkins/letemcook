@@ -1,4 +1,4 @@
-package main_test
+package tests
 
 import (
 	"context"
@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/chromedp/chromedp"
-	"github.com/jaredfolkins/letemcook/tests/testutil"
 )
 
 // TestNavClickAfterHardRefresh captures JavaScript errors that occur when
@@ -18,30 +17,30 @@ func TestNavClickAfterHardRefresh(t *testing.T) {
 		t.Skip("Skipping integration test in short mode")
 	}
 
-	// Use parallel test wrapper for automatic instance management
-	testutil.ParallelTestWrapper(t, func(t *testing.T, instance *testutil.TestInstance) {
+	// Use series test wrapper for better PID tracking and process management
+	SeriesTestWrapper(t, func(t *testing.T, instance *TestInstance) {
 		// Load test environment for this specific instance
-		alphaSquid, _, err := testutil.LoadTestEnvForInstance(instance)
+		alphaSquid, _, err := LoadTestEnvForInstance(instance)
 		if err != nil {
 			t.Fatalf("Failed to load test environment: %v", err)
 		}
 
 		// Use ChromeDP with the instance
-		testutil.ChromeDPTestWrapperWithInstance(t, instance, func(ctx context.Context) {
+		ChromeDPTestWrapperWithInstance(t, instance, func(ctx context.Context) {
 			loginVals := url.Values{}
 			loginVals.Set("squid", alphaSquid)
-			loginVals.Set("account", testutil.AlphaAccountName)
+			loginVals.Set("account", AlphaAccountName)
 
 			// Use the instance-specific base URL
-			baseURL := testutil.GetBaseURLForInstance(instance)
+			baseURL := GetBaseURLForInstance(instance)
 			loginURL := baseURL + "/lemc/login?" + loginVals.Encode()
 
 			tasks := chromedp.Tasks{
 				chromedp.Navigate(loginURL),
-				chromedp.WaitVisible(testutil.UsernameSelector, chromedp.ByQuery),
-				chromedp.SendKeys(testutil.UsernameSelector, testutil.AlphaOwnerUsername, chromedp.ByQuery),
-				chromedp.SendKeys(testutil.PasswordSelector, testutil.TestPassword, chromedp.ByQuery),
-				chromedp.Click(testutil.LoginButtonSelector, chromedp.ByQuery),
+				chromedp.WaitVisible(UsernameSelector, chromedp.ByQuery),
+				chromedp.SendKeys(UsernameSelector, AlphaOwnerUsername, chromedp.ByQuery),
+				chromedp.SendKeys(PasswordSelector, TestPassword, chromedp.ByQuery),
+				chromedp.Click(LoginButtonSelector, chromedp.ByQuery),
 				chromedp.Sleep(3 * time.Second), // Wait for login to complete
 
 				chromedp.Navigate(baseURL + "/lemc/apps"),
@@ -66,32 +65,32 @@ func TestNavRefreshError(t *testing.T) {
 		t.Skip("Skipping integration test in short mode")
 	}
 
-	// Use parallel test wrapper for automatic instance management
-	testutil.ParallelTestWrapper(t, func(t *testing.T, instance *testutil.TestInstance) {
+	// Use series test wrapper for better PID tracking and process management
+	SeriesTestWrapper(t, func(t *testing.T, instance *TestInstance) {
 		// Load test environment for this specific instance
-		alphaSquid, _, err := testutil.LoadTestEnvForInstance(instance)
+		alphaSquid, _, err := LoadTestEnvForInstance(instance)
 		if err != nil {
 			t.Fatalf("Failed to load test environment: %v", err)
 		}
 
 		// Use ChromeDP with the instance
-		testutil.ChromeDPTestWrapperWithInstance(t, instance, func(ctx context.Context) {
+		ChromeDPTestWrapperWithInstance(t, instance, func(ctx context.Context) {
 			loginVals := url.Values{}
 			loginVals.Set("squid", alphaSquid)
-			loginVals.Set("account", testutil.AlphaAccountName)
+			loginVals.Set("account", AlphaAccountName)
 
 			// Use the instance-specific base URL
-			baseURL := testutil.GetBaseURLForInstance(instance)
+			baseURL := GetBaseURLForInstance(instance)
 			loginURL := baseURL + "/lemc/login?" + loginVals.Encode()
 
 			var bodyHTML string
 
 			tasks := chromedp.Tasks{
 				chromedp.Navigate(loginURL),
-				chromedp.WaitVisible(testutil.UsernameSelector, chromedp.ByQuery),
-				chromedp.SendKeys(testutil.UsernameSelector, testutil.AlphaOwnerUsername, chromedp.ByQuery),
-				chromedp.SendKeys(testutil.PasswordSelector, testutil.TestPassword, chromedp.ByQuery),
-				chromedp.Click(testutil.LoginButtonSelector, chromedp.ByQuery),
+				chromedp.WaitVisible(UsernameSelector, chromedp.ByQuery),
+				chromedp.SendKeys(UsernameSelector, AlphaOwnerUsername, chromedp.ByQuery),
+				chromedp.SendKeys(PasswordSelector, TestPassword, chromedp.ByQuery),
+				chromedp.Click(LoginButtonSelector, chromedp.ByQuery),
 				chromedp.Sleep(3 * time.Second), // Wait for login to complete
 
 				// Navigate to apps page
@@ -119,32 +118,32 @@ func TestAppRefreshError(t *testing.T) {
 		t.Skip("Skipping integration test in short mode")
 	}
 
-	// Use parallel test wrapper for automatic instance management
-	testutil.ParallelTestWrapper(t, func(t *testing.T, instance *testutil.TestInstance) {
+	// Use series test wrapper for better PID tracking and process management
+	SeriesTestWrapper(t, func(t *testing.T, instance *TestInstance) {
 		// Load test environment for this specific instance
-		alphaSquid, _, err := testutil.LoadTestEnvForInstance(instance)
+		alphaSquid, _, err := LoadTestEnvForInstance(instance)
 		if err != nil {
 			t.Fatalf("Failed to load test environment: %v", err)
 		}
 
 		// Use ChromeDP with the instance
-		testutil.ChromeDPTestWrapperWithInstance(t, instance, func(ctx context.Context) {
+		ChromeDPTestWrapperWithInstance(t, instance, func(ctx context.Context) {
 			loginURLValues := url.Values{}
 			loginURLValues.Set("squid", alphaSquid)
-			loginURLValues.Set("account", testutil.AlphaAccountName)
+			loginURLValues.Set("account", AlphaAccountName)
 
 			// Use the instance-specific base URL
-			baseURL := testutil.GetBaseURLForInstance(instance)
+			baseURL := GetBaseURLForInstance(instance)
 			loginURL := baseURL + "/lemc/login?" + loginURLValues.Encode()
 
 			var bodyHTML string
 
 			tasks := chromedp.Tasks{
 				chromedp.Navigate(loginURL),
-				chromedp.WaitVisible(testutil.UsernameSelector, chromedp.ByQuery),
-				chromedp.SendKeys(testutil.UsernameSelector, testutil.AlphaOwnerUsername, chromedp.ByQuery),
-				chromedp.SendKeys(testutil.PasswordSelector, testutil.TestPassword, chromedp.ByQuery),
-				chromedp.Click(testutil.LoginButtonSelector, chromedp.ByQuery),
+				chromedp.WaitVisible(UsernameSelector, chromedp.ByQuery),
+				chromedp.SendKeys(UsernameSelector, AlphaOwnerUsername, chromedp.ByQuery),
+				chromedp.SendKeys(PasswordSelector, TestPassword, chromedp.ByQuery),
+				chromedp.Click(LoginButtonSelector, chromedp.ByQuery),
 				chromedp.Sleep(3 * time.Second), // Wait for login to complete
 
 				// Navigate to cookbooks page

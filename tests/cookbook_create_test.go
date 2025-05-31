@@ -1,14 +1,12 @@
-package main_test
+package tests
 
 import (
 	"context"
-	"net/url"
 	"strings"
 	"testing"
 	"time"
 
 	"github.com/chromedp/chromedp"
-	"github.com/jaredfolkins/letemcook/tests/testutil"
 )
 
 func TestCreateCookbook(t *testing.T) {
@@ -16,35 +14,19 @@ func TestCreateCookbook(t *testing.T) {
 		t.Skip("Skipping integration test in short mode")
 	}
 
-	// Use parallel test wrapper for automatic instance management
-	testutil.ParallelTestWrapper(t, func(t *testing.T, instance *testutil.TestInstance) {
-		// Load test environment for this specific instance
-		alphaSquid, _, err := testutil.LoadTestEnvForInstance(instance)
-		if err != nil {
-			t.Fatalf("Failed to load test environment: %v", err)
-		}
+	SeriesTestWrapper(t, func(t *testing.T, instance *TestInstance) {
+		ChromeDPTestWrapperWithInstance(t, instance, func(ctx context.Context) {
+			// Login to Alpha account
+			err := LoginToAlphaAccount(ctx, instance)
+			if err != nil {
+				t.Fatalf("Failed to login: %v", err)
+			}
 
-		// Use ChromeDP with the instance
-		testutil.ChromeDPTestWrapperWithInstance(t, instance, func(ctx context.Context) {
-			loginVals := url.Values{}
-			loginVals.Set("squid", alphaSquid)
-			loginVals.Set("account", testutil.AlphaAccountName)
-
-			// Use the instance-specific base URL
-			baseURL := testutil.GetBaseURLForInstance(instance)
-			loginURL := baseURL + "/lemc/login?" + loginVals.Encode()
-
+			baseURL := GetBaseURLForInstance(instance)
 			var bodyHTML string
 			var hasCreateButton bool
 
 			tasks := chromedp.Tasks{
-				chromedp.Navigate(loginURL),
-				chromedp.WaitVisible(testutil.UsernameSelector, chromedp.ByQuery),
-				chromedp.SendKeys(testutil.UsernameSelector, testutil.AlphaOwnerUsername, chromedp.ByQuery),
-				chromedp.SendKeys(testutil.PasswordSelector, testutil.TestPassword, chromedp.ByQuery),
-				chromedp.Click(testutil.LoginButtonSelector, chromedp.ByQuery),
-				chromedp.Sleep(3 * time.Second), // Wait for login to complete
-
 				// Navigate to cookbooks page
 				chromedp.Navigate(baseURL + "/lemc/cookbooks"),
 				chromedp.Sleep(2 * time.Second), // Wait for page to load

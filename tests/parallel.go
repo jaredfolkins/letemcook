@@ -1,4 +1,4 @@
-package testutil
+package tests
 
 import (
 	"crypto/rand"
@@ -24,6 +24,7 @@ type TestInstance struct {
 	TestDataDir string
 	BaseURL     string
 	Cleanup     func(failed bool)
+	serverCmd   *exec.Cmd // Track the server process for targeted cleanup
 }
 
 // generateTestID creates an 8-character lowercase alphanumeric ID
@@ -118,6 +119,13 @@ func (ti *TestInstance) StartTestServer() (func(failed bool), error) {
 		return nil, fmt.Errorf("start server: %w", err)
 	}
 
+	// Store the server command in the test instance for targeted cleanup
+	ti.serverCmd = serverCmd
+
+	// Register the process and port for safe cleanup
+	RegisterTestProcess(serverCmd)
+	RegisterTestPort(ti.Port)
+
 	// Wait for server to be ready
 	if err := ti.waitForServerReady(30 * time.Second); err != nil {
 		// Kill the server if it failed to start properly
@@ -129,23 +137,39 @@ func (ti *TestInstance) StartTestServer() (func(failed bool), error) {
 
 	// Return cleanup function that always cleans up resources
 	cleanup := func(failed bool) {
-		if serverCmd != nil && serverCmd.Process != nil {
-			// Always try graceful shutdown first
-			serverCmd.Process.Signal(syscall.SIGTERM)
+		if ti.serverCmd != nil && ti.serverCmd.Process != nil {
+			// First try graceful shutdown
+			if err := ti.serverCmd.Process.Signal(syscall.SIGTERM); err == nil {
+				// Wait for shutdown with timeout
+				done := make(chan error, 1)
+				go func() {
+					done <- ti.serverCmd.Wait()
+				}()
 
-			// Wait for shutdown
-			done := make(chan error, 1)
-			go func() {
-				done <- serverCmd.Wait()
-			}()
-
-			select {
-			case <-done:
-				// Graceful shutdown succeeded
-			case <-time.After(2 * time.Second):
-				// Force kill if graceful shutdown failed
-				serverCmd.Process.Kill()
-				<-done
+				select {
+				case <-done:
+					// Graceful shutdown succeeded
+				case <-time.After(2 * time.Second):
+					// Try SIGINT next
+					if err := ti.serverCmd.Process.Signal(syscall.SIGINT); err == nil {
+						select {
+						case <-done:
+							// SIGINT worked
+						case <-time.After(1 * time.Second):
+							// Force kill if nothing else works
+							ti.serverCmd.Process.Kill()
+							<-done
+						}
+					} else {
+						// SIGINT failed, force kill
+						ti.serverCmd.Process.Kill()
+						<-done
+					}
+				}
+			} else {
+				// SIGTERM failed, try force kill directly
+				ti.serverCmd.Process.Kill()
+				ti.serverCmd.Wait()
 			}
 		}
 
@@ -155,7 +179,20 @@ func (ti *TestInstance) StartTestServer() (func(failed bool), error) {
 		} else {
 			fmt.Printf("Test passed, cleaning up resources for instance %s\n", ti.ID)
 		}
+
+		// Force close any network connections
+		client := &http.Client{Timeout: 100 * time.Millisecond}
+		client.CloseIdleConnections()
+
+		// Clean up filesystem resources
 		_ = os.RemoveAll(ti.DataDir)
+
+		// Unregister from process tracking
+		UnregisterTestProcess(ti.serverCmd)
+		UnregisterTestPort(ti.Port)
+
+		// Extra sleep to ensure cleanup is complete
+		time.Sleep(300 * time.Millisecond)
 	}
 
 	ti.Cleanup = cleanup

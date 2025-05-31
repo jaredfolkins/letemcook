@@ -1,4 +1,4 @@
-package main_test
+package tests
 
 import (
 	"context"
@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/chromedp/chromedp"
-	"github.com/jaredfolkins/letemcook/tests/testutil"
 )
 
 const (
@@ -41,23 +40,23 @@ func TestAppVisibility(t *testing.T) {
 	}
 
 	// Use parallel test wrapper for automatic instance management
-	testutil.ParallelTestWrapper(t, func(t *testing.T, instance *testutil.TestInstance) {
+	SeriesTestWrapper(t, func(t *testing.T, instance *TestInstance) {
 		// Load test environment for this specific instance
-		alphaSquid, bravoSquid, err := testutil.LoadTestEnvForInstance(instance)
+		alphaSquid, bravoSquid, err := LoadTestEnvForInstance(instance)
 		if err != nil {
 			t.Fatalf("Failed to load test environment: %v", err)
 		}
 
 		// Use ChromeDP with the instance
-		testutil.ChromeDPTestWrapperWithInstance(t, instance, func(ctx context.Context) {
+		ChromeDPTestWrapperWithInstance(t, instance, func(ctx context.Context) {
 			// Test that Alpha account can see its apps
 			t.Run("AlphaCanSeeOwnApps", func(t *testing.T) {
 				loginVals := url.Values{}
 				loginVals.Set("squid", alphaSquid)
-				loginVals.Set("account", testutil.AlphaAccountName)
+				loginVals.Set("account", AlphaAccountName)
 
 				// Use the instance-specific base URL
-				baseURL := testutil.GetBaseURLForInstance(instance)
+				baseURL := GetBaseURLForInstance(instance)
 				loginURL := baseURL + "/lemc/login?" + loginVals.Encode()
 				targetAppsURL := baseURL + "/lemc/apps"
 
@@ -65,10 +64,10 @@ func TestAppVisibility(t *testing.T) {
 
 				tasks := chromedp.Tasks{
 					chromedp.Navigate(loginURL),
-					chromedp.WaitVisible(testutil.UsernameSelector, chromedp.ByQuery),
-					chromedp.SendKeys(testutil.UsernameSelector, testutil.AlphaOwnerUsername, chromedp.ByQuery),
-					chromedp.SendKeys(testutil.PasswordSelector, testutil.TestPassword, chromedp.ByQuery),
-					chromedp.Click(testutil.LoginButtonSelector, chromedp.ByQuery),
+					chromedp.WaitVisible(UsernameSelector, chromedp.ByQuery),
+					chromedp.SendKeys(UsernameSelector, AlphaOwnerUsername, chromedp.ByQuery),
+					chromedp.SendKeys(PasswordSelector, TestPassword, chromedp.ByQuery),
+					chromedp.Click(LoginButtonSelector, chromedp.ByQuery),
 					chromedp.Sleep(3 * time.Second), // Wait for login to complete
 
 					// Navigate to apps page to check visibility
@@ -93,10 +92,10 @@ func TestAppVisibility(t *testing.T) {
 			t.Run("BravoCanSeeOwnApps", func(t *testing.T) {
 				loginVals := url.Values{}
 				loginVals.Set("squid", bravoSquid)
-				loginVals.Set("account", testutil.BravoAccountName)
+				loginVals.Set("account", BravoAccountName)
 
 				// Use the instance-specific base URL
-				baseURL := testutil.GetBaseURLForInstance(instance)
+				baseURL := GetBaseURLForInstance(instance)
 				loginURL := baseURL + "/lemc/login?" + loginVals.Encode()
 				targetAppsURL := baseURL + "/lemc/apps"
 
@@ -104,10 +103,10 @@ func TestAppVisibility(t *testing.T) {
 
 				tasks := chromedp.Tasks{
 					chromedp.Navigate(loginURL),
-					chromedp.WaitVisible(testutil.UsernameSelector, chromedp.ByQuery),
-					chromedp.SendKeys(testutil.UsernameSelector, testutil.BravoOwnerUsername, chromedp.ByQuery),
-					chromedp.SendKeys(testutil.PasswordSelector, testutil.TestPassword, chromedp.ByQuery),
-					chromedp.Click(testutil.LoginButtonSelector, chromedp.ByQuery),
+					chromedp.WaitVisible(UsernameSelector, chromedp.ByQuery),
+					chromedp.SendKeys(UsernameSelector, BravoOwnerUsername, chromedp.ByQuery),
+					chromedp.SendKeys(PasswordSelector, TestPassword, chromedp.ByQuery),
+					chromedp.Click(LoginButtonSelector, chromedp.ByQuery),
 					chromedp.Sleep(3 * time.Second), // Wait for login to complete
 
 					// Navigate to apps page to check visibility
