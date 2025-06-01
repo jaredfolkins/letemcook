@@ -3,12 +3,14 @@
 .env
 .goenv
 .idea
+*.log
 .vscode
 data/*
 data/
 tmp/*
 *_templ.go
 patch.sh
-coverage.out
+coverage_*.out
+coverage_*.html
 git-*.sh
 letemcook

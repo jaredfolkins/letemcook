@@ -1,0 +1,2 @@
+# This file ensures the coverage directory is tracked in git
+# Coverage files are generated locally and not committed
