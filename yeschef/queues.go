@@ -418,9 +418,11 @@ func (jq *jobQueue) Remove(jobKey *quartz.JobKey) (quartz.ScheduledJob, error) {
 					logger.Errorf("Job validation failed in Remove: %v", err)
 					// Still try to remove the file if the key matches
 					if jobKey.Name() == file.Name() || strings.TrimSuffix(file.Name(), ".json") == jobKey.Name() {
-						if err = os.Remove(path); err == nil {
-							return nil, fmt.Errorf("removed invalid job file: %v", err)
+						remErr := os.Remove(path)
+						if remErr != nil {
+							return nil, remErr
 						}
+						return nil, fmt.Errorf("removed invalid job file: %s", path)
 					}
 					continue
 				}
