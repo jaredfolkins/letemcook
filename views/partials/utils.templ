@@ -142,6 +142,7 @@ templ renderJobFormModal(v []models.FormField, view_page, view_type, uuid, oldna
 }
 
 templ printWiki(b64 string) {
-    {{ html, _ := base64.StdEncoding.DecodeString(b64) }}
+    {{ html, err := base64.StdEncoding.DecodeString(b64) }}
+    {{ if err != nil { return err } }}
     @templ.Raw(string(html))
 }
