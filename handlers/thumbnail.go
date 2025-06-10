@@ -26,6 +26,14 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+func decodeThumbnailData(y models.YamlDefault) ([]byte, error) {
+	data := y.Cookbook.Storage.Thumbnail.B64
+	if data == "" {
+		return nil, nil
+	}
+	return base64.StdEncoding.DecodeString(data)
+}
+
 func GetCookbookThumbnailImage(c LemcContext) error {
 	uuid := c.Param("uuid")
 
@@ -40,24 +48,12 @@ func GetCookbookThumbnailImage(c LemcContext) error {
 		return c.JSON(http.StatusInternalServerError, "Failed to unmarshal user YAML for use with thumbnail")
 	}
 
-	var encodedStr string
-	if len(yamlDefault.Cookbook.Storage.Thumbnail.B64) == 0 {
-		return serveDefaultThumbnail(c)
+	decoded, err := decodeThumbnailData(yamlDefault)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, "Failed to decode base64 encoded file")
 	}
-
-	var decoded []byte
-	var err error
-
-	if len(yamlDefault.Cookbook.Storage.Thumbnail.B64) == 0 {
-		decoded, err = base64.StdEncoding.DecodeString(encodedStr)
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, "Failed to decode base64 encoded file")
-		}
-	} else {
-		decoded, err = base64.StdEncoding.DecodeString(yamlDefault.Cookbook.Storage.Thumbnail.B64)
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, "Failed to decode base64 encoded file")
-		}
+	if decoded == nil {
+		return serveDefaultThumbnail(c)
 	}
 
 	return c.Blob(http.StatusOK, http.DetectContentType(decoded), decoded)
