@@ -46,3 +46,10 @@ func TestAlphaNumHyphen(t *testing.T) {
 		t.Errorf("AlphaNumHyphen(%q) = %q, want %q", in, out, expected)
 	}
 }
+func TestAlphaNumHyphenNormalization(t *testing.T) {
+	in := "User+tag@Gmail.com"
+	expected := "user-gmail-com"
+	if out := AlphaNumHyphen(in); out != expected {
+		t.Errorf("AlphaNumHyphen(%q) = %q, want %q", in, out, expected)
+	}
+}
