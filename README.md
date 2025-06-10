@@ -53,6 +53,7 @@ The ultimate goal being that `LEMC` would help your organization **"Ops their De
 *   [Features](docs/FEATURES.md)
 *   [Philosophy](docs/PHILOSOPHY.md)
 *   [Agents Guide](AGENTS.md)
+*   [lemcli](docs/lemcli.md)
 *   [Frequently Asked Questions (FAQ)](docs/FAQ.md)
 
 ## LEMC Core Development Requirements
