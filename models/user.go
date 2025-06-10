@@ -301,7 +301,7 @@ func (uc *UserContext) IsAuthenticated() bool {
 }
 
 func (uc *UserContext) Username() string {
-	if uc != nil || uc.LoggedInAs != nil {
+	if uc != nil && uc.LoggedInAs != nil && uc.ActingAs != nil {
 		return uc.ActingAs.Username
 	}
 	return "Username() Error!"

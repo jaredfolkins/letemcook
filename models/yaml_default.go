@@ -81,7 +81,7 @@ func getLastParameter(url string) string {
 
 func (storage *Storage) PurgeUnusedFiles() error {
 
-	for name, _ := range storage.Files {
+	for name := range storage.Files {
 		deleteThis := true
 
 		for _, b64wiki := range storage.Wikis {
@@ -134,9 +134,63 @@ type Recipe struct {
 }
 
 type FormField struct {
-	Name     string   `yaml:"name"`
-	Type     string   `yaml:"type"` // input, text, radio, select, password, textarea
-	Defaults []string `yaml:"defaults"`
+	Name        string            `yaml:"name,omitempty"`        // Deprecated: use Variable instead
+	Variable    string            `yaml:"variable,omitempty"`    // New field for environment variable name
+	Description string            `yaml:"description,omitempty"` // New field for display label
+	Type        string            `yaml:"type"`                  // input, text, radio, select, password, textarea
+	Defaults    []string          `yaml:"defaults,omitempty"`
+	Options     []FormFieldOption `yaml:"options,omitempty"`
+}
+
+type FormFieldOption struct {
+	Label string `yaml:"label"`
+	Value string `yaml:"value"`
+}
+
+// GetOptions returns form field options, using Options if available, otherwise falling back to Defaults
+func (f *FormField) GetOptions() []FormFieldOption {
+	if len(f.Options) > 0 {
+		return f.Options
+	}
+
+	// Fallback to Defaults for backward compatibility
+	var options []FormFieldOption
+	for _, d := range f.Defaults {
+		options = append(options, FormFieldOption{
+			Label: d,
+			Value: d,
+		})
+	}
+	return options
+}
+
+// GetPlaceholder returns the first default value as placeholder for text inputs
+func (f *FormField) GetPlaceholder() string {
+	if len(f.Defaults) > 0 {
+		return f.Defaults[0]
+	}
+	return ""
+}
+
+// IsSelectType returns true if the field type is radio or select
+func (f *FormField) IsSelectType() bool {
+	return f.Type == "radio" || f.Type == "select"
+}
+
+// GetVariable returns the variable name, preferring Variable over Name for backward compatibility
+func (f *FormField) GetVariable() string {
+	if f.Variable != "" {
+		return f.Variable
+	}
+	return f.Name // Fallback to Name for backward compatibility
+}
+
+// GetDisplayName returns the description if available, otherwise falls back to variable name
+func (f *FormField) GetDisplayName() string {
+	if f.Description != "" {
+		return f.Description
+	}
+	return f.GetVariable() // Fallback to variable name
 }
 
 func (r *Recipe) UsernameOrAdmin() string {
@@ -152,9 +206,18 @@ type Step struct {
 	Image        string   `yaml:"image"`
 	RegistryAuth string   `yaml:"registry_auth,omitempty"`
 	Entrypoint   []string `yaml:"entrypoint,omitempty"`
-	Env          []string `yaml:"env,omitempty"`
+	Env          []string `yaml:"env,omitempty"`         // Deprecated: use Environment instead
+	Environment  []string `yaml:"environment,omitempty"` // New field for environment variables
 	Do           string   `yaml:"do"`
 	Timeout      string   `yaml:"timeout"`
+}
+
+// GetEnvironment returns environment variables, preferring Environment over Env for backward compatibility
+func (s *Step) GetEnvironment() []string {
+	if len(s.Environment) > 0 {
+		return s.Environment
+	}
+	return s.Env // Fallback to Env for backward compatibility
 }
 
 func NewYamlIndividual() *YamlDefault {

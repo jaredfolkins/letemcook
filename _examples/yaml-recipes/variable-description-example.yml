@@ -1,0 +1,95 @@
+cookbook:
+    environment:
+        public:
+            - DEMO_TYPE=variable_description_demo
+        private:
+            - API_SECRET=demo_secret_key
+    pages:
+        - page: 1
+          name: Variable & Description Demo
+          recipes:
+            - recipe: server deployment
+              description: Demonstrates the new variable and description format for form fields
+              form:
+                - variable: server_type
+                  description: "Select server type"
+                  type: select
+                  options:
+                    - label: "Database Server (MySQL/PostgreSQL)"
+                      value: "db"
+                    - label: "Web Server (Nginx/Apache)"
+                      value: "web"
+                    - label: "Application Server (Node.js/Python)"
+                      value: "app"
+                    - label: "Cache Server (Redis/Memcached)"
+                      value: "cache"
+                - variable: deployment_region
+                  description: "Choose deployment region"
+                  type: radio
+                  options:
+                    - label: "🇺🇸 US East (Virginia)"
+                      value: "us-east-1"
+                    - label: "🇺🇸 US West (Oregon)"
+                      value: "us-west-2"
+                    - label: "🇪🇺 EU West (Ireland)"
+                      value: "eu-west-1"
+                    - label: "🇦🇺 Asia Pacific (Sydney)"
+                      value: "ap-southeast-2"
+                - variable: instance_count
+                  description: "Number of instances to deploy"
+                  type: text
+                  defaults:
+                    - "1"
+                - variable: deployment_notes
+                  description: "Deployment notes and special instructions"
+                  type: textarea
+                  defaults:
+                    - "Enter any special deployment instructions, configuration notes, or requirements here..."
+              steps:
+                - step: 1
+                  image: docker.io/jfolkins/lemc-env:latest
+                  do: now
+                  timeout: 5.minutes
+                  
+            - recipe: configuration setup
+              description: Shows how descriptions make forms more user-friendly while keeping clean variable names
+              form:
+                - variable: auth_method
+                  description: "Authentication method for API access"
+                  type: select
+                  options:
+                    - label: "🔑 API Key Authentication"
+                      value: "api_key"
+                    - label: "🎫 OAuth 2.0 Token"
+                      value: "oauth"
+                    - label: "🔐 JWT Token"
+                      value: "jwt"
+                    - label: "📋 Basic Authentication"
+                      value: "basic"
+                - variable: log_verbosity
+                  description: "Logging verbosity level"
+                  type: radio
+                  options:
+                    - label: "Minimal - Errors only"
+                      value: "error"
+                    - label: "Standard - Warnings and errors"
+                      value: "warn"
+                    - label: "Detailed - Info, warnings, and errors"
+                      value: "info"
+                    - label: "Verbose - Debug information included"
+                      value: "debug"
+                - variable: admin_contact
+                  description: "System administrator contact email"
+                  type: text
+                  defaults:
+                    - "admin@company.com"
+                - variable: custom_config
+                  description: "Custom configuration parameters (JSON format)"
+                  type: textarea
+                  defaults:
+                    - '{"timeout": 30, "retries": 3, "buffer_size": 1024}'
+              steps:
+                - step: 1
+                  image: docker.io/jfolkins/lemc-env:latest
+                  do: now
+                  timeout: 5.minutes 

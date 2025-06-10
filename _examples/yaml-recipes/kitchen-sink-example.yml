@@ -103,6 +103,46 @@ cookbook:
                   image: docker.io/jfolkins/lemc-env:latest
                   do: now
                   timeout: 10.minutes
+            - recipe: show env with form options
+              description: Demonstrates the new form field options with separate labels and values. The environment variables will contain the values while the UI shows the labels.
+              form:
+                - variable: environment
+                  description: "Select deployment environment"
+                  type: select
+                  options:
+                    - label: "Development Environment"
+                      value: "dev"
+                    - label: "Staging Environment"
+                      value: "staging"
+                    - label: "Production Environment"
+                      value: "prod"
+                - variable: log_level
+                  description: "Choose logging level"
+                  type: radio
+                  options:
+                    - label: "Debug (Verbose)"
+                      value: "debug"
+                    - label: "Info (Standard)"
+                      value: "info"
+                    - label: "Warning (Important)"
+                      value: "warn"
+                    - label: "Error (Critical Only)"
+                      value: "error"
+                - variable: username
+                  description: "Enter your username"
+                  type: text
+                  defaults:
+                    - enter your username
+                - variable: notes
+                  description: "Additional notes"
+                  type: textarea
+                  defaults:
+                    - enter any additional notes here
+              steps:
+                - step: 1
+                  image: docker.io/jfolkins/lemc-env:latest
+                  do: now
+                  timeout: 10.minutes
         - page: 3
           name: Kitchen Stove
           recipes:

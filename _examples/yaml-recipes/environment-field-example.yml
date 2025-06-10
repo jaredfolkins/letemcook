@@ -1,0 +1,77 @@
+cookbook:
+    environment:
+        public:
+            - DEMO_ENV=environment_field_demo
+        private:
+            - SECRET_KEY=demo_secret_env_vars
+    pages:
+        - page: 1
+          name: Environment Field Examples
+          recipes:
+            - recipe: legacy env format
+              description: Demonstrates the original 'env:' field format (backward compatibility)
+              form: []
+              steps:
+                - step: 1
+                  name: show legacy env format
+                  image: docker.io/jfolkins/lemc-env:latest
+                  env:
+                    - LEGACY_VAR=using_old_env_field
+                    - DEMO_TYPE=legacy_format
+                  do: now
+                  timeout: 5.minutes
+                  
+            - recipe: new environment format
+              description: Demonstrates the new 'environment:' field format
+              form: []
+              steps:
+                - step: 1
+                  name: show new environment format
+                  image: docker.io/jfolkins/lemc-env:latest
+                  environment:
+                    - NEW_VAR=using_new_environment_field
+                    - DEMO_TYPE=new_format
+                    - FIELD_PREFERENCE=environment_field
+                  do: now
+                  timeout: 5.minutes
+                  
+            - recipe: mixed format recipe
+              description: Demonstrates mixing old and new formats within the same recipe (different steps)
+              form: []
+              steps:
+                - step: 1
+                  name: legacy step with env
+                  image: docker.io/jfolkins/lemc-env:latest
+                  env:
+                    - STEP_1_VAR=legacy_env_field
+                    - STEP_TYPE=legacy
+                  do: now
+                  timeout: 5.minutes
+                - step: 2
+                  name: new step with environment
+                  image: docker.io/jfolkins/lemc-env:latest
+                  environment:
+                    - STEP_2_VAR=new_environment_field
+                    - STEP_TYPE=modern
+                    - IMPROVEMENT=better_readability
+                  do: now
+                  timeout: 5.minutes
+                  
+            - recipe: comprehensive environment demo
+              description: Shows how environment variables from different sources combine
+              form:
+                - variable: user_input
+                  description: "Enter a custom value"
+                  type: text
+                  defaults:
+                    - user_provided_value
+              steps:
+                - step: 1
+                  name: comprehensive environment check
+                  image: docker.io/jfolkins/lemc-env:latest
+                  environment:
+                    - STEP_ENV=from_step_environment_field
+                    - ENVIRONMENT_TYPE=comprehensive
+                    - SOURCES=cookbook_public+cookbook_private+step_environment+form_input
+                  do: now
+                  timeout: 5.minutes 

@@ -1,0 +1,102 @@
+cookbook:
+    environment:
+        public:
+            - DEMO_ENV=form_demo
+        private:
+            - SECRET_KEY=demo_secret
+    pages:
+        - page: 1
+          name: Form Examples
+          recipes:
+            - recipe: legacy form format
+              description: Demonstrates the original form format using defaults (backward compatibility)
+              form:
+                - name: simple_text
+                  type: text
+                  defaults:
+                    - enter some text
+                - name: color_choice
+                  type: radio
+                  defaults:
+                    - red
+                    - green
+                    - blue
+                - name: food_selection
+                  type: select
+                  defaults:
+                    - pizza
+                    - burger
+                    - salad
+              steps:
+                - step: 1
+                  image: docker.io/jfolkins/lemc-env:latest
+                  do: now
+                  timeout: 5.minutes
+                  
+            - recipe: new form format
+              description: Demonstrates the new form format using options with separate labels and values
+              form:
+                - variable: deployment_env
+                  description: "Select deployment environment"
+                  type: select
+                  options:
+                    - label: "🔧 Development (Local)"
+                      value: "dev"
+                    - label: "🚀 Staging (Testing)"
+                      value: "staging"
+                    - label: "🏭 Production (Live)"
+                      value: "prod"
+                - variable: priority_level
+                  description: "Choose priority level"
+                  type: radio
+                  options:
+                    - label: "🔥 Critical (P0) - Immediate attention required"
+                      value: "p0"
+                    - label: "⚠️ High (P1) - Fix within 24 hours"
+                      value: "p1"
+                    - label: "📋 Medium (P2) - Fix within 1 week"
+                      value: "p2"
+                    - label: "💭 Low (P3) - Fix when convenient"
+                      value: "p3"
+              steps:
+                - step: 1
+                  image: docker.io/jfolkins/lemc-env:latest
+                  do: now
+                  timeout: 5.minutes
+                  
+            - recipe: mixed form format
+              description: Demonstrates mixing both old and new form formats in the same recipe
+              form:
+                - variable: server_type
+                  description: "Select server type"
+                  type: select
+                  options:
+                    - label: "Database Server (MySQL/PostgreSQL)"
+                      value: "db"
+                    - label: "Web Server (Nginx/Apache)"
+                      value: "web"
+                    - label: "Application Server (Node.js/Python)"
+                      value: "app"
+                    - label: "Cache Server (Redis/Memcached)"
+                      value: "cache"
+                - name: region
+                  type: radio
+                  defaults:
+                    - us-east-1
+                    - us-west-2
+                    - eu-west-1
+                - variable: admin_email
+                  description: "Administrator email address"
+                  type: text
+                  defaults:
+                    - admin@example.com
+                - variable: deployment_notes
+                  description: "Deployment notes and instructions"
+                  type: textarea
+                  defaults:
+                    - Enter any special deployment instructions or notes here...
+              steps:
+                - step: 1
+                  image: docker.io/jfolkins/lemc-env:latest
+                  do: now
+                  timeout: 5.minutes 

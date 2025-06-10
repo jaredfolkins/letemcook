@@ -29,8 +29,9 @@ func DoStep(ctx context.Context, job *JobRecipe, st models.Step) error {
 	stepEnv = append(stepEnv, fmt.Sprintf(LEMC_JS_ID, job.UUID, job.PageID, job.Scope))
 
 	// Append user-defined env vars from the step configuration
-	if len(st.Env) > 0 {
-		stepEnv = append(stepEnv, st.Env...)
+	stepEnvVars := st.GetEnvironment()
+	if len(stepEnvVars) > 0 {
+		stepEnv = append(stepEnv, stepEnvVars...)
 	}
 
 	// Work on a copy of the job to avoid races when multiple steps run concurrently
