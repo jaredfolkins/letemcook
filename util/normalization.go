@@ -19,7 +19,7 @@ func AlphaNumHyphen(s string) string {
 	normalized := n.Normalize(s)
 
 	re := regexp.MustCompile(`\W+`)
-	normalized = re.ReplaceAllString(s, "-")
+	normalized = re.ReplaceAllString(normalized, "-")
 
 	return normalized
 }
