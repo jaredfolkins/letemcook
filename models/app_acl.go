@@ -73,7 +73,10 @@ func AppAclsUsers(accountID int64, appID int64) ([]AppAcl, error) {
 
 	if !isOwnerInList && ownerID != 0 {
 		var ownerAcl AppAcl
-		ownerInfoQuery := "SELECT id AS user_id, username, email FROM users WHERE id = ? AND account_id = ?"
+		ownerInfoQuery := `SELECT u.id AS user_id, u.username, u.email
+                        FROM users u
+                        JOIN permissions_accounts pa ON pa.user_id = u.id
+                        WHERE u.id = ? AND pa.account_id = ?`
 		err = db.Db().Get(&ownerAcl, ownerInfoQuery, ownerID, accountID)
 		if err != nil {
 			log.Printf("AppAclsUsers: Error fetching owner details (UserID: %d, AccountID: %d): %v", ownerID, accountID, err)
