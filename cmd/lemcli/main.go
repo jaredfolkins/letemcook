@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func main() {
@@ -20,6 +21,12 @@ func main() {
 			os.Exit(1)
 		}
 		handleSecrets(os.Args[2:])
+	case "cookbook":
+		if len(os.Args) < 3 {
+			fmt.Println("Usage: lemcli cookbook init <name>")
+			os.Exit(1)
+		}
+		handleCookbook(os.Args[2:])
 	default:
 		fmt.Println("Unknown command")
 		os.Exit(1)
@@ -39,6 +46,28 @@ func secretsDir() string {
 	}
 	return dir
 }
+
+const cookbookPrefix = "lemc-"
+
+const defaultCookbookYAML = `cookbook:
+    environment:
+        public:
+            - USER_DEFINED_PUBLIC_ENV_VAR=somesillypublicvar
+        private:
+            - USER_DEFINED_PRIVATE_ENV_VAR=somesillyprivatevarthatyouwantsecret
+    pages:
+        - page: 1
+          name: Hello World Page
+          recipes:
+            - recipe: hello world
+              description: basic hello world lemc example
+              form: []
+              steps:
+                - step: 1
+                  image: docker.io/jfolkins/lemc-helloworld:latest
+                  do: now
+                  timeout: 10.minutes
+`
 
 func handleSecrets(args []string) {
 	cmd := args[0]
@@ -91,6 +120,34 @@ func handleSecrets(args []string) {
 		fmt.Println(string(data))
 	default:
 		fmt.Println("Usage: lemcli secrets [init|set|get]")
+		os.Exit(1)
+	}
+}
+
+func handleCookbook(args []string) {
+	cmd := args[0]
+	switch cmd {
+	case "init":
+		if len(args) != 2 {
+			fmt.Println("Usage: lemcli cookbook init <name>")
+			os.Exit(1)
+		}
+		name := args[1]
+		if !strings.HasPrefix(name, cookbookPrefix) {
+			name = cookbookPrefix + name
+		}
+		if err := os.MkdirAll(name, 0755); err != nil {
+			fmt.Println("Error:", err)
+			os.Exit(1)
+		}
+		path := filepath.Join(name, "cookbook.yaml")
+		if err := os.WriteFile(path, []byte(defaultCookbookYAML), 0644); err != nil {
+			fmt.Println("Error writing cookbook.yaml:", err)
+			os.Exit(1)
+		}
+		fmt.Println("Initialized cookbook at:", path)
+	default:
+		fmt.Println("Usage: lemcli cookbook init <name>")
 		os.Exit(1)
 	}
 }
